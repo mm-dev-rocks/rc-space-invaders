@@ -1,0 +1,169 @@
+// SPDX-License-Identifier: GPL-3.0-only
+
+$padding-medium: 0.4rem;
+
+$z-float: 2;
+$z-cover: 3;
+
+$page-colour: #0b0b0b;
+$dark-fg: #555555;
+
+$rounded-radius: 1rem;
+
+html {
+  box-sizing: border-box;
+  height: 100%;
+}
+*:focus {
+  outline: none;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+html,
+body {
+  // Disable pull-to-refresh
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+body {
+  background-repeat: repeat;
+  background-size: auto;
+
+  background-color: $page-colour;
+  //font-family: "body_main";
+  font-size: calc((1vw + 1vh) / 1.666);
+  margin: 0;
+  height: 100%;
+  min-height: 100vh;
+  cursor: crosshair;
+}
+body.over-control-area {
+  cursor: none;
+}
+body.over-clickable-area {
+  cursor: pointer;
+}
+
+#pd-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  .main {
+    flex: 1 0 auto;
+  }
+}
+
+.invisible {
+  display: none;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+/* 
+	LOADING BAR
+*/
+
+.bar-indicator,
+#loading-indicator {
+  position: absolute;
+  text-align: center;
+  width: 300px;
+  p,
+  span,
+  em {
+    position: absolute;
+    width: 100%;
+    left: 0;
+  }
+  p {
+    color: $dark-fg;
+    font-family: sans-serif;
+    margin-top: 4rem;
+    letter-spacing: 0.5em;
+  }
+  span,
+  em {
+    display: inline-block;
+    border-radius: $rounded-radius;
+    height: 1rem;
+  }
+  span {
+    background-color: #111111;
+  }
+  em {
+    z-index: $z-float;
+    width: calc(100% - #{$padding-medium});
+    margin-right: 2rem;
+    padding: $padding-medium;
+    background-clip: content-box;
+  }
+}
+#loading-indicator {
+  position: fixed;
+  width: auto;
+  z-index: $z-cover;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  padding: 20vh 0;
+  p,
+  span,
+  em {
+    width: 50%;
+    left: 25%;
+    top: 40%;
+  }
+  em {
+    width: calc(50% - #{$padding-medium});
+    background-color: #660000;
+  }
+}
+
+.pd-game {
+  position: relative;
+}
+
+#activearea-canvas {
+  position: fixed;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+}
+canvas {
+  image-rendering: pixelated;
+  //image-rendering: optimizespeed;
+  //image-rendering: -moz-crisp-edges; /* Firefox */
+  //image-rendering: -webkit-crisp-edges; /* Webkit (Safari) */
+
+  font-smooth: never;
+  -webkit-font-smoothing: none;
+}
+
+/*
+  `#debug` is the debugging overlay, only visible when `debug=overlay` is in the app URL
+*/
+#debug {
+  pointer-events: all;
+  background-color: rgba(0, 0, 0, 0.6);
+  overflow: auto;
+  z-index: 999999;
+  position: fixed;
+  top: 50vh;
+  left: calc(100vw - 25em);
+  bottom: 0;
+  padding-right: 1em;
+  padding-bottom: 1em;
+  right: 0;
+  p {
+    margin: 0;
+    font-size: 14px;
+  }
+}

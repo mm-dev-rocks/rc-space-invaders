@@ -1,0 +1,70 @@
+import { OBSTACLE_TYPE } from "./../ENUM.js";
+import * as SOUND_DATA from "./../SOUND_DATA.js";
+
+export const SWARM = {
+  isDark: true,
+  startHealth: 1500,
+  timeAllowedSecs: 60,
+  textColor: "#ff0000",
+  textColorHighlight: "#ff8800",
+  bgColor: "#d196b7",
+  bgFadeAlpha: 0.55,
+  gameplayAreaToCanvasLateralRatio: 0.6,
+  tip: "CUT A PATH!",
+  player: {
+    color: "#ff0067",
+    growthDivisor: 100,
+    radius: 25,
+  },
+  obstacles: [
+    //{
+    //  type: OBSTACLE_TYPE.BACKGROUND,
+    //  total: 100,
+    //  color_ar: ["#b693a7"],
+    //  radiusRange: [3, 40],
+    //  directionRange: [175, 185],
+    //  speedRange: [0.01, 0.04],
+    //},
+    {
+      type: OBSTACLE_TYPE.AVOID,
+      total: 666,
+      color_ar: ["#000055"],
+      radiusRange: [2, 2],
+      directionRange: [180, 180],
+      speedRange: [0.25, 0.5],
+    },
+    {
+      type: OBSTACLE_TYPE.AVOID,
+      total: 333,
+      color_ar: ["#550000"],
+      radiusRange: [2, 2],
+      directionRange: [180, 180],
+      speedRange: [0.25, 0.5],
+    },
+    {
+      type: OBSTACLE_TYPE.AVOID,
+      total: 333,
+      color_ar: ["#2e0826"],
+      radiusRange: [2, 2],
+      directionRange: [180, 180],
+      speedRange: [0.25, 0.5],
+    },
+    {
+      type: OBSTACLE_TYPE.AVOID,
+      total: 3,
+      color_ar: ["#333333"],
+      radiusRange: [25, 25],
+      directionRange: [180, 180],
+      speedRange: [5, 6],
+    },
+    {
+      type: OBSTACLE_TYPE.COLLECT,
+      collectSfx_ar: SOUND_DATA.ORDERED_POP_SFX_AR,
+      total: 23,
+      color_ar: ["#00ffff"],
+      radiusRange: [30, 55],
+      directionRange: [120, 240],
+      speedRange: [1, 2],
+    },
+  ],
+};

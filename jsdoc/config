@@ -1,0 +1,28 @@
+{
+  "plugins": [
+    "plugins/markdown"
+  ],
+  "markdown": {
+    "parser": "gfm",
+    "hardwrap": false,
+    "idInHeadings": true
+  },
+  "templates": {
+    "default": {
+      "includeDate": false,
+      "useLongnameInNav": true
+    }
+  },
+  "source": {
+    "include": ["README.md"],
+    "includePattern": ".+\\.js(doc|x)?$",
+    "excludePattern": "(^|\\/|\\\\)_"
+  },
+  "opts": {
+    "encoding": "utf8",
+    "destination": "www/docs",
+    "template": "jsdoc/template",
+    "private": true,
+    "recurse": true
+  }
+}
