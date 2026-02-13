@@ -11,28 +11,20 @@
  */
 
 import { RCSI } from "./RCSI/CONST.js";
-import {
-  ADDED_LAYER,
-  ASPECT_RATIO,
-  OBSTACLE_SUBTYPE,
-  OBSTACLE_TYPE,
-} from "./RCSI/ENUM.js";
+import { ASPECT_RATIO, OBSTACLE_SUBTYPE, OBSTACLE_TYPE } from "./RCSI/ENUM.js";
 import * as GAME from "./RCSI/GAME.js";
 import * as IMAGE_IDS from "./RCSI/IMAGE_IDS.js";
 import * as STRING from "./RCSI/STRING.js";
 
-import { AddedLayer } from "./AddedLayer.js";
 import { Controller } from "./Controller.js";
 import { FullscreenManager } from "./FullscreenManager.js";
 import { Game } from "./Game.js";
 import { HealthMeter } from "./HealthMeter.js";
 import { ImageManager } from "./ImageManager.js";
 import { InternalTimer } from "./InternalTimer.js";
-import { IntroObstacles } from "./IntroObstacles.js";
 import { Layout } from "./Layout.js";
 import { ObstacleManager } from "./ObstacleManager.js";
 import { OverlayText } from "./OverlayText.js";
-import { PipeWalls } from "./PipeWalls.js";
 import { Player } from "./Player.js";
 import { Shape } from "./Shape.js";
 import { Text } from "./Text.js";
@@ -61,7 +53,6 @@ Display.init = function () {
   Layout.init();
   Text.init();
   OverlayText.init();
-  PipeWalls.init();
 };
 
 /**
@@ -80,8 +71,6 @@ Display.setupForLevel = function () {
   Display.levelIsDark = Game.curLevelData.isDark;
   Display.textColor = Game.curLevelData.textColor;
   Display.textColorHighlight = Game.curLevelData.textColorHighlight;
-  //Display.setBackgroundColor(Game.curLevelData.bgColor);
-  //document.body.style.backgroundColor = Game.curLevelData.bgColor;
   Display.bgFadeAlpha = Game.curLevelData.bgFadeAlpha;
   Display.shadowColor =
     Game.curLevelData.textColorShadow || GAME.TEXT_DEFAULT_SHADOW_COLOR;
@@ -90,8 +79,6 @@ Display.setupForLevel = function () {
   }
 
   Display.updateLayout();
-
-  IntroObstacles.setupForLevel();
 
   Display.updateColors({ bgColor: Game.curLevelData.bgColor });
 };
@@ -124,7 +111,7 @@ Display.setBackgroundColor = function (_hexColor) {
   Display.bgColor = _hexColor;
   Display.overlayBgColor = hexOpacityToRGBA(
     _hexColor,
-    GAME.TEXT_BACKGROUND_FILL_ALPHA
+    GAME.TEXT_BACKGROUND_FILL_ALPHA,
   );
   document.body.style.backgroundColor = Game.curLevelData.bgColor;
 };
@@ -151,7 +138,6 @@ Display.updateLayout = function () {
   Controller.updateSizes();
   IntroObstacles.updateSizes();
   Shape.updateSizes();
-  PipeWalls.updateSizes();
 };
 
 /**
@@ -173,18 +159,13 @@ Display.createCanvas = function () {
     alpha: false,
     willReadFrequently: true,
     // Never set `desynchronized: true` on this canvas context!
-    // It works on secondary canvases in `PipeWalls` and `Text`, but here it causes blank screens/empty canvas in some browsers TODO Why??
+    // It works on secondary canvases in `PipeWalls` and `Text`, but here it causes blank screens/empty canvas in some
+    // browsers TODO Why??
     //desynchronized: true,
   });
   Display.ctx.imageSmoothingEnabled = false;
 
   Display.ctxDefault = Display.ctx;
-
-  if (Display.ctx.roundRect) {
-    Display.hasRoundRect = true;
-  } else {
-    Display.hasRoundRect = false;
-  }
 
   Game.container_el.appendChild(Display.canvas);
 
@@ -213,7 +194,6 @@ Display.update = function () {
   Display.drawBackground();
   Display.drawBackgroundObstacles();
   if (!Game.isOnFrontPage) {
-    Display.drawBackgroundFade();
     Display.drawForegroundObstacles();
   }
 
@@ -228,10 +208,6 @@ Display.update = function () {
   if (!Game.isOnFrontPage) {
     if (Game.doPerfLog) {
       t2 = performance.now();
-    }
-    PipeWalls.draw();
-    if (Game.doPerfLog) {
-      __("PipeWalls.draw() " + (performance.now() - t2), RCSI.FMT_PERFORMANCE);
     }
     Display.drawFloatingObstacles();
   }
@@ -306,7 +282,7 @@ Display.drawTitle = function () {
     Layout.mainTitle_rect.left,
     Layout.mainTitle_rect.top,
     Layout.mainTitle_rect.right - Layout.mainTitle_rect.left,
-    Layout.mainTitle_rect.bottom - Layout.mainTitle_rect.top
+    Layout.mainTitle_rect.bottom - Layout.mainTitle_rect.top,
   );
   Display.ctx.filter = "none";
 };
@@ -413,35 +389,6 @@ Display.swapContext = function (_data) {
     Display.ctx.save();
     Display.ctx = _data.contextToSwapTo;
   }
-};
-
-/**
- * @function drawBackgroundFade
- * @static
- *
- * @description
- * ##### Fade out part of the background
- * - Used to dim the inside of the pipe to suggest the glass material is absorbing light from things behind it
- * - As each level has a different combination of colours for the background fill and background obstacles, the level config contains a `bgFadeAlpha` variable to tweak the opacity of this fade
- */
-Display.drawBackgroundFade = function () {
-  var x, y, width, height;
-
-  if (Display.isLandscapeAspect) {
-    x = Layout.gameplay_rect.left;
-    y = Controller.lateralOffset + Layout.gameAreaOffsetLateral;
-  } else {
-    x = Controller.lateralOffset + Layout.gameAreaOffsetLateral;
-    y = Layout.gameplay_rect.top;
-  }
-  width = Layout.gameplayWidth;
-  height = Layout.gameplayHeight;
-
-  Display.ctx.fillStyle = hexOpacityToRGBA(
-    Display.bgColor,
-    Display.bgFadeAlpha
-  );
-  Display.ctx.fillRect(x, y, width, height);
 };
 
 /**
@@ -581,64 +528,6 @@ Display.drawObstacle = function (_obstacle) {
           rotation: _obstacle.rotation,
           useDefaultStroke: _obstacle.useDefaultStroke,
         });
-        break;
-    }
-
-    if (_obstacle.addedLayer_ar) {
-      Display.drawAddedLayers(displayX, displayY, _obstacle);
-    }
-  }
-};
-
-/**
- * @function drawAddedLayers
- * @static
- *
- * @description
- * ##### Some obstacles have special added details eg:
- * - Hats
- * - Lines of detail
- *
- * @param {number} _x - X coordinate of the obstacle
- * @param {number} _y - Y coordinate of the obstacle
- * @param {object} _obstacle - The obstacle to be drawn on top of
- */
-Display.drawAddedLayers = function (_x, _y, _obstacle) {
-  var i, addedLayer;
-
-  for (i = 0; i < _obstacle.addedLayer_ar.length; i++) {
-    addedLayer = _obstacle.addedLayer_ar[i];
-
-    // Add layer offsets if needed
-    _x += addedLayer.offsetX ? addedLayer.offsetX * _obstacle.radius : 0;
-    _y += addedLayer.offsetY ? addedLayer.offsetY * _obstacle.radius : 0;
-
-    switch (addedLayer.type) {
-      case ADDED_LAYER.SPOKES:
-        AddedLayer.drawSpokes(_x, _y, _obstacle, addedLayer);
-        break;
-      case ADDED_LAYER.MOUTH:
-        AddedLayer.drawMouth(_x, _y, _obstacle, addedLayer);
-        break;
-      case ADDED_LAYER.EYES:
-        AddedLayer.drawEyes(_x, _y, _obstacle, addedLayer);
-        break;
-      case ADDED_LAYER.STETSON:
-        AddedLayer.drawStetson(_x, _y, _obstacle, addedLayer);
-        break;
-      case ADDED_LAYER.STEM:
-        AddedLayer.drawStem(_x, _y, _obstacle, addedLayer);
-        break;
-      case ADDED_LAYER.BOWLER:
-        AddedLayer.drawBowler(_x, _y, _obstacle, addedLayer);
-        break;
-      case ADDED_LAYER.DOT:
-        AddedLayer.drawDot(_x, _y, _obstacle, addedLayer);
-        break;
-      case ADDED_LAYER.TRIANGLES:
-        AddedLayer.drawTriangles(_x, _y, _obstacle, addedLayer);
-        break;
-      default:
         break;
     }
   }

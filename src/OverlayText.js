@@ -19,7 +19,6 @@ import * as STRING from "./RCSI/STRING.js";
 import { Game } from "./Game.js";
 
 import { Display } from "./Display.js";
-import { IntroObstacles } from "./IntroObstacles.js";
 import { Layout } from "./Layout.js";
 import { Text } from "./Text.js";
 
@@ -94,19 +93,6 @@ OverlayText.draw = function () {
     // If both these are false we must be in a level intro
     isLevelIntro =
       !Game.isOnFrontPage && !Game.isInLevelOutro && !Game.isInGameOver,
-    // Get widths of obstacle groups
-    collectGroupOffsetX = IntroObstacles.getGroupWidth({
-      obstacle_ar: IntroObstacles.getDataArrayForType(OBSTACLE_TYPE.COLLECT),
-    }),
-    avoidGroupOffsetX = IntroObstacles.getGroupWidth({
-      obstacle_ar: IntroObstacles.getDataArrayForType(OBSTACLE_TYPE.AVOID),
-    });
-
-  // Pad the strings, be sure only to do it once per level (remember that the
-  // entire canvas is re-drawn every frame)
-  if (isLevelIntro && !IntroObstacles.textHasBeenPadded) {
-    OverlayText.padWithSpacesToFitObstacleGroups();
-  }
 
   // This is where we measure out the final positions of the text - no drawing happens here
   textMeasurements = Text.draw(textConfig);
@@ -136,22 +122,6 @@ OverlayText.draw = function () {
       textMeasurements.lines_rect_ar[OverlayText.levelIntroCollectLineNumber];
     avoidLinePos =
       textMeasurements.lines_rect_ar[OverlayText.levelIntroAvoidLineNumber];
-
-    IntroObstacles.drawGroup({
-      startX:
-        collectLinePos.right -
-        collectGroupOffsetX +
-        IntroObstacles.itemRadius * 3,
-      startY: Math.ceil(collectLinePos.top + Text.drawnCharHeight / 2),
-      obstacle_ar: IntroObstacles.getDataArrayForType(OBSTACLE_TYPE.COLLECT),
-    });
-
-    IntroObstacles.drawGroup({
-      startX:
-        avoidLinePos.right - avoidGroupOffsetX + IntroObstacles.itemRadius * 3,
-      startY: Math.ceil(avoidLinePos.top + Text.drawnCharHeight / 2),
-      obstacle_ar: IntroObstacles.getDataArrayForType(OBSTACLE_TYPE.AVOID),
-    });
   }
 
   // Draw everything to the main canvas
@@ -170,53 +140,6 @@ OverlayText.draw = function () {
   Display.ctx.globalAlpha = 1;
 };
 
-/**
- * @function padWithSpacesToFitObstacleGroups
- * @static
- *
- * @description
- * ##### Pad a couple of strings with spaces to offset them and accommodate the obstacle groups
- *
- * The text needs to be offset based on the width of the obstacle group, so we
- * call `IntroObstacles.getGroupWidth()` first.
- *
- * We never directly position text, `Text.draw()` instead uses values such as
- * 'top', and 'center' in its `alignV` and `alignH` parameters, and calculates
- * the position based on the width/height of the rendered text.
- *
- * So to offset text (move it to the left to accomodate the obstacles) we add
- * spaces to the end of the string, meaning `Text.draw()` will see a wider
- * string and adjust the position accordingly.
- */
-OverlayText.padWithSpacesToFitObstacleGroups = function () {
-  var i,
-    // Get widths of obstacle groups
-    collectGroupOffsetX = IntroObstacles.getGroupWidth({
-      obstacle_ar: IntroObstacles.getDataArrayForType(OBSTACLE_TYPE.COLLECT),
-    }),
-    avoidGroupOffsetX = IntroObstacles.getGroupWidth({
-      obstacle_ar: IntroObstacles.getDataArrayForType(OBSTACLE_TYPE.AVOID),
-    }),
-    // Convert width offsets to number of space characters
-    collectGroupOffsetSpaces = Math.floor(
-      collectGroupOffsetX / Text.fullCharWidth
-    ),
-    avoidGroupOffsetSpaces = Math.floor(avoidGroupOffsetX / Text.fullCharWidth);
-
-  // Pad the strings, be sure only to do it once per level (remember that the
-  // entire canvas is re-drawn every frame)
-  for (i = 0; i < collectGroupOffsetSpaces; i++) {
-    OverlayText.content_ar[OverlayText.levelIntroCollectLineNumber].text =
-      OverlayText.content_ar[OverlayText.levelIntroCollectLineNumber].text +
-      " ";
-  }
-  for (i = 0; i < avoidGroupOffsetSpaces; i++) {
-    OverlayText.content_ar[OverlayText.levelIntroAvoidLineNumber].text =
-      OverlayText.content_ar[OverlayText.levelIntroAvoidLineNumber].text + " ";
-  }
-  // Set a flag so this only gets done once per level (otherwise watch text fly off the screen)
-  IntroObstacles.textHasBeenPadded = true;
-};
 
 /**
  * @function wipeAndResizeCanvas

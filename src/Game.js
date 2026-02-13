@@ -14,13 +14,7 @@
 
 import * as CLASSNAMES from "./RCSI/CLASSNAMES.js";
 import { RCSI } from "./RCSI/CONST.js";
-import {
-  ASPECT_RATIO,
-  FADE_DIRECTION,
-  GAMEOVER_REASON,
-  OBSTACLE_TYPE,
-  TIMER_ID,
-} from "./RCSI/ENUM.js";
+import { ASPECT_RATIO, FADE_DIRECTION, GAMEOVER_REASON, OBSTACLE_TYPE, TIMER_ID } from "./RCSI/ENUM.js";
 import * as GAME from "./RCSI/GAME.js";
 import * as LEVELS from "./RCSI/LEVELS.js";
 import * as SOUND_IDS from "./RCSI/SOUND_IDS.js";
@@ -38,15 +32,12 @@ import { Player } from "./Player.js";
 import { SoundManagerHowler } from "./SoundManagerHowler.js";
 import { Timers } from "./Timers.js";
 
-import {
-  __,
-  getSquaredDistanceBetweenPoints,
-  pointIsInRect,
-  setHashParam,
-  vectorGetMagnitude,
-} from "./utils.js";
+import { __, getSquaredDistanceBetweenPoints, pointIsInRect, setHashParam, vectorGetMagnitude } from "./utils.js";
 
-class Game {}
+class Game {
+  /** @type {number} */
+  static scoreForLevel = 0;
+}
 
 /**
  * @function init
@@ -61,20 +52,20 @@ Game.init = function () {
   Game.container_el.classList.add(CLASSNAMES.GAME);
   document.getElementById(RCSI.EL_IDS.APP_WRAPPER).appendChild(Game.container_el);
 
-  //Game.initEventHandlers();
-  //Game.initSound();
-  //Game.initFpsCounter();
-  //Game.calculateGlobalCollectObstacleRadiusRange();
+  Game.initEventHandlers();
+  Game.initSound();
+  Game.initFpsCounter();
+  Game.calculateGlobalCollectObstacleRadiusRange();
 
-  //// Default to preferring fullscreen at start of game
-  //FullscreenManager.init({ userPrefersFullscreen: true });
-  //// `Display.init()` starts several things including (via `Text.init()`) measuring/selection of bitmap font size and pre-caching of bitmap characters
-  //Display.init();
-  //Player.init();
-  //Controller.init();
-  //LevelTransition.init();
+  // Default to preferring fullscreen at start of game
+  FullscreenManager.init({ userPrefersFullscreen: true });
+  // `Display.init()` starts several things including (via `Text.init()`) measuring/selection of bitmap font size and pre-caching of bitmap characters
+  Display.init();
+  Player.init();
+  Controller.init();
+  LevelTransition.init();
 
-  //Game.resetAndStartFirstLevel();
+  Game.resetAndStartFirstLevel();
 };
 
 /**
@@ -116,7 +107,7 @@ Game.initEventHandlers = function () {
  * @description
  * ##### Enable/disable sound based on URL hash parameter or default to 'enabled'
  */
-Game.initSound = function () {
+  Game.initSound = function () {
   if (window.RcSpaceInvaders.hashParams?.mute) {
     Game.soundIsEnabled = false;
   } else {
@@ -235,8 +226,7 @@ Game.updateLayout = function () {
   __("Game.updateLayout()::", RCSI.FMT_GAME);
 
   Layout.update({
-    gameplayAreaToCanvasLateralRatio:
-      Game.curLevelData.gameplayAreaToCanvasLateralRatio,
+    gameplayAreaToCanvasLateralRatio: Game.curLevelData.gameplayAreaToCanvasLateralRatio,
   });
   Controller.updateLayout();
   Display.updateLayout();
@@ -314,43 +304,6 @@ Game.updateByFrameCount = function (_frames) {
 
   Display.update();
 };
-//
-///**
-// * @function iterateLevelOutro
-// * @static
-// *
-// * @description
-// * ##### Perform the next step of the level outro sequence
-// * - Move from old level background colour to the next level colour
-// */
-//Game.iterateLevelOutro = function () {
-//  var rgb_ar;
-//
-//  if (Game.levelTransitionTotalFrames > 0) {
-//    // Background colour
-//    Game.transitionFromBgColorRGBA = addFadeStepToRGB(
-//      Game.transitionFromBgColorRGBA,
-//      Game.fadeStepBetweenRGBColors_ar
-//    );
-//    //__(
-//    //  "Game.transitionFromBgColorRGBA: " +
-//    //    JSON.stringify(Game.transitionFromBgColorRGBA)
-//    //);
-//    rgb_ar = rgbToRGB_ar(Game.transitionFromBgColorRGBA);
-//
-//    // Controller speed damping
-//    Controller.speedDamp += Game.controllerSpeedDampTransitionStep;
-//
-//    ObstacleManager.levelOutroRemoveNextBackgroundObstacles(Game.levelOutroBgObstaclesToRemovePerFrame);
-//
-//    // Continue sequence
-//    Game.levelTransitionTotalFrames--;
-//  } else {
-//    rgb_ar = rgbToRGB_ar(Game.transitionToBgColorRGBA);
-//  }
-//
-//  Display.setBackgroundColor(rgbToHex(...rgb_ar));
-//};
 
 /*
  *
@@ -372,20 +325,11 @@ Game.addScoreForLevel = function () {
   __("Game.addScoreForLevel()", RCSI.FMT_GAME);
   // TODO Can this local var be deleted?
   var successiveLevelsThisSession = Game.levelIndex - Game.skipToLevelIndex + 1,
-    levelScoreMultiplier =
-      Game.levelsCompletedThisSession * GAME.SCORE_PER_LEVEL_MULTIPLIER;
+    levelScoreMultiplier = Game.levelsCompletedThisSession * GAME.SCORE_PER_LEVEL_MULTIPLIER;
 
-  Game.scoreForLevel = Math.round(
-    Game.timeRemaining * GAME.SCORE_PER_SEC_REMAINING * levelScoreMultiplier
-  );
-  __(
-    "\tsuccessiveLevelsThisSession: " + successiveLevelsThisSession,
-    RCSI.FMT_GAME
-  );
-  __(
-    "\tGame.levelsCompletedThisSession: " + Game.levelsCompletedThisSession,
-    RCSI.FMT_GAME
-  );
+  Game.scoreForLevel = Math.round(Game.timeRemaining * GAME.SCORE_PER_SEC_REMAINING * levelScoreMultiplier);
+  __("\tsuccessiveLevelsThisSession: " + successiveLevelsThisSession, RCSI.FMT_GAME);
+  __("\tGame.levelsCompletedThisSession: " + Game.levelsCompletedThisSession, RCSI.FMT_GAME);
   __("\tlevelScoreMultiplier: " + levelScoreMultiplier, RCSI.FMT_GAME);
   __("\tscoreForLevel: " + Game.scoreForLevel, RCSI.FMT_GAME);
 
@@ -440,7 +384,7 @@ Game.playerHitObstacle = function (_obstacle) {
   if (_obstacle.type === OBSTACLE_TYPE.AVOID) {
     // bounce obstacle
     playerBounceVector = ObstacleManager.bounceOffPlayer(_obstacle);
-    
+
     // 'Bounce' player by pretending the pointer has moved... for the next
     // few // (GAME.DAMAGED_FRAMES_TOTAL) frames, mouse/touch input is ignored,
     // meaning the // fake pointer position is used as an aim for the controller
@@ -449,16 +393,12 @@ Game.playerHitObstacle = function (_obstacle) {
     Game.pointerPos.y += playerBounceVector.y;
 
     if (_obstacle.damageSafetyCounter === 0) {
-      _obstacle.damageSafetyCounter = InternalTimer.secondsToFrames(
-        GAME.DAMAGE_SAFETY_SECS_TOTAL
-      );
+      _obstacle.damageSafetyCounter = InternalTimer.secondsToFrames(GAME.DAMAGE_SAFETY_SECS_TOTAL);
 
       if (!Game.isInLevelOutro && !Game.isInGameOver) {
         Game.damagePlayer(vectorGetMagnitude(playerBounceVector));
 
-        SoundManagerHowler.playSoundById(
-          _obstacle.damageSfx || SOUND_IDS.SFX_DAMAGE
-        );
+        SoundManagerHowler.playSoundById(_obstacle.damageSfx || SOUND_IDS.SFX_DAMAGE);
       }
     }
   } else if (_obstacle.type === OBSTACLE_TYPE.COLLECT) {
@@ -483,9 +423,7 @@ Game.playerHitObstacle = function (_obstacle) {
  * @param {object} _obstacle
  */
 Game.playerEats = function (_obstacle) {
-  Player.playerEatsFramesCounter = InternalTimer.secondsToFrames(
-    GAME.PLAYEREATS_SECS_TOTAL
-  );
+  Player.playerEatsFramesCounter = InternalTimer.secondsToFrames(GAME.PLAYEREATS_SECS_TOTAL);
   Player.eatenColor = _obstacle.color;
   SoundManagerHowler.playSoundById(_obstacle.soundID);
   // no longer active / has been collected, so start animating it away
@@ -511,15 +449,14 @@ Game.playerEats = function (_obstacle) {
  * @param {number} _bounceMagnitude - Strength of the collision that caused damage
  */
 Game.damagePlayer = function (_bounceMagnitude) {
-  var adjustedBounceMagnitude =
-    _bounceMagnitude / GAME.PLAYER_LOSSOFCONTROL_MAGNITUDE_DIVISOR;
+  var adjustedBounceMagnitude = _bounceMagnitude / GAME.PLAYER_LOSSOFCONTROL_MAGNITUDE_DIVISOR;
 
   //__("_bounceMagnitude: " + _bounceMagnitude, RCSI.FMT_GAME);
   //__("adjustedBounceMagnitude: " + adjustedBounceMagnitude, RCSI.FMT_GAME);
 
   Player.damagedFramesCounter = Math.min(
     Math.ceil(adjustedBounceMagnitude * InternalTimer.currentFps),
-    InternalTimer.secondsToFrames(GAME.PLAYER_LOSSOFCONTROL_MAX_SECS)
+    InternalTimer.secondsToFrames(GAME.PLAYER_LOSSOFCONTROL_MAX_SECS),
   );
   Controller.damageAddedSlipperiness = adjustedBounceMagnitude;
   Player.health--;
@@ -546,10 +483,7 @@ Game.damagePlayer = function (_bounceMagnitude) {
  */
 Game.onResize = function () {
   clearTimeout(Game.resize_timeout);
-  Game.resize_timeout = setTimeout(
-    Game.updateLayout,
-    GAME.ONRESIZE_UPDATE_DELAY_MS
-  );
+  Game.resize_timeout = setTimeout(Game.updateLayout, GAME.ONRESIZE_UPDATE_DELAY_MS);
 };
 
 /**
@@ -752,9 +686,8 @@ Game.startPlay = function () {
   __("Game.startPlay()::", RCSI.FMT_GAME);
 
   __(
-    "ObstacleManager.surfaceAreaOfLevel: " +
-      Math.round(ObstacleManager.surfaceAreaOfLevel).toLocaleString(),
-    RCSI.FMT_INFO
+    "ObstacleManager.surfaceAreaOfLevel: " + Math.round(ObstacleManager.surfaceAreaOfLevel).toLocaleString(),
+    RCSI.FMT_INFO,
   );
 
   OverlayText.setEmpty();
@@ -778,10 +711,7 @@ Game.nextLevel = function () {
   document.removeEventListener(Game.tapEventName, Game.nextLevel);
   __("\tGame.lastLevelIndex:" + Game.lastLevelIndex, RCSI.FMT_GAME);
   __("\tGame.levelIndex:" + Game.levelIndex, RCSI.FMT_GAME);
-  __(
-    "\tGame.levelsCompletedThisSession:" + Game.levelsCompletedThisSession,
-    RCSI.FMT_GAME
-  );
+  __("\tGame.levelsCompletedThisSession:" + Game.levelsCompletedThisSession, RCSI.FMT_GAME);
   __("\tGame.totalLevels:" + Game.totalLevels, RCSI.FMT_GAME);
   ObstacleManager.deleteObstacles();
   if (Game.levelsCompletedThisSession < Game.totalLevels) {
@@ -910,7 +840,7 @@ Game.startLevelIntro = function () {
   if (Game.levelIndex === Game.skipToLevelIndex) {
     __(
       "Initial level, meaning either level 1 or whichever level is skipped to via URL hash (param Game.levelIndex === Game.skipToLevelIndex)",
-      RCSI.FMT_GAME
+      RCSI.FMT_GAME,
     );
     __("\t\tSETTING OVERLAY TEXT", RCSI.FMT_GAME);
     if (Game.isOnFrontPage) {
@@ -954,7 +884,7 @@ Game.delayedStartGameplay = function () {
   Timers.setByID(
     TIMER_ID.LEVELINTRO_ADD_OBSTACLES,
     ObstacleManager.addAllCollectAndAvoid,
-    TIMINGS.LEVEL_INTRO_ADDOBSTACLES_MS
+    TIMINGS.LEVEL_INTRO_ADDOBSTACLES_MS,
   );
 
   Timers.clearByID(TIMER_ID.TEXT_FADEOUT_START);
@@ -963,15 +893,11 @@ Game.delayedStartGameplay = function () {
     Game.startTextFade,
     TIMINGS.LEVEL_INTRO_TEXT_FADEOUT_START_MS,
     FADE_DIRECTION.OUT,
-    TIMINGS.TEXT_FADEOUT_SLOW_SECS
+    TIMINGS.TEXT_FADEOUT_SLOW_SECS,
   );
 
   Timers.clearByID(TIMER_ID.LEVELINTRO_END);
-  Timers.setByID(
-    TIMER_ID.LEVELINTRO_END,
-    Game.startPlay,
-    TIMINGS.LEVEL_INTROEND_MS
-  );
+  Timers.setByID(TIMER_ID.LEVELINTRO_END, Game.startPlay, TIMINGS.LEVEL_INTROEND_MS);
 
   // Sound was temporarily disabled at game over so set it back to whatever the
   // user preference is
@@ -1037,15 +963,11 @@ Game.startLevelOutro = function () {
     Game.startTextFade,
     TIMINGS.LEVEL_OUTRO_TEXT_FADEOUT_START_MS,
     FADE_DIRECTION.OUT,
-    TIMINGS.TEXT_FADEOUT_SLOW_SECS
+    TIMINGS.TEXT_FADEOUT_SLOW_SECS,
   );
 
   Timers.clearByID(TIMER_ID.LEVELOUTRO_END);
-  Timers.setByID(
-    TIMER_ID.LEVELOUTRO_END,
-    Game.nextLevel,
-    TIMINGS.LEVEL_OUTROEND_MS
-  );
+  Timers.setByID(TIMER_ID.LEVELOUTRO_END, Game.nextLevel, TIMINGS.LEVEL_OUTROEND_MS);
 
   LevelTransition.start();
 };
@@ -1060,9 +982,7 @@ Game.startLevelOutro = function () {
  * - If time is up, end the game
  */
 Game.updateTimer = function () {
-  Game.timeRemaining =
-    Game.curLevelData.timeAllowedSecs -
-    Math.round((Date.now() - Game.timestampOnStart) / 1000);
+  Game.timeRemaining = Game.curLevelData.timeAllowedSecs - Math.round((Date.now() - Game.timestampOnStart) / 1000);
   if (Game.timeRemaining <= 0) {
     Game.timeRemaining = 0;
     __("TIME UP", RCSI.FMT_GAME);
@@ -1089,10 +1009,7 @@ Game.updateTimer = function () {
  */
 Game.checkPlayerHit = function (_obstacle) {
   var combinedRadius = Player.drawnRadius + _obstacle.radius;
-  if (
-    Game.getSquaredObstacleDistanceFromPlayer(_obstacle) <
-    combinedRadius * combinedRadius
-  ) {
+  if (Game.getSquaredObstacleDistanceFromPlayer(_obstacle) < combinedRadius * combinedRadius) {
     Game.playerHitObstacle(_obstacle);
   }
 };

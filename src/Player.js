@@ -65,7 +65,6 @@ Player.setupForLevel = function () {
     GAME.PLAYER_ORIGIN_LONGITUDINAL * Layout.proportionalMultiplier;
   Player.growthDivisor = Game.curLevelData.player.growthDivisor;
   Player.color = Game.curLevelData.player.color;
-  Player.addedLayer_ar = Game.curLevelData.player.addedLayer_ar;
   Player.damagedColor = Game.curLevelData.bgColor;
   Player.damagedFramesCounter = 0;
 };
@@ -243,14 +242,6 @@ Player.draw = function () {
   Display.ctx.lineWidth = Player.outlineThickness;
   Display.ctx.stroke();
 
-  if (Player.addedLayer_ar) {
-    Display.drawAddedLayers(playerDrawnPosX, playerDrawnPosY, {
-      addedLayer_ar: Player.addedLayer_ar,
-      radius: drawnRadius,
-      rotation: vectorToDegrees(Controller.scalarVectorOfTravel),
-      stretch: ellipseStretch * GAME.PLAYER_GRIN_INCREASERATE,
-    });
-  }
 };
 
 export { Player };

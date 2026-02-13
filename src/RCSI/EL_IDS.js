@@ -11,7 +11,7 @@
  */
 
 
-export const APP_WRAPPER = 'pd-container';
+export const APP_WRAPPER = 'rcsi-container';
 export const ACTIVEAREA_CANVAS = 'activearea-canvas';
 
 export const PIPE_WALL_CANVAS = 'pipewall-canvas';

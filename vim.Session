@@ -1,0 +1,166 @@
+let SessionLoad = 1
+let s:so_save = &g:so | let s:siso_save = &g:siso | setg so=0 siso=0 | setl so=-1 siso=-1
+let v:this_session=expand("<sfile>:p")
+silent only
+silent tabonly
+cd ~/000-WORK/rc-space-invaders
+if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
+  let s:wipebuf = bufnr('%')
+endif
+let s:shortmess_save = &shortmess
+if &shortmess =~ 'A'
+  set shortmess=aoOA
+else
+  set shortmess=aoO
+endif
+badd +9 README.md
+badd +5 build-watch.sh
+badd +198 src/Game.js
+badd +105 ./src/AssetPreloader.js
+badd +231 ./src/BitmapText.js
+badd +24 ./src/Controller.js
+badd +98 ./src/Display.js
+badd +186 ./src/FullscreenManager.js
+badd +97 ./src/HealthMeter.js
+badd +99 ./src/ImageManager.js
+badd +79 ./src/InternalTimer.js
+badd +57 ./src/JsonManager.js
+badd +349 ./src/Layout.js
+badd +15 ./src/LevelTransition.js
+badd +17 ./src/LoadingIndicator.js
+badd +216 ./src/ObstacleManager.js
+badd +161 ./src/OverlayText.js
+badd +245 ./src/Player.js
+badd +8 ./src/RCSI/CLASSNAMES.js
+badd +25 ./src/RCSI/CONST.js
+badd +14 ./src/RCSI/EL_IDS.js
+badd +7 ./src/RCSI/ENUM.js
+badd +427 ./src/RCSI/GAME.js
+badd +1 ./src/RCSI/GRADIENT.js
+badd +7 ./src/RCSI/IMAGE_DATA.js
+badd +7 ./src/RCSI/IMAGE_IDS.js
+badd +1 ./src/RCSI/JSONFILES_DATA.js
+badd +1 ./src/RCSI/JSONFILE_IDS.js
+badd +1 ./src/RCSI/LEVELS.js
+badd +7 ./src/RCSI/SOUND_DATA.js
+badd +7 ./src/RCSI/SOUND_IDS.js
+badd +7 ./src/RCSI/STRING.js
+badd +7 ./src/RCSI/TIMINGS.js
+badd +14 ./src/Shape.js
+badd +10 ./src/SoundManagerHowler.js
+badd +16 ./src/Text.js
+badd +52 ./src/utils.js
+badd +65 ./src/RCSI/LEVEL_DATA/BASIC.js
+badd +22 ./src/RCSI/LEVEL_DATA/INTRO.js
+badd +34 ./src/Timers.js
+badd +1 ./src/main.js
+argglobal
+%argdel
+$argadd README.md
+$argadd ./src/AddedLayer.js
+$argadd ./src/AssetPreloader.js
+$argadd ./src/BitmapText.js
+$argadd ./src/Controller.js
+$argadd ./src/Display.js
+$argadd ./src/FullscreenManager.js
+$argadd src/Game.js
+$argadd ./src/HealthMeter.js
+$argadd ./src/ImageManager.js
+$argadd ./src/InternalTimer.js
+$argadd ./src/IntroObstacles.js
+$argadd ./src/JsonManager.js
+$argadd ./src/Layout.js
+$argadd ./src/LevelTransition.js
+$argadd ./src/LoadingIndicator.js
+$argadd ./src/ObstacleManager.js
+$argadd ./src/OverlayText.js
+$argadd ./src/PipeWalls.js
+$argadd ./src/Player.js
+$argadd ./src/RCSI/CLASSNAMES.js
+$argadd ./src/RCSI/CONST.js
+$argadd ./src/RCSI/EL_IDS.js
+$argadd ./src/RCSI/ENUM.js
+$argadd ./src/RCSI/GAME.js
+$argadd ./src/RCSI/GRADIENT.js
+$argadd ./src/RCSI/IMAGE_DATA.js
+$argadd ./src/RCSI/IMAGE_IDS.js
+$argadd ./src/RCSI/JSONFILES_DATA.js
+$argadd ./src/RCSI/JSONFILE_IDS.js
+$argadd ./src/RCSI/LEVELS.js
+$argadd ./src/RCSI/LEVEL_DATA/ALIEN.js
+$argadd ./src/RCSI/LEVEL_DATA/BASIC.js
+$argadd ./src/RCSI/LEVEL_DATA/BLRDS.js
+$argadd ./src/RCSI/LEVEL_DATA/CHPLN.js
+$argadd ./src/RCSI/LEVEL_DATA/DENSE.js
+$argadd ./src/RCSI/LEVEL_DATA/GARDN.js
+$argadd ./src/RCSI/LEVEL_DATA/GNSMK.js
+$argadd ./src/RCSI/LEVEL_DATA/INTRO.js
+$argadd ./src/RCSI/LEVEL_DATA/JUNGL.js
+$argadd ./src/RCSI/LEVEL_DATA/LMOLV.js
+$argadd ./src/RCSI/LEVEL_DATA/MAUVE.js
+$argadd ./src/RCSI/LEVEL_DATA/MERNG.js
+$argadd ./src/RCSI/LEVEL_DATA/MULT1.js
+$argadd ./src/RCSI/LEVEL_DATA/MULT2.js
+$argadd ./src/RCSI/LEVEL_DATA/MUSTD.js
+$argadd ./src/RCSI/LEVEL_DATA/NTPOR.js
+$argadd ./src/RCSI/LEVEL_DATA/OPRTN.js
+$argadd ./src/RCSI/LEVEL_DATA/PEKMN.js
+$argadd ./src/RCSI/LEVEL_DATA/REDDD.js
+$argadd ./src/RCSI/LEVEL_DATA/RRRED.js
+$argadd ./src/RCSI/LEVEL_DATA/STRRY.js
+$argadd ./src/RCSI/LEVEL_DATA/SWARM.js
+$argadd ./src/RCSI/LEVEL_DATA/TOOEZ.js
+$argadd ./src/RCSI/LEVEL_DATA/WISTA.js
+$argadd ./src/RCSI/SOUND_DATA.js
+$argadd ./src/RCSI/SOUND_IDS.js
+$argadd ./src/RCSI/STRING.js
+$argadd ./src/RCSI/TIMINGS.js
+$argadd ./src/Shape.js
+$argadd ./src/SoundManagerHowler.js
+$argadd ./src/Text.js
+$argadd ./src/Timers.js
+$argadd ./src/howler.core.min.js
+$argadd ./src/howler.min.js
+$argadd ./src/main.js
+$argadd ./src/utils.js
+edit src/Game.js
+argglobal
+67argu
+if bufexists(fnamemodify("src/Game.js", ":p")) | buffer src/Game.js | else | edit src/Game.js | endif
+if &buftype ==# 'terminal'
+  silent file src/Game.js
+endif
+balt build-watch.sh
+setlocal foldmethod=manual
+setlocal foldexpr=0
+setlocal foldmarker={{{,}}}
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldminlines=1
+setlocal foldnestmax=20
+setlocal nofoldenable
+silent! normal! zE
+let &fdl = &fdl
+let s:l = 215 - ((21 * winheight(0) + 15) / 30)
+if s:l < 1 | let s:l = 1 | endif
+keepjumps exe s:l
+normal! zt
+keepjumps 215
+normal! 0
+tabnext 1
+if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
+  silent exe 'bwipe ' . s:wipebuf
+endif
+unlet! s:wipebuf
+set winheight=1 winwidth=20
+let &shortmess = s:shortmess_save
+let s:sx = expand("<sfile>:p:r")."x.vim"
+if filereadable(s:sx)
+  exe "source " . fnameescape(s:sx)
+endif
+let &g:so = s:so_save | let &g:siso = s:siso_save
+set hlsearch
+nohlsearch
+doautoall SessionLoadPost
+unlet SessionLoad
+" vim: set ft=vim :

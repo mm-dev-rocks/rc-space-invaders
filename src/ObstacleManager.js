@@ -213,7 +213,6 @@ ObstacleManager.spawn = function (_data) {
       gradient: _data.gradient,
       gradientFadePoint: _data.gradientFadePoint,
       useDefaultStroke: _data.useDefaultStroke,
-      addedLayer_ar: _data.addedLayer_ar,
       damageSfx: _data.damageSfx,
       // Used for a short time after collisions
       //addedSpeed: 0,
