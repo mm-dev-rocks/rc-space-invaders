@@ -10,16 +10,16 @@
  * ## Drawing to the display (canvas) happens in this class, with some of it being farmed out to sub-classes
  */
 
-import { PD } from "./PD/CONST.js";
+import { RCSI } from "./RCSI/CONST.js";
 import {
   ADDED_LAYER,
   ASPECT_RATIO,
   OBSTACLE_SUBTYPE,
   OBSTACLE_TYPE,
-} from "./PD/ENUM.js";
-import * as GAME from "./PD/GAME.js";
-import * as IMAGE_IDS from "./PD/IMAGE_IDS.js";
-import * as STRING from "./PD/STRING.js";
+} from "./RCSI/ENUM.js";
+import * as GAME from "./RCSI/GAME.js";
+import * as IMAGE_IDS from "./RCSI/IMAGE_IDS.js";
+import * as STRING from "./RCSI/STRING.js";
 
 import { AddedLayer } from "./AddedLayer.js";
 import { Controller } from "./Controller.js";
@@ -51,7 +51,7 @@ class Display {}
  * - Initialise some other companion classes
  */
 Display.init = function () {
-  __("Display.init()", PD.FMT_DISPLAY);
+  __("Display.init()", RCSI.FMT_DISPLAY);
   if (!Display.canvas) {
     Display.createCanvas();
   }
@@ -75,7 +75,7 @@ Display.init = function () {
  * - Which obstacles to show on the level intro screen
  */
 Display.setupForLevel = function () {
-  __("Display.setupForLevel()", PD.FMT_DISPLAY);
+  __("Display.setupForLevel()", RCSI.FMT_DISPLAY);
 
   Display.levelIsDark = Game.curLevelData.isDark;
   Display.textColor = Game.curLevelData.textColor;
@@ -163,10 +163,10 @@ Display.updateLayout = function () {
  * **`Display.canvas` contains everything we see on-screen.**
  */
 Display.createCanvas = function () {
-  __("Display.createCanvas()", PD.FMT_INFO);
+  __("Display.createCanvas()", RCSI.FMT_INFO);
 
   Display.canvas = document.createElement("canvas");
-  Display.canvas.id = PD.EL_IDS.ACTIVEAREA_CANVAS;
+  Display.canvas.id = RCSI.EL_IDS.ACTIVEAREA_CANVAS;
   // Declaring that we don't need the canvas itself to use transparency allows
   // the browser to optimise
   Display.ctx = Display.canvas.getContext("2d", {
@@ -231,7 +231,7 @@ Display.update = function () {
     }
     PipeWalls.draw();
     if (Game.doPerfLog) {
-      __("PipeWalls.draw() " + (performance.now() - t2), PD.FMT_PERFORMANCE);
+      __("PipeWalls.draw() " + (performance.now() - t2), RCSI.FMT_PERFORMANCE);
     }
     Display.drawFloatingObstacles();
   }
@@ -283,7 +283,7 @@ Display.update = function () {
   }
 
   if (Game.doPerfLog) {
-    __("Display.update() " + (performance.now() - t1), PD.FMT_PERFORMANCE);
+    __("Display.update() " + (performance.now() - t1), RCSI.FMT_PERFORMANCE);
   }
 };
 

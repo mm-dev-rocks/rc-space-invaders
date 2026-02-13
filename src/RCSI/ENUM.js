@@ -4,7 +4,7 @@
  * @author Mark Mayes / mm-dev
  *
  *
- * @module PD/ENUM
+ * @module RCSI/ENUM
  *
  * @description
  * ## Some string-indexed enum-type data

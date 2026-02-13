@@ -13,8 +13,8 @@
 
 import { __, removeChildFromParent } from "./utils.js";
 
-import * as STRING from "./PD/STRING.js";
-import * as CLASSNAMES from "./PD/CLASSNAMES.js";
+import * as STRING from "./RCSI/STRING.js";
+import * as CLASSNAMES from "./RCSI/CLASSNAMES.js";
 
 class LoadingIndicator {}
 

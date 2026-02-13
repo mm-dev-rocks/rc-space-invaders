@@ -10,7 +10,7 @@
  * ## `Howler.js` is used for audio handling in the app, this module adds some functions to help integrate it
  */
 
-import { PD } from "./PD/CONST.js";
+import { RCSI } from "./RCSI/CONST.js";
 import { __, manualEvent } from "./utils.js";
 
 // https://github.com/goldfire/howler.js
@@ -47,7 +47,7 @@ SoundManagerHowler.init = function (_data) {
         "" +
           SoundManagerHowler.data_ar[i].id +
           ": already exists - skipping preload",
-        PD.FMT_AUDIO
+        RCSI.FMT_AUDIO
       );
     } else {
       audio_tmp = new Howl({
@@ -59,7 +59,7 @@ SoundManagerHowler.init = function (_data) {
       });
 
       audio_tmp.id = SoundManagerHowler.data_ar[i].id;
-      __("INITIALISING: " + SoundManagerHowler.data_ar[i].file, PD.FMT_AUDIO);
+      __("INITIALISING: " + SoundManagerHowler.data_ar[i].file, RCSI.FMT_AUDIO);
       SoundManagerHowler.allAudio_ob[SoundManagerHowler.data_ar[i].id] =
         audio_tmp;
       SoundManagerHowler.preload_ar.push(audio_tmp);
@@ -79,12 +79,12 @@ SoundManagerHowler.init = function (_data) {
 SoundManagerHowler.onAudioLoad = function () {
   var i;
 
-  //__('SoundManagerHowler::onAudioLoad: ' + this.id, PD.FMT_AUDIO);
+  //__('SoundManagerHowler::onAudioLoad: ' + this.id, RCSI.FMT_AUDIO);
 
   for (i = 0; i < SoundManagerHowler.preload_ar.length; i++) {
     if (SoundManagerHowler.preload_ar[i] === this) {
       SoundManagerHowler.preload_ar.splice(i, 1);
-      __("LOADED: " + this.id, PD.FMT_AUDIO);
+      __("LOADED: " + this.id, RCSI.FMT_AUDIO);
       break;
     }
   }
@@ -142,8 +142,8 @@ SoundManagerHowler.setMuteState = function (_state) {
  */
 SoundManagerHowler.onAudioEventGeneric = function (howlerID, message) {
   if (message) {
-    __("SoundManagerHowler::id: " + this.id, PD.FMT_AUDIO);
-    __("\t" + message, PD.FMT_AUDIO);
+    __("SoundManagerHowler::id: " + this.id, RCSI.FMT_AUDIO);
+    __("\t" + message, RCSI.FMT_AUDIO);
   }
 };
 

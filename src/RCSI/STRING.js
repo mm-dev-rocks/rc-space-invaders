@@ -4,7 +4,7 @@
  * @author Mark Mayes / mm-dev
  *
  *
- * @module PD/STRING
+ * @module RCSI/STRING
  *
  * @description
  * ## Strings used in the game
@@ -49,7 +49,7 @@ export const COLLECT_PADSTRING = "0000";
 export const COLLECT_TEXT = "EAT";
 export const AVOID_TEXT = "AVOID";
 
-export const ASSETS_LOADING = "PIPEDREAM LOADING";
+export const ASSETS_LOADING = "RC SPACE INVADERS LOADING";
 
 export const LEVEL_COMPLETED = "COMPLETED!";
 export const TIME_REMAINING = "SECS REMAINING";

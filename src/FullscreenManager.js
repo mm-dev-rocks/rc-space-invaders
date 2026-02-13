@@ -10,7 +10,7 @@
  * ## Handling fullscreen requests can be a little complex so it gets its own class
  */
 
-import { PD } from "./PD/CONST.js";
+import { RCSI } from "./RCSI/CONST.js";
 
 import { __ } from "./utils.js";
 
@@ -67,23 +67,23 @@ FullscreenManager.tryMethodCall = function (
     _target_el[_methodName]().catch(function (err) {
       __(
         `\tError in promise ${_description}: ${err.message} (${err.name})`,
-        PD.FMT_ERROR
+        RCSI.FMT_ERROR
       );
     });
   } catch (err) {
     __(
       `\tError attempting ${_description}: ${err.message} (${err.name})`,
-      PD.FMT_ERROR
+      RCSI.FMT_ERROR
     );
   } finally {
     setTimeout(function () {
       __(
         "\tdocument.fullscreenElement: " + document.fullscreenElement,
-        PD.FMT_FULLSCREEN
+        RCSI.FMT_FULLSCREEN
       );
       __(
         "\tFullscreenManager.isFullscreen: " + FullscreenManager.isFullscreen,
-        PD.FMT_FULLSCREEN
+        RCSI.FMT_FULLSCREEN
       );
     }, 100);
   }
@@ -104,7 +104,7 @@ FullscreenManager.tryMethodCall = function (
 FullscreenManager.setState = function (_ob) {
   __(
     "FullscreenManager.setState(" + JSON.stringify(_ob) + ")::",
-    PD.FMT_FULLSCREEN
+    RCSI.FMT_FULLSCREEN
   );
   var i, methodNameToTry;
 
@@ -112,23 +112,23 @@ FullscreenManager.setState = function (_ob) {
     // By clicking the fullscreen icon, the user is expressing a preference so
     // retain it for the rest of the session
     FullscreenManager.userPrefersFullscreen = _ob.wantsFullscreen;
-    __("\tUser sets fullscreen preference", PD.FMT_FULLSCREEN);
+    __("\tUser sets fullscreen preference", RCSI.FMT_FULLSCREEN);
   }
 
   __(
     "\tFullscreenManager.userPrefersFullscreen: " +
       FullscreenManager.userPrefersFullscreen,
-    PD.FMT_FULLSCREEN
+    RCSI.FMT_FULLSCREEN
   );
   __(
     "\tFullscreenManager.isFullscreen: " + FullscreenManager.isFullscreen,
-    PD.FMT_FULLSCREEN
+    RCSI.FMT_FULLSCREEN
   );
 
   if (_ob.wantsFullscreen && !FullscreenManager.userPrefersFullscreen) {
-    __("\tUser has disabled fullscreen, ignoring request", PD.FMT_FULLSCREEN);
+    __("\tUser has disabled fullscreen, ignoring request", RCSI.FMT_FULLSCREEN);
   } else if (!_ob.wantsFullscreen && FullscreenManager.userPrefersFullscreen) {
-    __("\tUser has asked for fullscreen, ignoring request", PD.FMT_FULLSCREEN);
+    __("\tUser has asked for fullscreen, ignoring request", RCSI.FMT_FULLSCREEN);
   } else {
     if (document.fullscreenEnabled) {
       if (_ob.wantsFullscreen) {
@@ -139,7 +139,7 @@ FullscreenManager.setState = function (_ob) {
             if (typeof _ob?.el[methodNameToTry] === "function") {
               __(
                 "\tAttempting fullscreen using `" + methodNameToTry + "`",
-                PD.FMT_FULLSCREEN
+                RCSI.FMT_FULLSCREEN
               );
               FullscreenManager.tryMethodCall(
                 _ob.el,
@@ -152,12 +152,12 @@ FullscreenManager.setState = function (_ob) {
         } else {
           __(
             "\t" + document.fullscreenElement + " is already fullscreen",
-            PD.FMT_FULLSCREEN
+            RCSI.FMT_FULLSCREEN
           );
         }
       } else {
         // Try to exit fullscreen
-        __("\tExiting fullscreen", PD.FMT_FULLSCREEN);
+        __("\tExiting fullscreen", RCSI.FMT_FULLSCREEN);
         FullscreenManager.tryMethodCall(
           document,
           "exitFullscreen",
@@ -167,7 +167,7 @@ FullscreenManager.setState = function (_ob) {
     } else {
       __(
         "\tFullscreen mode is not available in this document",
-        PD.FMT_FULLSCREEN
+        RCSI.FMT_FULLSCREEN
       );
     }
   }
@@ -175,11 +175,11 @@ FullscreenManager.setState = function (_ob) {
   __(
     "\tFullscreenManager.userPrefersFullscreen: " +
       FullscreenManager.userPrefersFullscreen,
-    PD.FMT_FULLSCREEN
+    RCSI.FMT_FULLSCREEN
   );
   __(
     "\tFullscreenManager.isFullscreen: " + FullscreenManager.isFullscreen,
-    PD.FMT_FULLSCREEN
+    RCSI.FMT_FULLSCREEN
   );
 };
 

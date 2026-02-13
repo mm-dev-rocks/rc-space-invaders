@@ -4,7 +4,7 @@
  * @author Mark Mayes / mm-dev
  *
  *
- * @module PD/EL_IDS
+ * @module RCSI/EL_IDS
  *
  * @description
  * ## IDs for some elements shared between CSS and JS

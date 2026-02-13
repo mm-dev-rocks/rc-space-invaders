@@ -10,15 +10,15 @@
  * ## Low-level text drawing
  * The `Text` class farms out text-drawing operations to this class.
  * - `ImageManager.allImages_ob` stores data on the bitmap font spritesheet images
- * - The data (originating from {@link PD/IMAGE_DATA.js}) lists allowed multiples for each font, so eg a font might be allowed to be displayed at 2x, 4x, 8x of its original size
+ * - The data (originating from {@link RCSI/IMAGE_DATA.js}) lists allowed multiples for each font, so eg a font might be allowed to be displayed at 2x, 4x, 8x of its original size
  * - The spritesheet images store 1-bit fonts at their smallest sizes
  * - The best-fitting multiple is stored as `BitmapText.spritesheetScale` for use by this and other classes
  * - If no font/multiple can be found to fit the desired number of characters in this viewport, use the smallest font and set `BitmapText.useShortVersions = true`
  */
 
-import { PD } from "./PD/CONST.js";
-import * as GAME from "./PD/GAME.js";
-import * as STRING from "./PD/STRING.js";
+import { RCSI } from "./RCSI/CONST.js";
+import * as GAME from "./RCSI/GAME.js";
+import * as STRING from "./RCSI/STRING.js";
 
 import { ImageManager } from "./ImageManager.js";
 import { Display } from "./Display.js";
@@ -185,7 +185,7 @@ BitmapText.chooseBestFittingFont = function () {
   }
 
   if (!bestFittingFontData) {
-    __("CANVAS TOO SMALL FOR ALL TEXT", PD.FMT_TEXT);
+    __("CANVAS TOO SMALL FOR ALL TEXT", RCSI.FMT_TEXT);
     BitmapText.useShortVersions = true;
     bestFittingFontData = smallestFontData;
     BitmapText.spritesheetScale = 1;
@@ -194,7 +194,7 @@ BitmapText.chooseBestFittingFont = function () {
   }
   __(
     "BitmapText.useShortVersions: " + BitmapText.useShortVersions,
-    PD.FMT_TEXT
+    RCSI.FMT_TEXT
   );
 
   BitmapText.drawnCharWidth = bestFittingFontData.width;
@@ -225,40 +225,40 @@ BitmapText.chooseBestFittingFont = function () {
 
   __(
     "BitmapText.spritesheetImage.width: " + BitmapText.spritesheetImage.width,
-    PD.FMT_TEXT
+    RCSI.FMT_TEXT
   );
 
   __(
     "BitmapText.spritesheetImage.height: " + BitmapText.spritesheetImage.height,
-    PD.FMT_TEXT
+    RCSI.FMT_TEXT
   );
 
   __(
     "BitmapText.spritesheetScale: " + BitmapText.spritesheetScale,
-    PD.FMT_TEXT
+    RCSI.FMT_TEXT
   );
 
-  __("BitmapText.drawnCharWidth: " + BitmapText.drawnCharWidth, PD.FMT_TEXT);
-  __("BitmapText.letterSpacing: " + BitmapText.letterSpacing, PD.FMT_TEXT);
-  __("BitmapText.fullCharWidth: " + BitmapText.fullCharWidth, PD.FMT_TEXT);
+  __("BitmapText.drawnCharWidth: " + BitmapText.drawnCharWidth, RCSI.FMT_TEXT);
+  __("BitmapText.letterSpacing: " + BitmapText.letterSpacing, RCSI.FMT_TEXT);
+  __("BitmapText.fullCharWidth: " + BitmapText.fullCharWidth, RCSI.FMT_TEXT);
 
-  __("BitmapText.drawnCharHeight: " + BitmapText.drawnCharHeight, PD.FMT_TEXT);
-  __("BitmapText.lineSpacing: " + BitmapText.lineSpacing, PD.FMT_TEXT);
-  __("BitmapText.lineHeight: " + BitmapText.lineHeight, PD.FMT_TEXT);
+  __("BitmapText.drawnCharHeight: " + BitmapText.drawnCharHeight, RCSI.FMT_TEXT);
+  __("BitmapText.lineSpacing: " + BitmapText.lineSpacing, RCSI.FMT_TEXT);
+  __("BitmapText.lineHeight: " + BitmapText.lineHeight, RCSI.FMT_TEXT);
 
-  __("bestFittingFontData.id: " + bestFittingFontData.id, PD.FMT_TEXT);
+  __("bestFittingFontData.id: " + bestFittingFontData.id, RCSI.FMT_TEXT);
 
   __(
     "Max chars in this width: " +
       Layout.canvasWidth /
         (bestFittingFontData.width + bestFittingFontData.letterSpacing),
-    PD.FMT_TEXT
+    RCSI.FMT_TEXT
   );
   __(
     "Max chars in this height: " +
       Layout.canvasHeight /
         (bestFittingFontData.height + bestFittingFontData.lineSpacing),
-    PD.FMT_TEXT
+    RCSI.FMT_TEXT
   );
 };
 
@@ -478,7 +478,7 @@ BitmapText.cacheCharacter = function (_char) {
   BitmapText.charCanvasCache[_char] = BitmapText.charCacheCanvas;
   __(
     "\tBitmapText.charCanvasCache[_char]: " + BitmapText.charCanvasCache[_char],
-    PD.FMT_TEXT
+    RCSI.FMT_TEXT
   );
 };
 

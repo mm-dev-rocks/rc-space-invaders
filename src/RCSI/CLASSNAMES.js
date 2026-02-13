@@ -5,7 +5,7 @@
  * @author Mark Mayes / mm-dev
  *
  *
- * @module PD/CLASSNAMES
+ * @module RCSI/CLASSNAMES
  *
  * @description
  * ## Some CSS classnames used in the app

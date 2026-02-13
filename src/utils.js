@@ -625,12 +625,12 @@ export const setHashParam = function (_fullParams_ar, _name, _value) {
  * @param { String } [ _format ] CSS style to apply to message
  */
 export const __ = function (_msg, _format) {
-  if (window.PipeDream.hashParams && window.PipeDream.hashParams.debug) {
+  if (window.RcSpaceInvaders.hashParams && window.RcSpaceInvaders.hashParams.debug) {
     // `debug` param comes from the query string, so is a string, **not** a boolean
     if (
-      window.PipeDream.hashParams.debug === true ||
-      window.PipeDream.hashParams.debug === "true" ||
-      window.PipeDream.hashParams.debug === "overlay"
+      window.RcSpaceInvaders.hashParams.debug === true ||
+      window.RcSpaceInvaders.hashParams.debug === "true" ||
+      window.RcSpaceInvaders.hashParams.debug === "overlay"
     ) {
       if (_format) {
         console.log("%c" + _msg, _format);
@@ -638,7 +638,7 @@ export const __ = function (_msg, _format) {
         console.log(_msg);
       }
     }
-    if (window.PipeDream.hashParams.debug === "overlay") {
+    if (window.RcSpaceInvaders.hashParams.debug === "overlay") {
       // Create debug element in DOM if it doesn't already exist
       if (!window.debug_el) {
         window.debug_el = document.createElement("div");

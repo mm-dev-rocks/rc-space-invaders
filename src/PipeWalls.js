@@ -15,7 +15,7 @@
 
 
 
-import * as GAME from "./PD/GAME.js";
+import * as GAME from "./RCSI/GAME.js";
 
 import { Controller } from "./Controller.js";
 import { Display } from "./Display.js";

@@ -4,7 +4,7 @@
  * @author Mark Mayes / mm-dev
  *
  *
- * @module PD/SOUND_DATA
+ * @module RCSI/SOUND_DATA
  *
  * @description
  * ## Info about sound assets

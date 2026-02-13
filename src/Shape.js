@@ -10,8 +10,8 @@
  * ## Draw basic polygon-type shapes
  */
 
-import { GRADIENT_TYPE } from "./PD/ENUM.js";
-import * as GAME from "./PD/GAME.js";
+import { GRADIENT_TYPE } from "./RCSI/ENUM.js";
+import * as GAME from "./RCSI/GAME.js";
 
 import { Display } from "./Display.js";
 import { Layout } from "./Layout.js";

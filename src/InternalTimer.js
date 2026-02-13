@@ -15,8 +15,8 @@
  * - If we aren't quite keeping up with the ideal frame rate, eg 2 frames' worth of time has passed since our last update, we can try to keep things looking smooth by moving obstacles twice as far as during a single-frame update
  */
 
-import { PD } from "./PD/CONST.js";
-import * as GAME from "./PD/GAME.js";
+import { RCSI } from "./RCSI/CONST.js";
+import * as GAME from "./RCSI/GAME.js";
 
 import { Game } from "./Game.js";
 
@@ -46,7 +46,7 @@ InternalTimer.init = function () {
  * ##### Start the internal clock
  */
 InternalTimer.startTicking = function () {
-  __("InternalTimer.startTicking()::", PD.FMT_GAME);
+  __("InternalTimer.startTicking()::", RCSI.FMT_GAME);
 
   // set initial tick timestamp
   requestAnimationFrame(function (_timestamp_ms) {
@@ -76,7 +76,7 @@ InternalTimer.tick = function (_timestamp_ms) {
   if (sinceLastTick_ms > GAME.FRAME_MS) {
     InternalTimer.lastTick_ms = _timestamp_ms;
     framesSinceLastTick = Math.floor(sinceLastTick_ms / GAME.FRAME_MS);
-    //__('framesSinceLastTick: ' + framesSinceLastTick, PD.FMT_GAME);
+    //__('framesSinceLastTick: ' + framesSinceLastTick, RCSI.FMT_GAME);
 
     InternalTimer.frameCount += framesSinceLastTick;
 

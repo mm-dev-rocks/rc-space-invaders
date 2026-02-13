@@ -10,9 +10,9 @@
  * ## Manage and draw the health meter
  */
 
-import { PD } from "./PD/CONST.js";
-import * as GAME from "./PD/GAME.js";
-import * as STRING from "./PD/STRING.js";
+import { RCSI } from "./RCSI/CONST.js";
+import * as GAME from "./RCSI/GAME.js";
+import * as STRING from "./RCSI/STRING.js";
 
 import { Display } from "./Display.js";
 import { Game } from "./Game.js";
@@ -33,8 +33,8 @@ class HealthMeter {}
  * Size is based on text character widths or heights (depending on viewport aspect ratio), so that the meter lines up with the (conceptual) text grid.
  */
 HealthMeter.updateSizes = function () {
-  __("HealthMeter.updateSizes()", PD.FMT_DISPLAY);
-  __("Text.drawnPixelSize: " + Text.drawnPixelSize, PD.FMT_DISPLAY);
+  __("HealthMeter.updateSizes()", RCSI.FMT_DISPLAY);
+  __("Text.drawnPixelSize: " + Text.drawnPixelSize, RCSI.FMT_DISPLAY);
   if (Display.isLandscapeAspect) {
     HealthMeter.width = Text.drawnCharWidth;
     HealthMeter.height = GAME.HEALTHMETER_SIZE_CHARS * Text.lineHeight;
@@ -88,13 +88,13 @@ HealthMeter.updateSizes = function () {
   // Used to prevent fuzzy lines when thickness is an odd number
   HealthMeter.strokeFixOffset = !isEvenNumber(Text.drawnPixelSize) ? -0.5 : 0;
 
-  __("HealthMeter.width: " + HealthMeter.width, PD.FMT_DISPLAY);
-  __("HealthMeter.height: " + HealthMeter.height, PD.FMT_DISPLAY);
-  __("HealthMeter.pos.x: " + HealthMeter.pos.x, PD.FMT_DISPLAY);
-  __("HealthMeter.pos.y: " + HealthMeter.pos.y, PD.FMT_DISPLAY);
+  __("HealthMeter.width: " + HealthMeter.width, RCSI.FMT_DISPLAY);
+  __("HealthMeter.height: " + HealthMeter.height, RCSI.FMT_DISPLAY);
+  __("HealthMeter.pos.x: " + HealthMeter.pos.x, RCSI.FMT_DISPLAY);
+  __("HealthMeter.pos.y: " + HealthMeter.pos.y, RCSI.FMT_DISPLAY);
   __(
     "Layout.textBgPaddingProportional: " + Layout.textBgPaddingProportional,
-    PD.FMT_DISPLAY
+    RCSI.FMT_DISPLAY
   );
 };
 

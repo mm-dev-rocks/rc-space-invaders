@@ -4,7 +4,7 @@
  * @author Mark Mayes / mm-dev
  *
  *
- * @module PD/IMAGE_DATA
+ * @module RCSI/IMAGE_DATA
  *
  * @description
  * ## Info about image assets

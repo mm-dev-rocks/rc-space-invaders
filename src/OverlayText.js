@@ -11,10 +11,10 @@
  * Used for example at the end of the game or during level intros.
  */
 
-import { PD } from "./PD/CONST.js";
-import { ASPECT_RATIO, GAMEOVER_REASON, OBSTACLE_TYPE } from "./PD/ENUM.js";
-import * as GAME from "./PD/GAME.js";
-import * as STRING from "./PD/STRING.js";
+import { RCSI } from "./RCSI/CONST.js";
+import { ASPECT_RATIO, GAMEOVER_REASON, OBSTACLE_TYPE } from "./RCSI/ENUM.js";
+import * as GAME from "./RCSI/GAME.js";
+import * as STRING from "./RCSI/STRING.js";
 
 import { Game } from "./Game.js";
 
@@ -288,7 +288,7 @@ OverlayText.getCurrentLevelDescription = function () {
  * ##### Empty the main text array (`OverlayText.content_ar`)
  */
 OverlayText.setEmpty = function () {
-  __("\t\tSETTING EMPTY OVERLAY TEXT", PD.FMT_GAME);
+  __("\t\tSETTING EMPTY OVERLAY TEXT", RCSI.FMT_GAME);
   OverlayText.content_ar = [];
 };
 
@@ -302,8 +302,8 @@ OverlayText.setEmpty = function () {
  * - Directly appends the text objects to `OverlayText.content_ar`
  */
 OverlayText.addCompletedLevelOutro = function () {
-  __("Normal level completed - Setting level outro text", PD.FMT_OVERLAYTEXT);
-  __("\t\tSETTING OVERLAY TEXT", PD.FMT_OVERLAYTEXT);
+  __("Normal level completed - Setting level outro text", RCSI.FMT_OVERLAYTEXT);
+  __("\t\tSETTING OVERLAY TEXT", RCSI.FMT_OVERLAYTEXT);
   OverlayText.content_ar = OverlayText.content_ar.concat(
     //OverlayText.getCurrentLevelDescription(),
     [
@@ -380,8 +380,8 @@ OverlayText.addHitToStart = function () {
  * - Directly appends the text objects to `OverlayText.content_ar`
  */
 OverlayText.addNormalLevelIntro = function () {
-  __("Normal level intro - Setting level intro text", PD.FMT_OVERLAYTEXT);
-  __("\t\tSETTING OVERLAY TEXT", PD.FMT_OVERLAYTEXT);
+  __("Normal level intro - Setting level intro text", RCSI.FMT_OVERLAYTEXT);
+  __("\t\tSETTING OVERLAY TEXT", RCSI.FMT_OVERLAYTEXT);
   OverlayText.content_ar = OverlayText.content_ar.concat(
     OverlayText.getCurrentLevelDescription(),
     [

@@ -11,9 +11,9 @@
  *
  */
 
-import { PD } from "./PD/CONST.js";
-import { ASPECT_RATIO, HORIZ_ALIGN, RECTANGLE, VERT_ALIGN } from "./PD/ENUM.js";
-import * as GAME from "./PD/GAME.js";
+import { RCSI } from "./RCSI/CONST.js";
+import { ASPECT_RATIO, HORIZ_ALIGN, RECTANGLE, VERT_ALIGN } from "./RCSI/ENUM.js";
+import * as GAME from "./RCSI/GAME.js";
 
 import { Game } from "./Game.js";
 import { Text } from "./Text.js";
@@ -30,7 +30,7 @@ class Layout {}
  * This just calls the update function with a default gameplay area size so that the caclulations have something to work with
  */
 Layout.init = function () {
-  __("Layout.init()::", PD.FMT_LAYOUT);
+  __("Layout.init()::", RCSI.FMT_LAYOUT);
   // TODO magic but means fill canvas, used when this function is called the first time
   Layout.update({ gameplayAreaToCanvasLateralRatio: 1 });
 };
@@ -57,7 +57,7 @@ Layout.setProportionalSizes = function () {
   );
   __(
     "Layout.proportionalMultiplier: " + Layout.proportionalMultiplier,
-    PD.FMT_LAYOUT
+    RCSI.FMT_LAYOUT
   );
 
   Layout.mainPaddingProportional = Math.ceil(
@@ -85,7 +85,7 @@ Layout.setProportionalSizes = function () {
  * @param {number} _data.gameplayAreaToCanvasLateralRatio - This value is set per-level and sets the size of the gameplay area (between the pipe walls) as a ratio of the canvas size
  */
 Layout.update = function (_data) {
-  __("Layout.update()::", PD.FMT_LAYOUT);
+  __("Layout.update()::", RCSI.FMT_LAYOUT);
   Layout.gameplayAreaToCanvasLateralRatio =
     _data.gameplayAreaToCanvasLateralRatio;
 
@@ -115,8 +115,8 @@ Layout.update = function (_data) {
   } else {
     Layout.gameplayWidth *= Layout.gameplayAreaToCanvasLateralRatio;
   }
-  __("\tLayout.gameplayHeight: " + Layout.gameplayHeight, PD.FMT_LAYOUT);
-  __("\tLayout.gameplayWidth: " + Layout.gameplayWidth, PD.FMT_LAYOUT);
+  __("\tLayout.gameplayHeight: " + Layout.gameplayHeight, RCSI.FMT_LAYOUT);
+  __("\tLayout.gameplayWidth: " + Layout.gameplayWidth, RCSI.FMT_LAYOUT);
 
   Layout.canvas_rect = Layout.getRectangle(RECTANGLE.CANVAS);
   Layout.gameplay_rect = Layout.getRectangle(RECTANGLE.GAMEAREA);
@@ -124,19 +124,19 @@ Layout.update = function (_data) {
   Layout.floating_rect = Layout.getRectangle(RECTANGLE.FLOATING);
   __(
     "\tLayout.canvas_rect: " + JSON.stringify(Layout.canvas_rect),
-    PD.FMT_LAYOUT
+    RCSI.FMT_LAYOUT
   );
   __(
     "\tLayout.gameplay_rect: " + JSON.stringify(Layout.gameplay_rect),
-    PD.FMT_LAYOUT
+    RCSI.FMT_LAYOUT
   );
   __(
     "\tLayout.background_rect: " + JSON.stringify(Layout.background_rect),
-    PD.FMT_LAYOUT
+    RCSI.FMT_LAYOUT
   );
   __(
     "\tLayout.floating_rect: " + JSON.stringify(Layout.floating_rect),
-    PD.FMT_LAYOUT
+    RCSI.FMT_LAYOUT
   );
 
   // Convert % control area sizes to px
@@ -333,7 +333,7 @@ Layout.getAlignedPos = function (
   } else {
     __(
       "Layout::getAlignedPos:: _alignmentH NOT RECOGNISED: " + _alignmentH,
-      PD.FMT_ERROR
+      RCSI.FMT_ERROR
     );
   }
 
@@ -346,7 +346,7 @@ Layout.getAlignedPos = function (
   } else {
     __(
       "Layout::getAlignedPos:: _alignmentV NOT RECOGNISED: " + _alignmentH,
-      PD.FMT_ERROR
+      RCSI.FMT_ERROR
     );
   }
   x += offsetH;

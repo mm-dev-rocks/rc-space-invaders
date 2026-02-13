@@ -4,7 +4,7 @@
  * @author Mark Mayes / mm-dev
  *
  *
- * @module PD/GAME
+ * @module RCSI/GAME
  *
  * @description
  * ## Lots of configuration for the game, including:

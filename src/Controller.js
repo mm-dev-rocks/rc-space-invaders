@@ -20,8 +20,8 @@
  * - `Controller.lateralOffset` - Used to calculate amount of lateral movement (steering)
  */
 
-import { ASPECT_RATIO } from "./PD/ENUM.js";
-import * as GAME from "./PD/GAME.js";
+import { ASPECT_RATIO } from "./RCSI/ENUM.js";
+import * as GAME from "./RCSI/GAME.js";
 
 import { Display } from "./Display.js";
 import { Layout } from "./Layout.js";

@@ -4,7 +4,7 @@
  * @author Mark Mayes / mm-dev
  *
  *
- * @module PD/SOUND_IDS
+ * @module RCSI/SOUND_IDS
  *
  * @description
  * ## Internal ID constants

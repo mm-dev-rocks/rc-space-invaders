@@ -12,8 +12,8 @@
  * - Actual drawing of the pixels is passed over to `BitmapText`
  */
 
-import * as GAME from "./PD/GAME.js";
-import * as STRING from "./PD/STRING.js";
+import * as GAME from "./RCSI/GAME.js";
+import * as STRING from "./RCSI/STRING.js";
 
 import { BitmapText } from "./BitmapText.js";
 import { Display } from "./Display.js";
@@ -199,7 +199,7 @@ Text.drawVersionInfo = function (_ob) {
     alignV,
     offsetV,
     offsetH,
-    str = window.PipeDream.versionInfo.displayString.toUpperCase();
+    str = window.RcSpaceInvaders.versionInfo.displayString.toUpperCase();
 
   if (_ob?.isInLevelIntro) {
     alignH = Layout.currentAspectUI.versionInfoLevelIntro.alignH;

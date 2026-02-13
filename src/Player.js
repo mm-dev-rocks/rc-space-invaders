@@ -10,8 +10,8 @@
  * ## Manage and draw the player
  */
 
-import { ASPECT_RATIO } from "./PD/ENUM.js";
-import * as GAME from "./PD/GAME.js";
+import { ASPECT_RATIO } from "./RCSI/ENUM.js";
+import * as GAME from "./RCSI/GAME.js";
 
 import { Layout } from "./Layout.js";
 

@@ -31,10 +31,10 @@ import {
   vectorToDegrees,
 } from "./utils.js";
 
-import { PD } from "./PD/CONST.js";
-import { ASPECT_RATIO, OBSTACLE_SUBTYPE, OBSTACLE_TYPE } from "./PD/ENUM.js";
-import * as GAME from "./PD/GAME.js";
-import * as TIMINGS from "./PD/TIMINGS.js";
+import { RCSI } from "./RCSI/CONST.js";
+import { ASPECT_RATIO, OBSTACLE_SUBTYPE, OBSTACLE_TYPE } from "./RCSI/ENUM.js";
+import * as GAME from "./RCSI/GAME.js";
+import * as TIMINGS from "./RCSI/TIMINGS.js";
 
 import { Controller } from "./Controller.js";
 import { Player } from "./Player.js";
@@ -119,7 +119,7 @@ ObstacleManager.addGroup = function (_data) {
       Math.round(ObstacleManager.surfaceAreaOfGroup).toLocaleString() +
       "\t" +
       _data.type,
-    PD.FMT_INFO
+    RCSI.FMT_INFO
   );
 };
 
@@ -977,7 +977,7 @@ ObstacleManager.update = function (_frames) {
   if (Game.doPerfLog) {
     __(
       "ObstacleManager.update() " + (performance.now() - t1),
-      PD.FMT_PERFORMANCE
+      RCSI.FMT_PERFORMANCE
     );
   }
 

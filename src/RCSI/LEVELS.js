@@ -4,7 +4,7 @@
  * @author Mark Mayes / mm-dev
  *
  *
- * @module PD/LEVELS
+ * @module RCSI/LEVELS
  *
  * @description
  * ## Simple wrapper to hold all the level data

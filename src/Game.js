@@ -12,19 +12,19 @@
  * - Most functionality is farmed out to other classes
  */
 
-import * as CLASSNAMES from "./PD/CLASSNAMES.js";
-import { PD } from "./PD/CONST.js";
+import * as CLASSNAMES from "./RCSI/CLASSNAMES.js";
+import { RCSI } from "./RCSI/CONST.js";
 import {
   ASPECT_RATIO,
   FADE_DIRECTION,
   GAMEOVER_REASON,
   OBSTACLE_TYPE,
   TIMER_ID,
-} from "./PD/ENUM.js";
-import * as GAME from "./PD/GAME.js";
-import * as LEVELS from "./PD/LEVELS.js";
-import * as SOUND_IDS from "./PD/SOUND_IDS.js";
-import * as TIMINGS from "./PD/TIMINGS.js";
+} from "./RCSI/ENUM.js";
+import * as GAME from "./RCSI/GAME.js";
+import * as LEVELS from "./RCSI/LEVELS.js";
+import * as SOUND_IDS from "./RCSI/SOUND_IDS.js";
+import * as TIMINGS from "./RCSI/TIMINGS.js";
 
 import { Controller } from "./Controller.js";
 import { Display } from "./Display.js";
@@ -56,25 +56,25 @@ class Game {}
  * ##### Set up the basics, initialise other modules
  */
 Game.init = function () {
-  __("Game.init()::", PD.FMT_GAME);
+  __("Game.init()::", RCSI.FMT_GAME);
   Game.container_el = document.createElement("div");
   Game.container_el.classList.add(CLASSNAMES.GAME);
-  document.getElementById(PD.EL_IDS.APP_WRAPPER).appendChild(Game.container_el);
+  document.getElementById(RCSI.EL_IDS.APP_WRAPPER).appendChild(Game.container_el);
 
-  Game.initEventHandlers();
-  Game.initSound();
-  Game.initFpsCounter();
-  Game.calculateGlobalCollectObstacleRadiusRange();
+  //Game.initEventHandlers();
+  //Game.initSound();
+  //Game.initFpsCounter();
+  //Game.calculateGlobalCollectObstacleRadiusRange();
 
-  // Default to preferring fullscreen at start of game
-  FullscreenManager.init({ userPrefersFullscreen: true });
-  // `Display.init()` starts several things including (via `Text.init()`) measuring/selection of bitmap font size and pre-caching of bitmap characters
-  Display.init();
-  Player.init();
-  Controller.init();
-  LevelTransition.init();
+  //// Default to preferring fullscreen at start of game
+  //FullscreenManager.init({ userPrefersFullscreen: true });
+  //// `Display.init()` starts several things including (via `Text.init()`) measuring/selection of bitmap font size and pre-caching of bitmap characters
+  //Display.init();
+  //Player.init();
+  //Controller.init();
+  //LevelTransition.init();
 
-  Game.resetAndStartFirstLevel();
+  //Game.resetAndStartFirstLevel();
 };
 
 /**
@@ -117,7 +117,7 @@ Game.initEventHandlers = function () {
  * ##### Enable/disable sound based on URL hash parameter or default to 'enabled'
  */
 Game.initSound = function () {
-  if (window.PipeDream.hashParams?.mute) {
+  if (window.RcSpaceInvaders.hashParams?.mute) {
     Game.soundIsEnabled = false;
   } else {
     Game.soundIsEnabled = true;
@@ -135,7 +135,7 @@ Game.initSound = function () {
 Game.initFpsCounter = function () {
   InternalTimer.init();
   Game.showFps = false;
-  if (window.PipeDream.hashParams?.fps) {
+  if (window.RcSpaceInvaders.hashParams?.fps) {
     Game.showFps = true;
   }
 };
@@ -151,7 +151,7 @@ Game.initFpsCounter = function () {
  * - Reset score to 0
  */
 Game.resetAndStartFirstLevel = function () {
-  __("Game.resetAndStartFirstLevel()::", PD.FMT_GAME);
+  __("Game.resetAndStartFirstLevel()::", RCSI.FMT_GAME);
 
   var i,
     curLevelId,
@@ -172,8 +172,8 @@ Game.resetAndStartFirstLevel = function () {
   Game.skipToLevelIndex = 0;
   for (i = 0; i < levelDataKeys.length; i++) {
     curLevelId = levelDataKeys[i];
-    if (window.PipeDream.hashParams[curLevelId.toLowerCase()]) {
-      __("\tMATCH", PD.FMT_GAME);
+    if (window.RcSpaceInvaders.hashParams[curLevelId.toLowerCase()]) {
+      __("\tMATCH", RCSI.FMT_GAME);
       Game.levelIndex = i;
       Game.skipToLevelIndex = i;
       // Don't break, if there's more than 1 level id in the hash find the highest
@@ -214,10 +214,10 @@ Game.setSoundEnabledState = function (_enabled) {
   Game.soundIsEnabled = _enabled;
 
   if (!Game.soundIsEnabled) {
-    setHashParam(PD.IMPORTABLE_HASH_PARAMS, "mute", true);
+    setHashParam(RCSI.IMPORTABLE_HASH_PARAMS, "mute", true);
   } else {
     // Omitting the param value deletes it
-    setHashParam(PD.IMPORTABLE_HASH_PARAMS, "mute");
+    setHashParam(RCSI.IMPORTABLE_HASH_PARAMS, "mute");
   }
 
   SoundManagerHowler.setMuteState(!Game.soundIsEnabled);
@@ -232,7 +232,7 @@ Game.setSoundEnabledState = function (_enabled) {
  * Calls similar methods in other modules.
  */
 Game.updateLayout = function () {
-  __("Game.updateLayout()::", PD.FMT_GAME);
+  __("Game.updateLayout()::", RCSI.FMT_GAME);
 
   Layout.update({
     gameplayAreaToCanvasLateralRatio:
@@ -369,7 +369,7 @@ Game.updateByFrameCount = function (_frames) {
  * - Points per second are increased according to how many successive levels have been played during this session
  */
 Game.addScoreForLevel = function () {
-  __("Game.addScoreForLevel()", PD.FMT_GAME);
+  __("Game.addScoreForLevel()", RCSI.FMT_GAME);
   // TODO Can this local var be deleted?
   var successiveLevelsThisSession = Game.levelIndex - Game.skipToLevelIndex + 1,
     levelScoreMultiplier =
@@ -380,18 +380,18 @@ Game.addScoreForLevel = function () {
   );
   __(
     "\tsuccessiveLevelsThisSession: " + successiveLevelsThisSession,
-    PD.FMT_GAME
+    RCSI.FMT_GAME
   );
   __(
     "\tGame.levelsCompletedThisSession: " + Game.levelsCompletedThisSession,
-    PD.FMT_GAME
+    RCSI.FMT_GAME
   );
-  __("\tlevelScoreMultiplier: " + levelScoreMultiplier, PD.FMT_GAME);
-  __("\tscoreForLevel: " + Game.scoreForLevel, PD.FMT_GAME);
+  __("\tlevelScoreMultiplier: " + levelScoreMultiplier, RCSI.FMT_GAME);
+  __("\tscoreForLevel: " + Game.scoreForLevel, RCSI.FMT_GAME);
 
-  __("\tGame.currentScore: " + Game.currentScore, PD.FMT_GAME);
+  __("\tGame.currentScore: " + Game.currentScore, RCSI.FMT_GAME);
   Game.currentScore += Game.scoreForLevel;
-  __("\tGame.currentScore: " + Game.currentScore, PD.FMT_GAME);
+  __("\tGame.currentScore: " + Game.currentScore, RCSI.FMT_GAME);
 };
 
 /**
@@ -514,8 +514,8 @@ Game.damagePlayer = function (_bounceMagnitude) {
   var adjustedBounceMagnitude =
     _bounceMagnitude / GAME.PLAYER_LOSSOFCONTROL_MAGNITUDE_DIVISOR;
 
-  //__("_bounceMagnitude: " + _bounceMagnitude, PD.FMT_GAME);
-  //__("adjustedBounceMagnitude: " + adjustedBounceMagnitude, PD.FMT_GAME);
+  //__("_bounceMagnitude: " + _bounceMagnitude, RCSI.FMT_GAME);
+  //__("adjustedBounceMagnitude: " + adjustedBounceMagnitude, RCSI.FMT_GAME);
 
   Player.damagedFramesCounter = Math.min(
     Math.ceil(adjustedBounceMagnitude * InternalTimer.currentFps),
@@ -525,7 +525,7 @@ Game.damagePlayer = function (_bounceMagnitude) {
   Player.health--;
   if (Player.health <= 0) {
     Player.health = 0;
-    __("HEALTH GONE", PD.FMT_GAME);
+    __("HEALTH GONE", RCSI.FMT_GAME);
     Game.end(GAMEOVER_REASON.HEALTH_DEPLETED);
   }
 };
@@ -600,7 +600,7 @@ Game.onPointerMove = function (event) {
  * @param {Event} event - Either a `touchmove` or a `mousemove` event
  */
 Game.onTap = function (event) {
-  __("Game.onTap()", PD.FMT_GAME);
+  __("Game.onTap()", RCSI.FMT_GAME);
 
   // TODO EXPERIMENT MAKE SURE ITS NOT CAUSING BUGS!!!
   Game.onPointerMove(event);
@@ -648,7 +648,7 @@ Game.clearAllLevelsFromHash = function () {
   for (i = 0; i < levelDataKeys.length; i++) {
     curLevelId = levelDataKeys[i];
     // Missing 3rd param means 'delete this param'
-    setHashParam(PD.IMPORTABLE_HASH_PARAMS, curLevelId.toLowerCase());
+    setHashParam(RCSI.IMPORTABLE_HASH_PARAMS, curLevelId.toLowerCase());
   }
 };
 
@@ -667,11 +667,11 @@ Game.clearAllLevelsFromHash = function () {
  * - Start the level intro
  */
 Game.setupCurrentLevel = function () {
-  __("Game.setupCurrentLevel()::", PD.FMT_GAME);
+  __("Game.setupCurrentLevel()::", RCSI.FMT_GAME);
 
   Game.clearAllLevelsFromHash();
   Game.curLevelId = Object.keys(Game.levelData)[Game.levelIndex];
-  setHashParam(PD.IMPORTABLE_HASH_PARAMS, Game.curLevelId.toLowerCase(), true);
+  setHashParam(RCSI.IMPORTABLE_HASH_PARAMS, Game.curLevelId.toLowerCase(), true);
   Game.curLevelData = Game.levelData[Game.curLevelId];
   Game.timeRemaining = Game.curLevelData.timeAllowedSecs;
 
@@ -749,12 +749,12 @@ Game.calculateGlobalCollectObstacleRadiusRange = function () {
  * ##### All intros etc have finished, actually start playing
  */
 Game.startPlay = function () {
-  __("Game.startPlay()::", PD.FMT_GAME);
+  __("Game.startPlay()::", RCSI.FMT_GAME);
 
   __(
     "ObstacleManager.surfaceAreaOfLevel: " +
       Math.round(ObstacleManager.surfaceAreaOfLevel).toLocaleString(),
-    PD.FMT_INFO
+    RCSI.FMT_INFO
   );
 
   OverlayText.setEmpty();
@@ -773,16 +773,16 @@ Game.startPlay = function () {
  * ##### Move to the next level, or if this is the last level the game is completed
  */
 Game.nextLevel = function () {
-  __("Game.nextLevel()::", PD.FMT_GAME);
-  __("CANCEL click starts next level", PD.FMT_GAME);
+  __("Game.nextLevel()::", RCSI.FMT_GAME);
+  __("CANCEL click starts next level", RCSI.FMT_GAME);
   document.removeEventListener(Game.tapEventName, Game.nextLevel);
-  __("\tGame.lastLevelIndex:" + Game.lastLevelIndex, PD.FMT_GAME);
-  __("\tGame.levelIndex:" + Game.levelIndex, PD.FMT_GAME);
+  __("\tGame.lastLevelIndex:" + Game.lastLevelIndex, RCSI.FMT_GAME);
+  __("\tGame.levelIndex:" + Game.levelIndex, RCSI.FMT_GAME);
   __(
     "\tGame.levelsCompletedThisSession:" + Game.levelsCompletedThisSession,
-    PD.FMT_GAME
+    RCSI.FMT_GAME
   );
-  __("\tGame.totalLevels:" + Game.totalLevels, PD.FMT_GAME);
+  __("\tGame.totalLevels:" + Game.totalLevels, RCSI.FMT_GAME);
   ObstacleManager.deleteObstacles();
   if (Game.levelsCompletedThisSession < Game.totalLevels) {
     Game.isInPlay = false;
@@ -794,7 +794,7 @@ Game.nextLevel = function () {
     //  Game.levelIndex++;
     //}
     Game.levelIndex = Game.getNextLevelIndex();
-    __("\tGame.levelIndex:" + Game.levelIndex, PD.FMT_GAME);
+    __("\tGame.levelIndex:" + Game.levelIndex, RCSI.FMT_GAME);
     Game.setupCurrentLevel();
   } else {
     Game.doComplete();
@@ -847,14 +847,14 @@ Game.doComplete = function () {
  * @param {GAMEOVER_REASON} _reason - Why the game ended, used to decide what to display on the game over screen
  */
 Game.end = function (_reason) {
-  __("Game.end()::", PD.FMT_GAME);
+  __("Game.end()::", RCSI.FMT_GAME);
   cancelAnimationFrame(Game.tickAnimationFrameRef);
 
   if (Game.isInPlay) {
-    __("GAME OVER", PD.FMT_GAME);
+    __("GAME OVER", RCSI.FMT_GAME);
     Game.displayGameOver(_reason);
   } else {
-    __("ALREADY ENDED / repeat call", PD.FMT_GAME);
+    __("ALREADY ENDED / repeat call", RCSI.FMT_GAME);
   }
 };
 
@@ -870,8 +870,8 @@ Game.end = function (_reason) {
  * @param {GAMEOVER_REASON} _reason - Why the game ended
  */
 Game.displayGameOver = function (_reason) {
-  __("Game.displayGameOver()::", PD.FMT_GAME);
-  __("\t\tSETTING OVERLAY TEXT", PD.FMT_GAME);
+  __("Game.displayGameOver()::", RCSI.FMT_GAME);
+  __("\t\tSETTING OVERLAY TEXT", RCSI.FMT_GAME);
   OverlayText.setGameOver(_reason);
   SoundManagerHowler.setMuteState(true);
 
@@ -895,7 +895,7 @@ Game.displayGameOver = function (_reason) {
  * - If this is a subsequent level, start a timer, after which play will start auomatically
  */
 Game.startLevelIntro = function () {
-  __("Game.startLevelIntro()::", PD.FMT_GAME);
+  __("Game.startLevelIntro()::", RCSI.FMT_GAME);
   Game.isInLevelIntro = true;
 
   //Game.textIsFading = false;
@@ -910,21 +910,21 @@ Game.startLevelIntro = function () {
   if (Game.levelIndex === Game.skipToLevelIndex) {
     __(
       "Initial level, meaning either level 1 or whichever level is skipped to via URL hash (param Game.levelIndex === Game.skipToLevelIndex)",
-      PD.FMT_GAME
+      RCSI.FMT_GAME
     );
-    __("\t\tSETTING OVERLAY TEXT", PD.FMT_GAME);
+    __("\t\tSETTING OVERLAY TEXT", RCSI.FMT_GAME);
     if (Game.isOnFrontPage) {
-      __("\tGame.isOnFrontPage TRUE", PD.FMT_GAME);
-      __("\tclick starts next level", PD.FMT_GAME);
+      __("\tGame.isOnFrontPage TRUE", RCSI.FMT_GAME);
+      __("\tclick starts next level", RCSI.FMT_GAME);
       document.addEventListener(Game.tapEventName, Game.nextLevel);
     } else {
-      __("\tGame.isOnFrontPage FALSE", PD.FMT_GAME);
-      __("\tclick starts gameplay after a delay", PD.FMT_GAME);
+      __("\tGame.isOnFrontPage FALSE", RCSI.FMT_GAME);
+      __("\tclick starts gameplay after a delay", RCSI.FMT_GAME);
       OverlayText.addHitToStart();
       document.addEventListener(Game.tapEventName, Game.delayedStartGameplay);
     }
   } else {
-    __("Not initial level --- start gameplay after a delay", PD.FMT_GAME);
+    __("Not initial level --- start gameplay after a delay", RCSI.FMT_GAME);
     Game.delayedStartGameplay();
   }
 
@@ -940,8 +940,8 @@ Game.startLevelIntro = function () {
  * Also initiate fullscreen mode (unless the player has indicated that they prefer not to).
  */
 Game.delayedStartGameplay = function () {
-  __("Game.delayedStartGameplay()::", PD.FMT_GAME);
-  __("CANCEL click starts gameplay after a delay", PD.FMT_GAME);
+  __("Game.delayedStartGameplay()::", RCSI.FMT_GAME);
+  __("CANCEL click starts gameplay after a delay", RCSI.FMT_GAME);
   document.removeEventListener(Game.tapEventName, Game.delayedStartGameplay);
   FullscreenManager.setState({
     el: Game.container_el,
@@ -1008,11 +1008,11 @@ Game.startTextFade = function (_direction, _secs) {
  * - Show level outro text and start a timer after which the game moves to the next level
  */
 Game.doLevelCompleted = function () {
-  __("LEVEL COMPLETE", PD.FMT_GAME);
-  //__("\tGame.doubleCollected: " + Game.doubleCollected, PD.FMT_GAME);
-  //__("\tGame.collectedThisLevel: " + Game.collectedThisLevel, PD.FMT_GAME);
-  __("\tGame.collectableRemaining: " + Game.collectableRemaining, PD.FMT_GAME);
-  __("\tGame.collectableTotal: " + Game.collectableTotal, PD.FMT_GAME);
+  __("LEVEL COMPLETE", RCSI.FMT_GAME);
+  //__("\tGame.doubleCollected: " + Game.doubleCollected, RCSI.FMT_GAME);
+  //__("\tGame.collectedThisLevel: " + Game.collectedThisLevel, RCSI.FMT_GAME);
+  __("\tGame.collectableRemaining: " + Game.collectableRemaining, RCSI.FMT_GAME);
+  __("\tGame.collectableTotal: " + Game.collectableTotal, RCSI.FMT_GAME);
   Game.levelsCompletedThisSession++;
   Game.addScoreForLevel();
   Game.startLevelOutro();
@@ -1065,7 +1065,7 @@ Game.updateTimer = function () {
     Math.round((Date.now() - Game.timestampOnStart) / 1000);
   if (Game.timeRemaining <= 0) {
     Game.timeRemaining = 0;
-    __("TIME UP", PD.FMT_GAME);
+    __("TIME UP", RCSI.FMT_GAME);
     Game.end(GAMEOVER_REASON.TIMES_UP);
   } else if (Game.timeRemaining <= GAME.TIME_LOW_SECONDS) {
     Game.timeIsLow = true;

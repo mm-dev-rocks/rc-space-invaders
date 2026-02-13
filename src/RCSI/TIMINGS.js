@@ -4,7 +4,7 @@
  * @author Mark Mayes / mm-dev
  *
  *
- * @module PD/TIMERS
+ * @module RCSI/TIMERS
  *
  * @description
  * ## Basic details for timers used in `setTimeout()` calls

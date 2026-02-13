@@ -10,9 +10,9 @@
  * ## Manage the transition between levels
  */
 
-import { LEVEL_TRANSITION_PROPERTY_TYPE } from "./PD/ENUM.js";
-import * as GAME from "./PD/GAME.js";
-import * as TIMINGS from "./PD/TIMINGS.js";
+import { LEVEL_TRANSITION_PROPERTY_TYPE } from "./RCSI/ENUM.js";
+import * as GAME from "./RCSI/GAME.js";
+import * as TIMINGS from "./RCSI/TIMINGS.js";
 
 import { Controller } from "./Controller.js";
 import { Display } from "./Display.js";

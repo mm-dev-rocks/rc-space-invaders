@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: GPL-3.0-only
 /*
-  Pipe Dream (PD)
+  Pipe Dream (RCSI)
 
   JsonManager:
   - Pre-load required json files
 
 */
 
-import { PD } from "./PD/CONST.js";
+import { RCSI } from "./RCSI/CONST.js";
 import { __, manualEvent } from "./utils.js";
 
 class JsonManager {}
@@ -27,13 +27,13 @@ JsonManager.init = function (ob) {
     if (JsonManager.allJson_ob[JsonManager.data_ar[i].id]) {
       __(
         "" + JsonManager.data_ar[i].id + ": already exists - skipping preload",
-        PD.FMT_JSONMANAGER
+        RCSI.FMT_JSONMANAGER
       );
     } else {
       json_tmp = new XMLHttpRequest();
       json_tmp.open("GET", JsonManager.data_ar[i].file);
       json_tmp.id = JsonManager.data_ar[i].id;
-      __("INITIALISING: " + JsonManager.data_ar[i].file, PD.FMT_JSONMANAGER);
+      __("INITIALISING: " + JsonManager.data_ar[i].file, RCSI.FMT_JSONMANAGER);
       json_tmp.addEventListener("load", JsonManager.onJsonLoad);
       json_tmp.send();
       JsonManager.preload_ar.push(json_tmp);
@@ -54,7 +54,7 @@ JsonManager.onJsonLoad = function (event) {
     if (JsonManager.preload_ar[i] === json_request) {
       JsonManager.allJson_ob[id] = JsonManager.preload_ar[i].responseText;
       JsonManager.preload_ar.splice(i, 1);
-      __("LOADED: " + id, PD.FMT_JSONMANAGER);
+      __("LOADED: " + id, RCSI.FMT_JSONMANAGER);
       break;
     }
   }

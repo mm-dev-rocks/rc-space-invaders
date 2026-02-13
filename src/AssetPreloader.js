@@ -19,7 +19,7 @@
 
 
 
-import { PD } from "./PD/CONST.js";
+import { RCSI } from "./RCSI/CONST.js";
 
 import { __, manualEvent } from "./utils.js";
 
@@ -40,9 +40,9 @@ class AssetPreloader {}
  * - Set up event listener for items loading
  */
 AssetPreloader.init = function () {
-  AssetPreloader.sound_ar = PD.SOUND_DATA.SOUND_AR;
-  AssetPreloader.image_ar = PD.IMAGE_DATA.IMAGE_AR;
-  AssetPreloader.json_ar = PD.JSONFILES_DATA.JSON_AR;
+  AssetPreloader.sound_ar = RCSI.SOUND_DATA.SOUND_AR;
+  AssetPreloader.image_ar = RCSI.IMAGE_DATA.IMAGE_AR;
+  AssetPreloader.json_ar = RCSI.JSONFILES_DATA.JSON_AR;
 
   // Use respective managers to preload their assets
   SoundManagerHowler.init({ sound_ar: AssetPreloader.sound_ar });
@@ -96,7 +96,7 @@ AssetPreloader.onItemDone = function (event) {
     AssetPreloader.jsonsDone;
 
   percentDone = (totalItemsDone / AssetPreloader.totalItems) * 100;
-  //__("percentDone: " + percentDone, PD.LOG_FORMAT_INFO);
+  //__("percentDone: " + percentDone, RCSI.LOG_FORMAT_INFO);
   if (percentDone === 100) {
     AssetPreloader.onComplete();
   }
@@ -113,7 +113,7 @@ AssetPreloader.onItemDone = function (event) {
  * Broadcast an `assetsloaded` event.
  */
 AssetPreloader.onComplete = function () {
-  __("PRELOAD COMPLETE", PD.LOG_FORMAT_INFO);
+  __("PRELOAD COMPLETE", RCSI.LOG_FORMAT_INFO);
   manualEvent(document, "assetsloaded");
 };
 

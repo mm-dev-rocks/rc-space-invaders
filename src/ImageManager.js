@@ -13,8 +13,8 @@
  */
 
 
-import { PD } from "./PD/CONST.js";
-import * as GAME from "./PD/GAME.js";
+import { RCSI } from "./RCSI/CONST.js";
+import * as GAME from "./RCSI/GAME.js";
 import { __, manualEvent } from "./utils.js";
 
 class ImageManager {}
@@ -37,14 +37,14 @@ ImageManager.init = function (ob) {
     if (ImageManager.allImages_ob[itemData.id]) {
       __(
         "" + itemData.id + ": already exists - skipping preload",
-        PD.FMT_IMAGEMANAGER
+        RCSI.FMT_IMAGEMANAGER
       );
     } else {
       image_tmp = document.createElement("img");
       image_tmp.src = itemData.file;
       image_tmp.addEventListener("load", ImageManager.onImageLoad);
       image_tmp.data = itemData;
-      __("INITIALISING: " + itemData.file, PD.FMT_IMAGEMANAGER);
+      __("INITIALISING: " + itemData.file, RCSI.FMT_IMAGEMANAGER);
       ImageManager.preload_ar.push(image_tmp);
     }
   }
@@ -60,7 +60,7 @@ ImageManager.updatePreloadStatus = function (_el) {
   for (i = 0; i < ImageManager.preload_ar.length; i++) {
     if (ImageManager.preload_ar[i] === _el) {
       ImageManager.preload_ar.splice(i, 1);
-      __("LOADED: " + _el.data.id, PD.FMT_IMAGEMANAGER);
+      __("LOADED: " + _el.data.id, RCSI.FMT_IMAGEMANAGER);
       break;
     }
   }
@@ -91,12 +91,12 @@ ImageManager.onImageLoad = function (event) {
         ImageManager.allImages_ob[id].bitmap = imageBitmap;
         __(
           "\tbitmap created: " + ImageManager.allImages_ob[id].bitmap,
-          PD.FMT_IMAGEMANAGER
+          RCSI.FMT_IMAGEMANAGER
         );
         ImageManager.updatePreloadStatus(image_el);
       },
       function (error) {
-        __(error, PD.FMT_ERROR);
+        __(error, RCSI.FMT_ERROR);
       }
     );
   } else {

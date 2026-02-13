@@ -4,14 +4,14 @@
  * @author Mark Mayes / mm-dev
  *
  *
- * @module PD/CONST
+ * @module RCSI/CONST
  *
  * @description
  * ## Main constants and data eg
  * - CSS formatting strings used to colour logging output
  * - List of hash parameters that the app recognises
  *
- * **OTHER CONSTANTS ARE SPREAD OVER ALL FILES IN `./src/PD/`**
+ * **OTHER CONSTANTS ARE SPREAD OVER ALL FILES IN `./src/RCSI/`**
  */
 
 import * as CLASSNAMES from "./CLASSNAMES.js";
@@ -22,7 +22,7 @@ import * as SOUND_DATA from "./SOUND_DATA.js";
 import * as JSONFILES_DATA from "./JSONFILES_DATA.js";
 import * as TIMINGS from "./TIMINGS.js";
 
-export const PD = {
+export const RCSI = {
   FMT_ERROR: "font-weight: bold; color: white; background-color: red; ",
   FMT_INFO: "font-weight: bold; background-color: indigo; color: pink; ",
   FMT_AUDIO: "background-color: darkorange; color: lightyellow; ",

@@ -14,7 +14,7 @@
  * - `_target` params will either be obstacles or the player
  */
 
-import * as GAME from "./PD/GAME.js";
+import * as GAME from "./RCSI/GAME.js";
 
 import { Display } from "./Display.js";
 

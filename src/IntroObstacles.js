@@ -10,9 +10,9 @@
  * ## Draw special versions of obstacles used in level introductions
  */
 
-import { PD } from "./PD/CONST.js";
-import { OBSTACLE_TYPE } from "./PD/ENUM.js";
-import * as GAME from "./PD/GAME.js";
+import { RCSI } from "./RCSI/CONST.js";
+import { OBSTACLE_TYPE } from "./RCSI/ENUM.js";
+import * as GAME from "./RCSI/GAME.js";
 
 import { Display } from "./Display.js";
 import { Game } from "./Game.js";
@@ -31,7 +31,7 @@ class IntroObstacles {}
  * ##### Reset some variables
  */
 IntroObstacles.setupForLevel = function () {
-  __("IntroObstacles.setupForLevel()", PD.FMT_DISPLAY);
+  __("IntroObstacles.setupForLevel()", RCSI.FMT_DISPLAY);
   IntroObstacles.textHasBeenPadded = false;
 };
 
@@ -43,7 +43,7 @@ IntroObstacles.setupForLevel = function () {
  * ##### Keep sizes correct in relation to the viewport
  */
 IntroObstacles.updateSizes = function () {
-  __("IntroObstacles.updateSizes()", PD.FMT_DISPLAY);
+  __("IntroObstacles.updateSizes()", RCSI.FMT_DISPLAY);
   IntroObstacles.itemRadius = Math.round(
     Text.drawnCharHeight
   );

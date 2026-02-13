@@ -4,7 +4,7 @@
  * @author Mark Mayes / mm-dev
  *
  *
- * @module PD/IMAGE_IDS
+ * @module RCSI/IMAGE_IDS
  *
  * @description
  * ## Internal ID constants
