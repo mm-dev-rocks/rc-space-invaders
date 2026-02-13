@@ -25,6 +25,7 @@ Below is an example build script which does the following:
 
 1. Change to the project directory
 1. Use `tmux` to open a few window panes:
+ 
     0. **esbuild** watching for changes to **JS**
     0. **SASS** watching for changes to **CSS**
     0. **git** status, pane left open for commits etc
