@@ -153,8 +153,8 @@ Game.onResize = function () {
 Game.onKeyDown = function (event) {
   __(`event.key: ${event.key}`);
   __(`event.code: ${event.code}`);
-  if (GAME.KEYS.hasOwnProperty(event.key)) {
-    switch (GAME.KEYS[event.key]) {
+  if (GAME.KEYS.hasOwnProperty(event.code)) {
+    switch (GAME.KEYS[event.code]) {
       case KEY_ACTIONS.MOVE_LEFT:
         Player.startMoveLeft();
         break;
@@ -179,13 +179,18 @@ Game.onKeyDown = function (event) {
  * ##### Handle key release
  */
 Game.onKeyUp = function (event) {
-  if (GAME.KEYS.hasOwnProperty(event.key)) {
-    switch (GAME.KEYS[event.key]) {
+  if (GAME.KEYS.hasOwnProperty(event.code)) {
+    switch (GAME.KEYS[event.code]) {
       case KEY_ACTIONS.MOVE_LEFT:
       case KEY_ACTIONS.MOVE_RIGHT:
-        Player.stopMove();
-        break;
       case KEY_ACTIONS.FIRE:
+        break;
+      case KEY_ACTIONS.START_GAME:
+        __("START GAME");
+        if (Game.levelIndex == 0) {
+          Game.levelIndex++;
+          Game.setupCurrentLevel();
+        }
         break;
       default:
         break;
@@ -202,12 +207,9 @@ Game.onKeyUp = function (event) {
  * @description
  * ##### Everything to do with getting the current level ready to play
  * - Get the ID and data for the level
- * - Update the URL hash with the level ID
  * - Call methods in other modules to update them
- * - Add the (non-interactive) background and floating obstacles
- * - Add up how many collectable obstacles there are (but don't add them to the game yet)
+ * - Add the (non-interactive) background obstacles
  * - Reset the game timer
- * - Start the level intro
  */
 Game.setupCurrentLevel = function () {
   __("Game.setupCurrentLevel()::", RCSI.FMT_GAME);
@@ -227,78 +229,26 @@ Game.setupCurrentLevel = function () {
 
   ObstacleManager.reset();
   ObstacleManager.addAllBackground();
-  ObstacleManager.addAllFloating();
-
-  //Game.clearAllLevelsFromHash();
-  //setHashParam(PD.IMPORTABLE_HASH_PARAMS, Game.curLevelId.toLowerCase(), true);
-  //Game.timeRemaining = Game.curLevelData.timeAllowedSecs;
-
-  //Game.isInLevelOutro = false;
-  //Game.isInPlay = true;
-  //Game.scoreForLevel = 0;
 
   Game.updateLayout();
 
-  //Controller.setupForLevel();
-  //Player.setupForLevel();
-  //Display.setupForLevel();
-
-  //ObstacleManager.reset();
-  //ObstacleManager.addAllBackground();
-  //ObstacleManager.addAllFloating();
-
-  //Game.updateObstacleTypeTotals();
-
-  //Game.startLevelIntro();
-
-  //  __("Game.startLevelIntro()::", PD.FMT_GAME);
-  //Game.isInLevelIntro = true;
-
-  ////Game.textIsFading = false;
-
   OverlayText.setEmpty();
-
-  //if (!Game.isOnFrontPage) {
-  //  OverlayText.addNormalLevelIntro();
-  //  Game.startTextFade(FADE_DIRECTION.IN, TIMINGS.TEXT_FADEIN_SECS);
-  //}
-
-  //if (Game.levelIndex === Game.skipToLevelIndex) {
-  //  __(
-  //    "Initial level, meaning either level 1 or whichever level is skipped to via URL hash (param Game.levelIndex === Game.skipToLevelIndex)",
-  //    PD.FMT_GAME
-  //  );
-  //  __("\t\tSETTING OVERLAY TEXT", PD.FMT_GAME);
-  //  if (Game.isOnFrontPage) {
-  //    __("\tGame.isOnFrontPage TRUE", PD.FMT_GAME);
-  //    __("\tclick starts next level", PD.FMT_GAME);
-  //    document.addEventListener(Game.tapEventName, Game.nextLevel);
-  //  } else {
-  //    __("\tGame.isOnFrontPage FALSE", PD.FMT_GAME);
-  //    __("\tclick starts gameplay after a delay", PD.FMT_GAME);
-  //    OverlayText.addHitToStart();
-  //    document.addEventListener(Game.tapEventName, Game.delayedStartGameplay);
-  //  }
-  //} else {
-  //  __("Not initial level --- start gameplay after a delay", PD.FMT_GAME);
-  //  Game.delayedStartGameplay();
-  //}
 
   InternalTimer.startTicking();
 };
 
-/**
- * @function startPlay
- * @static
- *
- * @description
- * ##### All intros etc have finished, actually start playing
- */
-Game.startPlay = function () {
-  __("Game.startPlay()::", RCSI.FMT_GAME);
-
-  OverlayText.setEmpty();
-};
+///**
+// * @function startPlay
+// * @static
+// *
+// * @description
+// * ##### All intros etc have finished, actually start playing
+// */
+//Game.startPlay = function () {
+//  __("Game.startPlay()::", RCSI.FMT_GAME);
+//
+//  OverlayText.setEmpty();
+//};
 
 /**
  * @function updateLayout

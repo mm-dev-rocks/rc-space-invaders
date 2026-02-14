@@ -301,5 +301,6 @@ export const CHARS_IN_SPRITESHEET_AR = [
 export const KEYS = {
   ArrowLeft: KEY_ACTIONS.MOVE_LEFT,
   ArrowRight: KEY_ACTIONS.MOVE_RIGHT,
-  k: KEY_ACTIONS.FIRE,
+  ArrowUp: KEY_ACTIONS.FIRE,
+  Space: KEY_ACTIONS.START_GAME,
 };

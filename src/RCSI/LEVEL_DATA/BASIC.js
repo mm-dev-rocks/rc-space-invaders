@@ -11,13 +11,9 @@ export const BASIC = {
   textColorShadow: "#3a3a3a",
   bgColor: "#000000",
   bgFadeAlpha: 0.56,
-  gameplayAreaToCanvasLateralRatio: 0.7,
   tip: "EAT AND GROW!",
   player: {
     color: "#ffffff",
-    // 300 - 800
-    growthDivisor: 800,
-    radius: 15,
   },
   obstacles: [
     {
@@ -29,15 +25,12 @@ export const BASIC = {
       speedRange: [0.001, 0.03],
     },
     {
-      type: OBSTACLE_TYPE.COLLECT,
-      collectSfx_ar: SOUND_DATA.ORDERED_TWANG_SFX_AR,
-      total: 33,
-      color_ar: ["#bbbbbb", "#dddddd"],
-      radiusRange: [25, 35],
-      directionRange: [140, 220],
-      speedRange: [1, 2],
-      // 0.01 - 0.99
-      gradientFadePoint: 0.01,
+      type: OBSTACLE_TYPE.ALIEN,
+      pattern: `
+      -XXX-XXX-XXX-
+      XXXXXXXXXXXXX
+      --XX--X--XX--
+      `,
     },
   ],
 };

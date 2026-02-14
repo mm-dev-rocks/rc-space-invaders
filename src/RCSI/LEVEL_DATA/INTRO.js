@@ -8,11 +8,8 @@ export const INTRO = {
   textColor: "#ffffff",
   bgColor: "#000000",
   bgFadeAlpha: 0.4,
-  gameplayAreaToCanvasLateralRatio: 1,
   player: {
     color: "#ffffff",
-    growthDivisor: 100,
-    radius: 15,
   },
   obstacles: [
     {
@@ -31,20 +28,19 @@ export const INTRO = {
       portraitOffsetCharsV: -3,
       text: [
         {
-          color: "#ffff00",
-          text: "ARROWS TO MOVE",
-        },
-        {
-          color: "#ffff00",
-          text: "SPACE TO FIRE",
-        },
-        {
-          color: "#ffff00",
-          text: "",
+          color: "#ffffff",
+          text: "LEFT/RIGHT ARROWS TO MOVE",
         },
         {
           color: "#ffffff",
-          text: "TAP TO START",
+          text: "ARROW UP TO FIRE",
+        },
+        {
+          text: "",
+        },
+        {
+          color: "#ffff00",
+          text: "SPACE TO START",
         },
       ],
     },

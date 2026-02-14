@@ -26,8 +26,6 @@ class Layout {
   /** @type {number} */ static mainPaddingProportional;
   /** @type {number} */ static textBgPaddingProportional;
   /** @type {number} */ static hitAreaPaddingProportional;
-  /** @type {number} */ static gameplayAreaToCanvasLateralRatio;
-  /** @type {number} */ static gameAreaOffsetLateral;
   /** @type {number} */ static gameplayWidth;
   /** @type {number} */ static gameplayHeight;
 
@@ -35,7 +33,6 @@ class Layout {
   /** @type {Object} */ static playerBounds_rect;
   /** @type {Object} */ static gameplay_rect;
   /** @type {Object} */ static background_rect;
-  /** @type {Object} */ static floating_rect;
   /** @type {Object} */ static mainTitle_rect;
 }
 
@@ -49,8 +46,7 @@ class Layout {
  */
 Layout.init = function () {
   __("Layout.init()::", RCSI.FMT_LAYOUT);
-  // TODO magic but means fill canvas, used when this function is called the first time
-  Layout.update({ gameplayAreaToCanvasLateralRatio: 1 });
+  Layout.update();
 };
 
 /**
@@ -87,35 +83,28 @@ Layout.setProportionalSizes = function () {
  * @description
  * ##### Calculate sizes (particularly recctangles) for lots of important parts of the game and UI
  *
- * @param {object} _data
- * @param {number} _data.gameplayAreaToCanvasLateralRatio - This value is set per-level and sets the size of the gameplay area (between the pipe walls) as a ratio of the canvas size
  */
-Layout.update = function (_data) {
+Layout.update = function () {
   __("Layout.update()::", RCSI.FMT_LAYOUT);
-  Layout.gameplayAreaToCanvasLateralRatio = _data.gameplayAreaToCanvasLateralRatio;
 
   Layout.canvasWidth = Math.round(document.documentElement.clientWidth / GAME.PIXEL_SCALE);
   Layout.canvasHeight = Math.round(document.documentElement.clientHeight / GAME.PIXEL_SCALE);
+  __(`\tLayout.canvasHeight: ${Layout.canvasHeight}`, RCSI.FMT_LAYOUT);
+  __(`\tLayout.canvasWidth: ${Layout.canvasWidth}`, RCSI.FMT_LAYOUT);
 
   Layout.gameplayWidth = Layout.canvasWidth;
   Layout.gameplayHeight = Layout.canvasHeight;
-  // Size field-of-play as a % of canvas size depending on level (`gameplayAreaToCanvasLateralRatio` comes from level data)
-  Layout.gameplayWidth *= Layout.gameplayAreaToCanvasLateralRatio;
   __("\tLayout.gameplayHeight: " + Layout.gameplayHeight, RCSI.FMT_LAYOUT);
   __("\tLayout.gameplayWidth: " + Layout.gameplayWidth, RCSI.FMT_LAYOUT);
 
   Layout.canvas_rect = Layout.getRectangle(RECTANGLE.CANVAS);
   Layout.gameplay_rect = Layout.getRectangle(RECTANGLE.GAMEAREA);
   Layout.background_rect = Layout.getRectangle(RECTANGLE.BACKGROUND);
-  Layout.floating_rect = Layout.getRectangle(RECTANGLE.FLOATING);
   Layout.playerBounds_rect = Layout.getRectangle(RECTANGLE.PLAYERBOUNDS);
   __("\tLayout.canvas_rect: " + JSON.stringify(Layout.canvas_rect), RCSI.FMT_LAYOUT);
   __("\tLayout.gameplay_rect: " + JSON.stringify(Layout.gameplay_rect), RCSI.FMT_LAYOUT);
   __("\tLayout.background_rect: " + JSON.stringify(Layout.background_rect), RCSI.FMT_LAYOUT);
-  __("\tLayout.floating_rect: " + JSON.stringify(Layout.floating_rect), RCSI.FMT_LAYOUT);
   __("\tLayout.playerBounds_rect: " + JSON.stringify(Layout.playerBounds_rect), RCSI.FMT_LAYOUT);
-
-  Layout.gameAreaOffsetLateral = (Layout.canvasWidth - Layout.gameplayWidth) / 2;
 
   Layout.setProportionalSizes();
 
@@ -154,17 +143,6 @@ Layout.getRectangle = function (_type) {
       top: 0 - Layout.gameplayHeight / 2,
       bottom: Layout.canvasHeight + Layout.gameplayHeight / 2,
     };
-    //
-    //
-  } else if (_type === RECTANGLE.FLOATING) {
-    rect = {
-      top: Layout.canvas_rect.top,
-      right: Layout.canvas_rect.right,
-      bottom: Layout.canvas_rect.bottom,
-      left: Layout.canvas_rect.left,
-    };
-    rect.left -= (Layout.canvasWidth / 2) * GAME.FLOATING_LATERAL_MULTIPLIER;
-    rect.right += (Layout.canvasWidth / 2) * GAME.FLOATING_LATERAL_MULTIPLIER;
     //
     //
   } else if (_type === RECTANGLE.GAMEAREA) {

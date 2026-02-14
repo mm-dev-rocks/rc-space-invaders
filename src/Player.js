@@ -138,7 +138,6 @@ Player.draw = function () {
   var color, playerDrawnPosX, playerDrawnPosY;
 
   playerDrawnPosX = Player.pos.x;
-  //playerDrawnPosX = Player.pos.x + Layout.gameAreaOffsetLateral;
   playerDrawnPosY = Player.pos.y;
   color = Player.color;
 
@@ -151,7 +150,6 @@ Player.draw = function () {
       Player.image.height,
       playerDrawnPosX,
       playerDrawnPosY,
-      // TODO magic number
       Player.image.width * GAME.PLAYER_DRAW_SCALE,
       Player.image.height * GAME.PLAYER_DRAW_SCALE,
     );
