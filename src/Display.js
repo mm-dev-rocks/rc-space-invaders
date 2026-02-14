@@ -138,7 +138,6 @@ Display.updateLayout = function () {
   Display.ctxDefault.imageSmoothingEnabled = false;
 
   Player.updateSizes();
-  Shape.updateSizes();
 };
 
 /**
@@ -192,9 +191,6 @@ Display.createCanvas = function () {
 Display.update = function () {
   Display.drawBackground();
   Display.drawBackgroundThings();
-  if (!Game.isOnFrontPage) {
-    Display.drawForegroundThings();
-  }
 
   if (Game.isOnFrontPage) {
     Display.drawTitle();
@@ -203,10 +199,6 @@ Display.update = function () {
   }
 
   Player.draw();
-
-  if (!Game.isOnFrontPage) {
-    Display.drawFloatingThings();
-  }
 
   if (!Game.isOnFrontPage) {
     Text.drawTimeRemaining();
@@ -335,44 +327,6 @@ Display.drawBackgroundThings = function () {
 };
 
 /**
- * @function drawForegroundThings
- * @static
- *
- * @description
- * ##### Foreground things
- * - Can interact with the player by being collected or causing health damage
- * - Conceptually are on the **middle layer**
- */
-Display.drawForegroundThings = function () {
-  var i, thing;
-  for (i = 0; i < ThingManager.things.length; i++) {
-    thing = ThingManager.things[i];
-    if (!thing.isDeleted && (thing.type === THING_TYPE.COLLECT || thing.type === THING_TYPE.AVOID)) {
-      Display.drawThing(thing);
-    }
-  }
-};
-
-/**
- * @function drawFloatingThings
- * @static
- *
- * @description
- * ##### Floating things
- * - Are above and do not interact with the player
- * - Conceptually are on the **top layer**
- */
-Display.drawFloatingThings = function () {
-  var i, thing;
-  for (i = 0; i < ThingManager.things.length; i++) {
-    thing = ThingManager.things[i];
-    if (thing.type === THING_TYPE.FLOATING) {
-      Display.drawThing(thing);
-    }
-  }
-};
-
-/**
  * @function drawThing
  * @static
  *
@@ -392,35 +346,16 @@ Display.drawThing = function (_thing) {
 
   if (_thing.type === THING_TYPE.BACKGROUND) {
     parallaxMultiplier = GAME.BACKGROUND_LATERAL_MULTIPLIER;
-  } else if (_thing.type === THING_TYPE.FLOATING) {
-    parallaxMultiplier = GAME.FLOATING_LATERAL_MULTIPLIER;
   }
 
   displayX = _thing.pos.x + lateralOffset;
   displayY = _thing.pos.y;
 
   switch (_thing.subtype) {
-    case THING_SUBTYPE.FLOWER:
-      Shape.drawFlower(displayX, displayY, _thing);
-      break;
-    case THING_SUBTYPE.STAR:
-      Shape.drawStar(displayX, displayY, _thing);
-      break;
-    case THING_SUBTYPE.SQUARCLE:
-      Shape.drawSquarcle(displayX, displayY, _thing);
-      break;
-    case THING_SUBTYPE.SKEWED_CIRCLE:
-      Shape.drawSkewedCircle(displayX, displayY, _thing);
-      break;
     default:
       Shape.drawCircle(displayX, displayY, {
         radius: _thing.radius,
-        // TODO color/explodingColor are not used, always gradient?
-        color: _thing.explodingColor || _thing.color,
-        gradientFadePoint: _thing.gradientFadePoint,
-        gradient: _thing.gradient,
-        rotation: _thing.rotation,
-        useDefaultStroke: _thing.useDefaultStroke,
+        color: _thing.color,
       });
       break;
   }

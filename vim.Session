@@ -13,95 +13,53 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +9 README.md
-badd +5 build-watch.sh
-badd +29 src/Game.js
-badd +77 ./src/AssetPreloader.js
-badd +231 ./src/BitmapText.js
-badd +281 ./src/Display.js
-badd +99 ./src/ImageManager.js
-badd +79 ./src/InternalTimer.js
-badd +57 ./src/JsonManager.js
-badd +254 ./src/Layout.js
-badd +70 ./src/LoadingIndicator.js
-badd +740 ./src/ObstacleManager.js
-badd +191 ./src/OverlayText.js
-badd +76 ./src/Player.js
-badd +8 ./src/RCSI/CLASSNAMES.js
-badd +25 ./src/RCSI/CONST.js
-badd +14 ./src/RCSI/EL_IDS.js
-badd +60 ./src/RCSI/ENUM.js
-badd +340 ./src/RCSI/GAME.js
+badd +112 ./src/AssetPreloader.js
+badd +1 ./src/BitmapText.js
+badd +55 ./src/Display.js
+badd +211 ./src/Game.js
+badd +1 ./src/ImageManager.js
+badd +15 ./src/InternalTimer.js
+badd +1 ./src/JsonManager.js
+badd +1 ./src/Layout.js
+badd +1 ./src/LoadingIndicator.js
+badd +236 src/ThingManager.js
+badd +243 ./src/OverlayText.js
+badd +132 ./src/Player.js
+badd +1 ./src/RCSI/CLASSNAMES.js
+badd +1 ./src/RCSI/CONST.js
+badd +1 ./src/RCSI/EL_IDS.js
+badd +82 ./src/RCSI/ENUM.js
+badd +190 ./src/RCSI/GAME.js
 badd +1 ./src/RCSI/GRADIENT.js
-badd +7 ./src/RCSI/IMAGE_DATA.js
-badd +7 ./src/RCSI/IMAGE_IDS.js
+badd +1 ./src/RCSI/IMAGE_DATA.js
+badd +1 ./src/RCSI/IMAGE_IDS.js
 badd +1 ./src/RCSI/JSONFILES_DATA.js
 badd +1 ./src/RCSI/JSONFILE_IDS.js
-badd +15 ./src/RCSI/LEVELS.js
-badd +7 ./src/RCSI/SOUND_DATA.js
-badd +7 ./src/RCSI/SOUND_IDS.js
-badd +7 ./src/RCSI/STRING.js
-badd +7 ./src/RCSI/TIMINGS.js
-badd +14 ./src/Shape.js
-badd +272 ./src/Text.js
-badd +519 ./src/utils.js
-badd +42 ./src/RCSI/LEVEL_DATA/BASIC.js
-badd +34 ./src/RCSI/LEVEL_DATA/INTRO.js
-badd +46 ./src/Timers.js
-badd +38 ./src/main.js
-badd +0 ./src/AddedLayer.js
-badd +0 ./src/Controller.js
-badd +0 ./src/FullscreenManager.js
-badd +0 ./src/HealthMeter.js
-badd +0 ./src/IntroObstacles.js
-badd +0 ./src/LevelTransition.js
-badd +0 ./src/PipeWalls.js
-badd +0 ./src/RCSI/LEVEL_DATA/ALIEN.js
-badd +0 ./src/RCSI/LEVEL_DATA/BLRDS.js
-badd +0 ./src/RCSI/LEVEL_DATA/CHPLN.js
-badd +0 ./src/RCSI/LEVEL_DATA/DENSE.js
-badd +0 ./src/RCSI/LEVEL_DATA/GARDN.js
-badd +0 ./src/RCSI/LEVEL_DATA/GNSMK.js
-badd +0 ./src/RCSI/LEVEL_DATA/JUNGL.js
-badd +0 ./src/RCSI/LEVEL_DATA/LMOLV.js
-badd +0 ./src/RCSI/LEVEL_DATA/MAUVE.js
-badd +0 ./src/RCSI/LEVEL_DATA/MERNG.js
-badd +0 ./src/RCSI/LEVEL_DATA/MULT1.js
-badd +0 ./src/RCSI/LEVEL_DATA/MULT2.js
-badd +0 ./src/RCSI/LEVEL_DATA/MUSTD.js
-badd +0 ./src/RCSI/LEVEL_DATA/NTPOR.js
-badd +0 ./src/RCSI/LEVEL_DATA/OPRTN.js
-badd +0 ./src/RCSI/LEVEL_DATA/PEKMN.js
-badd +0 ./src/RCSI/LEVEL_DATA/REDDD.js
-badd +0 ./src/RCSI/LEVEL_DATA/RRRED.js
-badd +0 ./src/RCSI/LEVEL_DATA/STRRY.js
-badd +0 ./src/RCSI/LEVEL_DATA/SWARM.js
-badd +0 ./src/RCSI/LEVEL_DATA/TOOEZ.js
-badd +0 ./src/RCSI/LEVEL_DATA/WISTA.js
-badd +0 ./src/SoundManagerHowler.js
-badd +0 ./src/howler.core.min.js
-badd +0 ./src/howler.min.js
+badd +1 ./src/RCSI/LEVELS.js
+badd +24 ./src/RCSI/LEVEL_DATA/BASIC.js
+badd +19 ./src/RCSI/LEVEL_DATA/INTRO.js
+badd +1 ./src/RCSI/SOUND_DATA.js
+badd +1 ./src/RCSI/SOUND_IDS.js
+badd +1 ./src/RCSI/STRING.js
+badd +26 ./src/RCSI/TIMINGS.js
+badd +16 ./src/Shape.js
+badd +1 ./src/Text.js
+badd +1 ./src/Timers.js
+badd +25 ./src/main.js
+badd +392 ./src/utils.js
 argglobal
 %argdel
-$argadd README.md
-$argadd ./src/AddedLayer.js
 $argadd ./src/AssetPreloader.js
 $argadd ./src/BitmapText.js
-$argadd ./src/Controller.js
 $argadd ./src/Display.js
-$argadd ./src/FullscreenManager.js
-$argadd src/Game.js
-$argadd ./src/HealthMeter.js
+$argadd ./src/Game.js
 $argadd ./src/ImageManager.js
 $argadd ./src/InternalTimer.js
-$argadd ./src/IntroObstacles.js
 $argadd ./src/JsonManager.js
 $argadd ./src/Layout.js
-$argadd ./src/LevelTransition.js
 $argadd ./src/LoadingIndicator.js
-$argadd ./src/ObstacleManager.js
+$argadd src/ThingManager.js
 $argadd ./src/OverlayText.js
-$argadd ./src/PipeWalls.js
 $argadd ./src/Player.js
 $argadd ./src/RCSI/CLASSNAMES.js
 $argadd ./src/RCSI/CONST.js
@@ -114,50 +72,25 @@ $argadd ./src/RCSI/IMAGE_IDS.js
 $argadd ./src/RCSI/JSONFILES_DATA.js
 $argadd ./src/RCSI/JSONFILE_IDS.js
 $argadd ./src/RCSI/LEVELS.js
-$argadd ./src/RCSI/LEVEL_DATA/ALIEN.js
 $argadd ./src/RCSI/LEVEL_DATA/BASIC.js
-$argadd ./src/RCSI/LEVEL_DATA/BLRDS.js
-$argadd ./src/RCSI/LEVEL_DATA/CHPLN.js
-$argadd ./src/RCSI/LEVEL_DATA/DENSE.js
-$argadd ./src/RCSI/LEVEL_DATA/GARDN.js
-$argadd ./src/RCSI/LEVEL_DATA/GNSMK.js
 $argadd ./src/RCSI/LEVEL_DATA/INTRO.js
-$argadd ./src/RCSI/LEVEL_DATA/JUNGL.js
-$argadd ./src/RCSI/LEVEL_DATA/LMOLV.js
-$argadd ./src/RCSI/LEVEL_DATA/MAUVE.js
-$argadd ./src/RCSI/LEVEL_DATA/MERNG.js
-$argadd ./src/RCSI/LEVEL_DATA/MULT1.js
-$argadd ./src/RCSI/LEVEL_DATA/MULT2.js
-$argadd ./src/RCSI/LEVEL_DATA/MUSTD.js
-$argadd ./src/RCSI/LEVEL_DATA/NTPOR.js
-$argadd ./src/RCSI/LEVEL_DATA/OPRTN.js
-$argadd ./src/RCSI/LEVEL_DATA/PEKMN.js
-$argadd ./src/RCSI/LEVEL_DATA/REDDD.js
-$argadd ./src/RCSI/LEVEL_DATA/RRRED.js
-$argadd ./src/RCSI/LEVEL_DATA/STRRY.js
-$argadd ./src/RCSI/LEVEL_DATA/SWARM.js
-$argadd ./src/RCSI/LEVEL_DATA/TOOEZ.js
-$argadd ./src/RCSI/LEVEL_DATA/WISTA.js
 $argadd ./src/RCSI/SOUND_DATA.js
 $argadd ./src/RCSI/SOUND_IDS.js
 $argadd ./src/RCSI/STRING.js
 $argadd ./src/RCSI/TIMINGS.js
 $argadd ./src/Shape.js
-$argadd ./src/SoundManagerHowler.js
 $argadd ./src/Text.js
 $argadd ./src/Timers.js
-$argadd ./src/howler.core.min.js
-$argadd ./src/howler.min.js
 $argadd ./src/main.js
 $argadd ./src/utils.js
-edit ./src/AssetPreloader.js
+edit ./src/BitmapText.js
 argglobal
-67argu
-if bufexists(fnamemodify("./src/AssetPreloader.js", ":p")) | buffer ./src/AssetPreloader.js | else | edit ./src/AssetPreloader.js | endif
+34argu
+if bufexists(fnamemodify("./src/BitmapText.js", ":p")) | buffer ./src/BitmapText.js | else | edit ./src/BitmapText.js | endif
 if &buftype ==# 'terminal'
-  silent file ./src/AssetPreloader.js
+  silent file ./src/BitmapText.js
 endif
-balt src/Game.js
+balt ./src/AssetPreloader.js
 setlocal foldmethod=manual
 setlocal foldexpr=0
 setlocal foldmarker={{{,}}}
@@ -168,11 +101,11 @@ setlocal foldnestmax=20
 setlocal nofoldenable
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 77 - ((21 * winheight(0) + 15) / 30)
+let s:l = 223 - ((16 * winheight(0) + 15) / 30)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 77
+keepjumps 223
 normal! 0
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
@@ -187,7 +120,6 @@ if filereadable(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
 set hlsearch
-nohlsearch
 doautoall SessionLoadPost
 unlet SessionLoad
 " vim: set ft=vim :

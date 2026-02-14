@@ -39,9 +39,8 @@ class Game {
 
   /** @type {boolean} */ static isInGameOver;
   /** @type {boolean} */ static isOnFrontPage;
-  /** @type {boolean} */ static textIsFading;
 
-  /** @type {Object} */ static levelData;
+  /** @type {Object} */ static allLevelsData;
   /** @type {Object} */ static curLevelData;
 }
 
@@ -73,9 +72,8 @@ Game.init = function () {
  *
  * @description
  * ##### Start listening for events:
- * - Touch / move pointer
- * - Tap
  * - Resize
+ * - Keypresses
  */
 Game.initEventHandlers = function () {
   window.addEventListener("resize", Game.onResize);
@@ -98,16 +96,16 @@ Game.resetAndStartFirstLevel = function () {
 
   var i,
     curLevelId,
-    levelDataKeys = Object.keys(LEVELS.LEVEL_DATA);
+    allLevelsDataKeys = Object.keys(LEVELS.LEVEL_DATA);
 
   Game.isInGameOver = false;
 
   OverlayText.blankOutHitToStart();
 
-  Game.levelData = LEVELS.LEVEL_DATA;
+  Game.allLevelsData = LEVELS.LEVEL_DATA;
   Game.levelIndex = 0;
-  for (i = 0; i < levelDataKeys.length; i++) {
-    curLevelId = levelDataKeys[i];
+  for (i = 0; i < allLevelsDataKeys.length; i++) {
+    curLevelId = allLevelsDataKeys[i];
   }
 
   Game.currentScore = 0;
@@ -186,8 +184,8 @@ Game.onKeyUp = function (event) {
       case KEY_ACTIONS.FIRE:
         break;
       case KEY_ACTIONS.START_GAME:
-        __("START GAME");
         if (Game.levelIndex == 0) {
+          __("START GAME");
           Game.levelIndex++;
           Game.setupCurrentLevel();
         }
@@ -215,8 +213,8 @@ Game.setupCurrentLevel = function () {
   __("Game.setupCurrentLevel()::", RCSI.FMT_GAME);
 
   Game.scoreForLevel = 0;
-  Game.curLevelId = Object.keys(Game.levelData)[Game.levelIndex];
-  Game.curLevelData = Game.levelData[Game.curLevelId];
+  Game.curLevelId = Object.keys(Game.allLevelsData)[Game.levelIndex];
+  Game.curLevelData = Game.allLevelsData[Game.curLevelId];
 
   if (Game.levelIndex === 0) {
     Game.isOnFrontPage = true;

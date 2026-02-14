@@ -16,9 +16,9 @@ export const INTRO = {
       type: THING_TYPE.BACKGROUND,
       total: 500,
       color_ar: ["#bbbbbb", "#666666", "#999999", "#ffffff"],
-      radiusRange: [1, 3],
-      directionRange: [-10, 10],
-      speedRange: [0.2, 0.0],
+      radiusRange: [0.5, 2],
+      directionRange: [85, 95],
+      speedRange: [0.1, 2.0],
     },
   ],
   instruct_text: [

@@ -21,8 +21,8 @@ export const BASIC = {
       total: 300,
       color_ar: ["#bbbbbb", "#dddddd", "#999999", "#ffffff"],
       radiusRange: [1, 2],
-      directionRange: [175, 185],
-      speedRange: [0.001, 0.03],
+      directionRange: [80, 100],
+      speedRange: [0.01, 0.1],
     },
     {
       type: THING_TYPE.ALIEN,

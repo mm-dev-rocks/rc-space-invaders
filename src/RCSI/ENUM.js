@@ -76,17 +76,6 @@ export const RECTANGLE = {
  * @readonly
  * @enum {string}
  */
-export const GRADIENT_TYPE = {
-  LINEAR: "gradientTypeLinear",
-  RADIAL: "gradientTypeRadial",
-  LINEAR_TUMBLING: "gradientTypeLinearTumbling",
-  RADIAL_TUMBLING: "gradientTypeRadialTumbling",
-};
-
-/**
- * @readonly
- * @enum {string}
- */
 export const VERT_ALIGN = {
   TOP: "verticalAlignmentTop",
   CENTER: "verticalAlignmentCenter",
