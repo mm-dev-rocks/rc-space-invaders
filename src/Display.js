@@ -133,6 +133,10 @@ Display.updateLayout = function () {
   Display.canvas.width = Layout.canvasWidth;
   Display.canvas.height = Layout.canvasHeight;
 
+  // IMPORTANT changing width/height resets the drawing states of the context get reset
+  Display.ctx.imageSmoothingEnabled = false;
+  Display.ctxDefault.imageSmoothingEnabled = false;
+
   Player.updateSizes();
   Shape.updateSizes();
 };
@@ -163,6 +167,7 @@ Display.createCanvas = function () {
 
   if (Display.ctx) {
     Display.ctx.imageSmoothingEnabled = false;
+    __("\t disabling smoothing", RCSI.FMT_INFO);
   }
 
   Display.ctxDefault = Display.ctx;
@@ -227,19 +232,21 @@ Display.update = function () {
  */
 Display.drawTitle = function () {
   var hueRotationAngle = modulo(InternalTimer.frameCount, 360);
-  Display.ctx.filter = "hue-rotate(" + hueRotationAngle + "deg)";
-  Display.ctx.drawImage(
-    Display.titleImage,
-    0,
-    0,
-    Display.titleImage.width,
-    Display.titleImage.height,
-    Layout.mainTitle_rect.left,
-    Layout.mainTitle_rect.top,
-    Layout.mainTitle_rect.right - Layout.mainTitle_rect.left,
-    Layout.mainTitle_rect.bottom - Layout.mainTitle_rect.top,
-  );
-  Display.ctx.filter = "none";
+  if (Display.ctx) {
+    Display.ctx.filter = "hue-rotate(" + hueRotationAngle + "deg)";
+    Display.ctx.drawImage(
+      Display.titleImage,
+      0,
+      0,
+      Display.titleImage.width,
+      Display.titleImage.height,
+      Layout.mainTitle_rect.left,
+      Layout.mainTitle_rect.top,
+      Layout.mainTitle_rect.right - Layout.mainTitle_rect.left,
+      Layout.mainTitle_rect.bottom - Layout.mainTitle_rect.top,
+    );
+    Display.ctx.filter = "none";
+  }
 };
 
 /**
@@ -381,8 +388,7 @@ Display.drawObstacle = function (_obstacle) {
   var displayX,
     displayY,
     lateralOffset = 0,
-    parallaxMultiplier = 1,
-    ignore = false;
+    parallaxMultiplier = 1;
 
   if (_obstacle.type === OBSTACLE_TYPE.BACKGROUND) {
     parallaxMultiplier = GAME.BACKGROUND_LATERAL_MULTIPLIER;
@@ -393,46 +399,30 @@ Display.drawObstacle = function (_obstacle) {
   displayX = _obstacle.pos.x + lateralOffset;
   displayY = _obstacle.pos.y;
 
-  //if (_obstacle.type === OBSTACLE_TYPE.AVOID) {
-  //  // AVOIDABLE
-  //  _obstacle.damageSafetyCounter = 0;
-  if (
-    _obstacle.type === OBSTACLE_TYPE.AVOID &&
-    _obstacle.damageSafetyCounter > 0 &&
-    Display.flashIsOff(GAME.DAMAGE_FLASH_ON_SECS, GAME.DAMAGE_FLASH_OFF_SECS)
-  ) {
-    ignore = true;
-  }
-
-  //displayX = Math.round(displayX);
-  //displayY = Math.round(displayY);
-
-  if (!ignore) {
-    switch (_obstacle.subtype) {
-      case OBSTACLE_SUBTYPE.FLOWER:
-        Shape.drawFlower(displayX, displayY, _obstacle);
-        break;
-      case OBSTACLE_SUBTYPE.STAR:
-        Shape.drawStar(displayX, displayY, _obstacle);
-        break;
-      case OBSTACLE_SUBTYPE.SQUARCLE:
-        Shape.drawSquarcle(displayX, displayY, _obstacle);
-        break;
-      case OBSTACLE_SUBTYPE.SKEWED_CIRCLE:
-        Shape.drawSkewedCircle(displayX, displayY, _obstacle);
-        break;
-      default:
-        Shape.drawCircle(displayX, displayY, {
-          radius: _obstacle.radius,
-          // TODO color/explodingColor are not used, always gradient?
-          color: _obstacle.explodingColor || _obstacle.color,
-          gradientFadePoint: _obstacle.gradientFadePoint,
-          gradient: _obstacle.gradient,
-          rotation: _obstacle.rotation,
-          useDefaultStroke: _obstacle.useDefaultStroke,
-        });
-        break;
-    }
+  switch (_obstacle.subtype) {
+    case OBSTACLE_SUBTYPE.FLOWER:
+      Shape.drawFlower(displayX, displayY, _obstacle);
+      break;
+    case OBSTACLE_SUBTYPE.STAR:
+      Shape.drawStar(displayX, displayY, _obstacle);
+      break;
+    case OBSTACLE_SUBTYPE.SQUARCLE:
+      Shape.drawSquarcle(displayX, displayY, _obstacle);
+      break;
+    case OBSTACLE_SUBTYPE.SKEWED_CIRCLE:
+      Shape.drawSkewedCircle(displayX, displayY, _obstacle);
+      break;
+    default:
+      Shape.drawCircle(displayX, displayY, {
+        radius: _obstacle.radius,
+        // TODO color/explodingColor are not used, always gradient?
+        color: _obstacle.explodingColor || _obstacle.color,
+        gradientFadePoint: _obstacle.gradientFadePoint,
+        gradient: _obstacle.gradient,
+        rotation: _obstacle.rotation,
+        useDefaultStroke: _obstacle.useDefaultStroke,
+      });
+      break;
   }
 };
 

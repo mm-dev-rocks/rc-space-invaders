@@ -25,6 +25,7 @@ import { Player } from "./Player.js";
 import { __ } from "./utils.js";
 import { Layout } from "./Layout.js";
 import { InternalTimer } from "./InternalTimer.js";
+import { KEY_ACTIONS } from "./RCSI/ENUM.js";
 
 class Game {
   /** @type {number} */ static currentScore;
@@ -61,6 +62,8 @@ Game.init = function () {
   Display.init();
   Player.init();
 
+  InternalTimer.init();
+
   Game.resetAndStartFirstLevel();
 };
 
@@ -76,6 +79,8 @@ Game.init = function () {
  */
 Game.initEventHandlers = function () {
   window.addEventListener("resize", Game.onResize);
+  document.addEventListener("keydown", Game.onKeyDown);
+  document.addEventListener("keyup", Game.onKeyUp);
 };
 
 /**
@@ -139,6 +144,58 @@ Game.onResize = function () {
 };
 
 /**
+ * @function onKeyDown
+ * @static
+ *
+ * @description
+ * ##### Handle key presses
+ */
+Game.onKeyDown = function (event) {
+  __(`event.key: ${event.key}`);
+  __(`event.code: ${event.code}`);
+  if (GAME.KEYS.hasOwnProperty(event.key)) {
+    switch (GAME.KEYS[event.key]) {
+      case KEY_ACTIONS.MOVE_LEFT:
+        Player.startMoveLeft();
+        break;
+      case KEY_ACTIONS.MOVE_RIGHT:
+        Player.startMoveRight();
+        break;
+      case KEY_ACTIONS.FIRE:
+        break;
+      default:
+        break;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+  }
+};
+
+/**
+ * @function onKeyUp
+ * @static
+ *
+ * @description
+ * ##### Handle key release
+ */
+Game.onKeyUp = function (event) {
+  if (GAME.KEYS.hasOwnProperty(event.key)) {
+    switch (GAME.KEYS[event.key]) {
+      case KEY_ACTIONS.MOVE_LEFT:
+      case KEY_ACTIONS.MOVE_RIGHT:
+        Player.stopMove();
+        break;
+      case KEY_ACTIONS.FIRE:
+        break;
+      default:
+        break;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+  }
+};
+
+/**
  * @function setupCurrentLevel
  * @static
  *
@@ -159,6 +216,12 @@ Game.setupCurrentLevel = function () {
   Game.curLevelId = Object.keys(Game.levelData)[Game.levelIndex];
   Game.curLevelData = Game.levelData[Game.curLevelId];
 
+  if (Game.levelIndex === 0) {
+    Game.isOnFrontPage = true;
+  } else {
+    Game.isOnFrontPage = false;
+  }
+
   Player.setupForLevel();
   Display.setupForLevel();
 
@@ -170,17 +233,11 @@ Game.setupCurrentLevel = function () {
   //setHashParam(PD.IMPORTABLE_HASH_PARAMS, Game.curLevelId.toLowerCase(), true);
   //Game.timeRemaining = Game.curLevelData.timeAllowedSecs;
 
-  //if (Game.levelIndex === 0) {
-  //  Game.isOnFrontPage = true;
-  //} else {
-  //  Game.isOnFrontPage = false;
-  //}
-
   //Game.isInLevelOutro = false;
   //Game.isInPlay = true;
   //Game.scoreForLevel = 0;
 
-  //Game.updateLayout();
+  Game.updateLayout();
 
   //Controller.setupForLevel();
   //Player.setupForLevel();

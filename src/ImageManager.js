@@ -12,7 +12,6 @@
  * - Optionally also produce and cache `ImageBitmap`s
  */
 
-
 import { RCSI } from "./RCSI/CONST.js";
 import * as GAME from "./RCSI/GAME.js";
 import { __, manualEvent } from "./utils.js";
@@ -35,10 +34,7 @@ ImageManager.init = function (ob) {
   for (i = 0; i < ImageManager.data_ar.length; i++) {
     itemData = ImageManager.data_ar[i];
     if (ImageManager.allImages_ob[itemData.id]) {
-      __(
-        "" + itemData.id + ": already exists - skipping preload",
-        RCSI.FMT_IMAGEMANAGER
-      );
+      __("" + itemData.id + ": already exists - skipping preload", RCSI.FMT_IMAGEMANAGER);
     } else {
       image_tmp = document.createElement("img");
       image_tmp.src = itemData.file;
@@ -66,8 +62,7 @@ ImageManager.updatePreloadStatus = function (_el) {
   }
 
   manualEvent(document, "itempreload", {
-    imageItemsLoaded:
-      ImageManager.data_ar.length - ImageManager.preload_ar.length,
+    imageItemsLoaded: ImageManager.data_ar.length - ImageManager.preload_ar.length,
   });
 
   if (ImageManager.preload_ar.length === 0) {
@@ -89,15 +84,12 @@ ImageManager.onImageLoad = function (event) {
     createImageBitmap(image_el, GAME.BITMAPIMAGE_DEFAULT_OPTIONS).then(
       function (imageBitmap) {
         ImageManager.allImages_ob[id].bitmap = imageBitmap;
-        __(
-          "\tbitmap created: " + ImageManager.allImages_ob[id].bitmap,
-          RCSI.FMT_IMAGEMANAGER
-        );
+        __("\tbitmap created: " + ImageManager.allImages_ob[id].bitmap, RCSI.FMT_IMAGEMANAGER);
         ImageManager.updatePreloadStatus(image_el);
       },
       function (error) {
         __(error, RCSI.FMT_ERROR);
-      }
+      },
     );
   } else {
     ImageManager.updatePreloadStatus(image_el);

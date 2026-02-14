@@ -12,7 +12,6 @@
  * - Used by `BitmapText` to help understand the bitmap font spritesheet images
  */
 
-
 import * as IMAGE_IDS from "./IMAGE_IDS.js";
 
 export const IMAGE_AR = [
@@ -39,5 +38,9 @@ export const IMAGE_AR = [
   {
     id: IMAGE_IDS.MAIN_TITLE,
     file: "images/title.png",
+  },
+  {
+    id: IMAGE_IDS.IMG_PLAYER,
+    file: "images/player.png",
   },
 ];

@@ -41,7 +41,9 @@ import { Game } from "./Game.js";
 import { InternalTimer } from "./InternalTimer.js";
 import { Layout } from "./Layout.js";
 
-class ObstacleManager {}
+class ObstacleManager {
+  /** @type {Array} */ static obstacles;
+}
 
 /**
  * @function reset
@@ -52,7 +54,6 @@ class ObstacleManager {}
  */
 ObstacleManager.reset = function () {
   ObstacleManager.deleteObstacles();
-  ObstacleManager.surfaceAreaOfLevel = 0;
 };
 
 /**
@@ -79,16 +80,10 @@ ObstacleManager.deleteObstacles = function () {
  * @param {object} _data - An object describing a group of obstacles, originating from a `LEVEL_DATA/*.js` file
  */
 ObstacleManager.addGroupToRadiusRanges = function (_data) {
-  if (
-    !ObstacleManager.radiusMin ||
-    _data.radiusRange[0] < ObstacleManager.radiusMin
-  ) {
+  if (!ObstacleManager.radiusMin || _data.radiusRange[0] < ObstacleManager.radiusMin) {
     ObstacleManager.radiusMin = _data.radiusRange[0];
   }
-  if (
-    !ObstacleManager.radiusMax ||
-    _data.radiusRange[1] > ObstacleManager.radiusMax
-  ) {
+  if (!ObstacleManager.radiusMax || _data.radiusRange[1] > ObstacleManager.radiusMax) {
     ObstacleManager.radiusMax = _data.radiusRange[1];
   }
   __("ObstacleManager.radiusMin: " + ObstacleManager.radiusMin);
@@ -118,7 +113,7 @@ ObstacleManager.addGroup = function (_data) {
       Math.round(ObstacleManager.surfaceAreaOfGroup).toLocaleString() +
       "\t" +
       _data.type,
-    RCSI.FMT_INFO
+    RCSI.FMT_INFO,
   );
 };
 
@@ -135,8 +130,8 @@ ObstacleManager.addGroup = function (_data) {
  * @return {object} A normalised vector
  */
 ObstacleManager.getRandomVector = function (_degreesMin, _degreesMax) {
-    _degreesMin += 90;
-    _degreesMax += 90;
+  _degreesMin += 90;
+  _degreesMax += 90;
 
   return degreesToVector(randomIntBetween(_degreesMin, _degreesMax));
 };
@@ -157,9 +152,7 @@ ObstacleManager.getSoundIDFromRadius = function (_r, _orderedSfx_ar) {
   var soundID,
     radiusRange = ObstacleManager.radiusMax - ObstacleManager.radiusMin,
     radiusGroupSize = radiusRange / _orderedSfx_ar.length,
-    sfxPositionInRange = Math.floor(
-      (_r - ObstacleManager.radiusMin) / radiusGroupSize
-    );
+    sfxPositionInRange = Math.floor((_r - ObstacleManager.radiusMin) / radiusGroupSize);
 
   if (isNaN(sfxPositionInRange)) {
     sfxPositionInRange = 0;
@@ -193,19 +186,13 @@ ObstacleManager.spawn = function (_data) {
     obstacle = {
       type: _data.type,
       subtype: _data.subtype,
-      color: Array.isArray(_data.color_ar)
-        ? getRandomItemFromArray(_data.color_ar)
-        : undefined,
+      color: Array.isArray(_data.color_ar) ? getRandomItemFromArray(_data.color_ar) : undefined,
       nativeSpeed: Math.max(
         //speed: Math.max(
-        randomFloatBetween(_data.speedRange[0], _data.speedRange[1]) /
-          GAME.PIXEL_SCALE,
-        GAME.STATIC_OBSTACLE_SPEED
+        randomFloatBetween(_data.speedRange[0], _data.speedRange[1]) / GAME.PIXEL_SCALE,
+        GAME.STATIC_OBSTACLE_SPEED,
       ),
-      vector: ObstacleManager.getRandomVector(
-        _data.directionRange[0],
-        _data.directionRange[1]
-      ),
+      vector: ObstacleManager.getRandomVector(_data.directionRange[0], _data.directionRange[1]),
       radius: randomFloatBetween(_data.radiusRange[0], _data.radiusRange[1]),
       gradient: _data.gradient,
       gradientFadePoint: _data.gradientFadePoint,
@@ -227,63 +214,42 @@ ObstacleManager.spawn = function (_data) {
     bounds_rect = Layout.gameplay_rect;
   }
 
-  if (
-    _data.type === OBSTACLE_TYPE.BACKGROUND ||
-    _data.type === OBSTACLE_TYPE.FLOATING
-  ) {
+  if (_data.type === OBSTACLE_TYPE.BACKGROUND || _data.type === OBSTACLE_TYPE.FLOATING) {
     // BACKGROUND / FLOATING
-    x = randomFloatBetween(
-      bounds_rect.left + obstacle.radius,
-      bounds_rect.right - obstacle.radius
-    );
-    y = randomFloatBetween(
-      bounds_rect.top + obstacle.radius,
-      bounds_rect.bottom - obstacle.radius
-    );
+    x = randomFloatBetween(bounds_rect.left + obstacle.radius, bounds_rect.right - obstacle.radius);
+    y = randomFloatBetween(bounds_rect.top + obstacle.radius, bounds_rect.bottom - obstacle.radius);
   } else {
     // AVOID / COLLECT
-      x = randomFloatBetween(
-        bounds_rect.left + obstacle.radius,
-        bounds_rect.right - obstacle.radius
-      );
-      y = randomFloatBetween(
-        bounds_rect.bottom + obstacle.radius * 2,
-        bounds_rect.bottom * 2 + obstacle.radius * 2
-      );
+    x = randomFloatBetween(bounds_rect.left + obstacle.radius, bounds_rect.right - obstacle.radius);
+    y = randomFloatBetween(bounds_rect.bottom + obstacle.radius * 2, bounds_rect.bottom * 2 + obstacle.radius * 2);
 
     if (_data.type === OBSTACLE_TYPE.AVOID) {
       // AVOIDABLE
       obstacle.damageSafetyCounter = 0;
     } else if (_data.type === OBSTACLE_TYPE.COLLECT) {
-    //if (_data.type === OBSTACLE_TYPE.COLLECT) {
+      //if (_data.type === OBSTACLE_TYPE.COLLECT) {
       // COLLECTABLE
-      obstacle.soundID = ObstacleManager.getSoundIDFromRadius(
-        obstacle.radius,
-        _data.collectSfx_ar
-      );
+      obstacle.soundID = ObstacleManager.getSoundIDFromRadius(obstacle.radius, _data.collectSfx_ar);
     }
 
     if (obstacle.color) {
-      obstacle.explodingColor = hexOpacityToRGBA(
-        obstacle.color,
-        GAME.EXPLODING_OBSTACLE_ALPHA
-      );
+      obstacle.explodingColor = hexOpacityToRGBA(obstacle.color, GAME.EXPLODING_OBSTACLE_ALPHA);
     }
 
     obstacle.explodeFrameAngleIncrease = randomFloatBetween(
       GAME.EXPLODING_FRAMES_ANGLE_INCREASE_MIN,
-      GAME.EXPLODING_FRAMES_ANGLE_INCREASE_MAX
+      GAME.EXPLODING_FRAMES_ANGLE_INCREASE_MAX,
     );
     obstacle.explodeFrameAngleIncrease *= -1;
 
     obstacle.explodingFramesReduceSpeedMultiplier = randomFloatBetween(
       GAME.EXPLODING_FRAMES_REDUCE_SPEED_MULTIPLIER_MIN,
-      GAME.EXPLODING_FRAMES_REDUCE_SPEED_MULTIPLIER_MAX
+      GAME.EXPLODING_FRAMES_REDUCE_SPEED_MULTIPLIER_MAX,
     );
 
     obstacle.explodingFramesReduceRadiusMultiplier = randomFloatBetween(
       GAME.EXPLODING_FRAMES_REDUCE_RADIUS_MULTIPLIER_MIN,
-      GAME.EXPLODING_FRAMES_REDUCE_RADIUS_MULTIPLIER_MAX
+      GAME.EXPLODING_FRAMES_REDUCE_RADIUS_MULTIPLIER_MAX,
     );
   }
 
@@ -293,24 +259,15 @@ ObstacleManager.spawn = function (_data) {
   // Rotation
   obstacle.rotation = vectorToDegrees(obstacle.vector);
   if (Array.isArray(_data.rotationSpeedRange)) {
-    obstacle.rotationSpeed = randomFloatBetween(
-      _data.rotationSpeedRange[0],
-      _data.rotationSpeedRange[1]
-    );
+    obstacle.rotationSpeed = randomFloatBetween(_data.rotationSpeedRange[0], _data.rotationSpeedRange[1]);
     if (Math.random() < 0.5) {
       obstacle.rotationSpeed *= -1;
     }
   }
 
   // Special shapes
-  if (
-    _data.subtype === OBSTACLE_SUBTYPE.FLOWER ||
-    _data.subtype === OBSTACLE_SUBTYPE.STAR
-  ) {
-    obstacle.numAppendages = randomIntBetween(
-      _data.numAppendagesRange[0],
-      _data.numAppendagesRange[1]
-    );
+  if (_data.subtype === OBSTACLE_SUBTYPE.FLOWER || _data.subtype === OBSTACLE_SUBTYPE.STAR) {
+    obstacle.numAppendages = randomIntBetween(_data.numAppendagesRange[0], _data.numAppendagesRange[1]);
     obstacle.shapeCenterRadiusDivisor = _data.shapeCenterRadiusDivisor;
     if (obstacle.rotationSpeed !== undefined) {
       // rotation value is used in the `Display.draw*()` drawing of
@@ -321,17 +278,12 @@ ObstacleManager.spawn = function (_data) {
   }
 
   if (Array.isArray(_data.shapeCenterColor_ar)) {
-    obstacle.shapeCenterColor = getRandomItemFromArray(
-      _data.shapeCenterColor_ar
-    );
+    obstacle.shapeCenterColor = getRandomItemFromArray(_data.shapeCenterColor_ar);
   }
 
   obstacle.pos = { x: x, y: y };
 
   ObstacleManager.obstacles.push(obstacle);
-
-  ObstacleManager.surfaceAreaOfGroup += circleAreaFromRadius(obstacle.radius);
-  ObstacleManager.surfaceAreaOfLevel += circleAreaFromRadius(obstacle.radius);
 };
 
 /**
@@ -361,10 +313,7 @@ ObstacleManager.increaseVectorAngle = function (_obstacle, _inc) {
  * @param {object} _obstacle
  */
 ObstacleManager.incrementExplosionAnimation = function (_obstacle) {
-  ObstacleManager.increaseVectorAngle(
-    _obstacle,
-    _obstacle.explodeFrameAngleIncrease
-  );
+  ObstacleManager.increaseVectorAngle(_obstacle, _obstacle.explodeFrameAngleIncrease);
   _obstacle.radius *= _obstacle.explodingFramesReduceRadiusMultiplier;
   _obstacle.speed *= _obstacle.explodingFramesReduceSpeedMultiplier;
   if (_obstacle.explodingFramesCounter < 1) {
@@ -387,9 +336,7 @@ ObstacleManager.wrapAroundRectangle = function (_obstacle, _rect) {
   var hasWrapped,
     diameter = _obstacle.radius * 2,
     // floating/bg obstacles always wrap in both portrait and landscape
-    wrapBothAspects =
-      _obstacle.type === OBSTACLE_TYPE.BACKGROUND ||
-      _obstacle.type === OBSTACLE_TYPE.FLOATING,
+    wrapBothAspects = _obstacle.type === OBSTACLE_TYPE.BACKGROUND || _obstacle.type === OBSTACLE_TYPE.FLOATING,
     // Avoidable objects might cross boundaries while travelling in the wrong direction, but we still need them to wrap
     ignoreDirectionOfTravel = _obstacle.type === OBSTACLE_TYPE.AVOID;
 
@@ -398,35 +345,23 @@ ObstacleManager.wrapAroundRectangle = function (_obstacle, _rect) {
 
   // Handle left/right edges
   if (wrapBothAspects) {
-    if (
-      _obstacle.pos.x + diameter < _rect.left &&
-      (_obstacle.vector.x < 0 || ignoreDirectionOfTravel)
-    ) {
+    if (_obstacle.pos.x + diameter < _rect.left && (_obstacle.vector.x < 0 || ignoreDirectionOfTravel)) {
       _obstacle.pos.x += wrapWidth;
       hasWrapped = true;
-    } else if (
-      _obstacle.pos.x - diameter > _rect.right &&
-      (_obstacle.vector.x > 0 || ignoreDirectionOfTravel)
-    ) {
+    } else if (_obstacle.pos.x - diameter > _rect.right && (_obstacle.vector.x > 0 || ignoreDirectionOfTravel)) {
       _obstacle.pos.x -= wrapWidth;
       hasWrapped = true;
     }
   }
 
   // Handle top/bottom edges
-    if (
-      _obstacle.pos.y + diameter < _rect.top &&
-      (_obstacle.vector.y < 0 || ignoreDirectionOfTravel)
-    ) {
-      _obstacle.pos.y += wrapHeight;
-      hasWrapped = true;
-    } else if (
-      _obstacle.pos.y - diameter > _rect.bottom &&
-      (_obstacle.vector.y > 0 || ignoreDirectionOfTravel)
-    ) {
-      _obstacle.pos.y -= wrapHeight;
-      hasWrapped = true;
-    }
+  if (_obstacle.pos.y + diameter < _rect.top && (_obstacle.vector.y < 0 || ignoreDirectionOfTravel)) {
+    _obstacle.pos.y += wrapHeight;
+    hasWrapped = true;
+  } else if (_obstacle.pos.y - diameter > _rect.bottom && (_obstacle.vector.y > 0 || ignoreDirectionOfTravel)) {
+    _obstacle.pos.y -= wrapHeight;
+    hasWrapped = true;
+  }
 
   if (hasWrapped) {
     // if mid-explosion when wrap happens, cancel explosion
@@ -606,35 +541,17 @@ ObstacleManager.bounceOffPlayer = function (_obstacle) {
       y: _obstacle.pos.y - Player.pos.y,
     },
     normalVectorMagnitude = vectorGetMagnitude(normalVector),
-    unitNormalVector = vectorScalarMultiply(
-      normalVector,
-      1 / normalVectorMagnitude
-    ),
+    unitNormalVector = vectorScalarMultiply(normalVector, 1 / normalVectorMagnitude),
     //
     unitTangentVector = {
       x: -1 * unitNormalVector.y,
       y: unitNormalVector.x,
     },
-    obstacleVelocityVector = vectorScalarMultiply(
-      _obstacle.vector,
-      _obstacle.speed
-    ),
-    normalVectorPlayerMagnitude = vectorGetDotProduct(
-      unitNormalVector,
-      Player.velocityVector
-    ),
-    tangentVectorPlayerMagnitude = vectorGetDotProduct(
-      unitTangentVector,
-      Player.velocityVector
-    ),
-    normalVectorObstacleMagnitude = vectorGetDotProduct(
-      unitNormalVector,
-      obstacleVelocityVector
-    ),
-    tangentVectorObstacleMagnitude = vectorGetDotProduct(
-      unitTangentVector,
-      obstacleVelocityVector
-    ),
+    obstacleVelocityVector = vectorScalarMultiply(_obstacle.vector, _obstacle.speed),
+    normalVectorPlayerMagnitude = vectorGetDotProduct(unitNormalVector, Player.velocityVector),
+    tangentVectorPlayerMagnitude = vectorGetDotProduct(unitTangentVector, Player.velocityVector),
+    normalVectorObstacleMagnitude = vectorGetDotProduct(unitNormalVector, obstacleVelocityVector),
+    tangentVectorObstacleMagnitude = vectorGetDotProduct(unitTangentVector, obstacleVelocityVector),
     //
     tangentVectorPlayerMagnitudeAfter = tangentVectorPlayerMagnitude,
     tangentVectorObstacleMagnitudeAfter = tangentVectorObstacleMagnitude,
@@ -646,38 +563,18 @@ ObstacleManager.bounceOffPlayer = function (_obstacle) {
       (normalVectorObstacleMagnitude * (_obstacle.radius - Player.radius) +
         2 * Player.radius * normalVectorPlayerMagnitude) /
       (Player.radius + _obstacle.radius),
-    normalVectorPlayerAfter = vectorScalarMultiply(
-      unitNormalVector,
-      normalVectorPlayerMagnitudeAfter
-    ),
-    tangentVectorPlayerAfter = vectorScalarMultiply(
-      unitTangentVector,
-      tangentVectorPlayerMagnitudeAfter
-    ),
-    normalVectorObstacleAfter = vectorScalarMultiply(
-      unitNormalVector,
-      normalVectorObstacleMagnitudeAfter
-    ),
-    tangentVectorObstacleAfter = vectorScalarMultiply(
-      unitTangentVector,
-      tangentVectorObstacleMagnitudeAfter
-    ),
-    playerVelocityVectorAfter = vectorAdd(
-      normalVectorPlayerAfter,
-      tangentVectorPlayerAfter
-    ),
+    normalVectorPlayerAfter = vectorScalarMultiply(unitNormalVector, normalVectorPlayerMagnitudeAfter),
+    tangentVectorPlayerAfter = vectorScalarMultiply(unitTangentVector, tangentVectorPlayerMagnitudeAfter),
+    normalVectorObstacleAfter = vectorScalarMultiply(unitNormalVector, normalVectorObstacleMagnitudeAfter),
+    tangentVectorObstacleAfter = vectorScalarMultiply(unitTangentVector, tangentVectorObstacleMagnitudeAfter),
+    playerVelocityVectorAfter = vectorAdd(normalVectorPlayerAfter, tangentVectorPlayerAfter),
     playerVectorMagnitudeAfter = vectorGetMagnitude(playerVelocityVectorAfter),
     playerUnitVectorAfter = {
       x: playerVelocityVectorAfter.x / playerVectorMagnitudeAfter,
       y: playerVelocityVectorAfter.y / playerVectorMagnitudeAfter,
     },
-    obstacleVelocityVectorAfter = vectorAdd(
-      normalVectorObstacleAfter,
-      tangentVectorObstacleAfter
-    ),
-    obstacleVectorMagnitudeAfter = vectorGetMagnitude(
-      obstacleVelocityVectorAfter
-    ),
+    obstacleVelocityVectorAfter = vectorAdd(normalVectorObstacleAfter, tangentVectorObstacleAfter),
+    obstacleVectorMagnitudeAfter = vectorGetMagnitude(obstacleVelocityVectorAfter),
     obstacleUnitVectorAfter = {
       x: obstacleVelocityVectorAfter.x / obstacleVectorMagnitudeAfter,
       y: obstacleVelocityVectorAfter.y / obstacleVectorMagnitudeAfter,
@@ -711,7 +608,7 @@ ObstacleManager.bounceOffPlayer = function (_obstacle) {
   return vectorScalarMultiply(
     //  playerUnitVectorAfter,
     playerVelocityVectorAfter,
-    playerVectorMagnitudeAfter
+    playerVectorMagnitudeAfter,
   );
 };
 
@@ -728,15 +625,15 @@ ObstacleManager.bounceOffPlayer = function (_obstacle) {
 ObstacleManager.bounceInRectangle = function (_obstacle, _rect) {
   var hasBounced = false;
 
-    if (_obstacle.pos.x < _rect.left + _obstacle.radius) {
-      _obstacle.vector.x *= -1;
-      _obstacle.pos.x = _rect.left + _obstacle.radius;
-      hasBounced = true;
-    } else if (_obstacle.pos.x > _rect.right - _obstacle.radius) {
-      _obstacle.vector.x *= -1;
-      _obstacle.pos.x = _rect.right - _obstacle.radius;
-      hasBounced = true;
-    }
+  if (_obstacle.pos.x < _rect.left + _obstacle.radius) {
+    _obstacle.vector.x *= -1;
+    _obstacle.pos.x = _rect.left + _obstacle.radius;
+    hasBounced = true;
+  } else if (_obstacle.pos.x > _rect.right - _obstacle.radius) {
+    _obstacle.vector.x *= -1;
+    _obstacle.pos.x = _rect.right - _obstacle.radius;
+    hasBounced = true;
+  }
   if (hasBounced) {
     _obstacle.rotation = vectorToDegrees(_obstacle.vector);
   }
@@ -791,10 +688,7 @@ ObstacleManager.addAllCollectAndAvoid = function () {
   var i, curObstacleGroup;
   for (i = 0; i < Game.curLevelData.obstacles.length; i++) {
     curObstacleGroup = Game.curLevelData.obstacles[i];
-    if (
-      curObstacleGroup.type === OBSTACLE_TYPE.COLLECT ||
-      curObstacleGroup.type === OBSTACLE_TYPE.AVOID
-    ) {
+    if (curObstacleGroup.type === OBSTACLE_TYPE.COLLECT || curObstacleGroup.type === OBSTACLE_TYPE.AVOID) {
       ObstacleManager.addGroup(curObstacleGroup);
     }
   }
@@ -811,23 +705,16 @@ ObstacleManager.addAllCollectAndAvoid = function () {
  */
 ObstacleManager.explodeAllAvoids = function () {
   ObstacleManager.levelOutroExplodeNextWaitFrames = Math.floor(
-    InternalTimer.secondsToFrames(
-      TIMINGS.LEVELOUTRO_OBSTACLE_EXPLOSIONS_TOTALTIME_MS / 1000
-    ) / Game.avoidTotal
+    InternalTimer.secondsToFrames(TIMINGS.LEVELOUTRO_OBSTACLE_EXPLOSIONS_TOTALTIME_MS / 1000) / Game.avoidTotal,
   );
 
-  __(
-    "ObstacleManager.levelOutroExplodeNextWaitFrames: " +
-      ObstacleManager.levelOutroExplodeNextWaitFrames
-  );
+  __("ObstacleManager.levelOutroExplodeNextWaitFrames: " + ObstacleManager.levelOutroExplodeNextWaitFrames);
 
   ObstacleManager.levelOutroExplodeNext();
 };
 
 // TODO Comment
-ObstacleManager.levelOutroRemoveNextBackgroundObstacles = function (
-  _numToRemove
-) {
+ObstacleManager.levelOutroRemoveNextBackgroundObstacles = function (_numToRemove) {
   var i,
     obstacle,
     count = 0;
@@ -851,17 +738,13 @@ ObstacleManager.levelOutroExplodeNext = function () {
   if (Game.isInLevelOutro) {
     for (i = ObstacleManager.obstacles.length - 1; i >= 0; i--) {
       obstacle = ObstacleManager.obstacles[i];
-      if (
-        obstacle.type === OBSTACLE_TYPE.AVOID &&
-        obstacle.explodingFramesCounter === 0
-      ) {
+      if (obstacle.type === OBSTACLE_TYPE.AVOID && obstacle.explodingFramesCounter === 0) {
         obstacle.explodingFramesCounter = GAME.EXPLODING_FRAMES_TOTAL;
         break;
       }
     }
 
-    ObstacleManager.levelOutroExplodeNextFrameCount =
-      ObstacleManager.levelOutroExplodeNextWaitFrames;
+    ObstacleManager.levelOutroExplodeNextFrameCount = ObstacleManager.levelOutroExplodeNextWaitFrames;
   }
 };
 
@@ -876,57 +759,37 @@ ObstacleManager.levelOutroExplodeNext = function () {
  */
 ObstacleManager.update = function (_frames) {
   var i,
-    t1,
+    //t1,
     obstacle,
     totalObstacles = ObstacleManager.obstacles.length;
-
-  if (Game.doPerfLog) {
-    t1 = performance.now();
-  }
 
   for (i = totalObstacles - 1; i >= 0; i--) {
     obstacle = ObstacleManager.obstacles[i];
 
-    if (obstacle.type === OBSTACLE_TYPE.BACKGROUND) {
-      ObstacleManager.wrapAroundRectangle(obstacle, Layout.background_rect);
-    } else if (obstacle.type === OBSTACLE_TYPE.FLOATING) {
-      if (Game.isInLevelOutro) {
-        // If in level transition, let floating items wander off
-        obstacle.speed += GAME.FLOATING_OBSTACLE_LEVELOUTRO_ACCEL_RATE;
-      } else {
-        ObstacleManager.wrapAroundRectangle(obstacle, Layout.floating_rect);
-      }
-    } else if (!obstacle.isDeleted) {
-      Game.checkPlayerHit(obstacle);
+    //if (obstacle.type === OBSTACLE_TYPE.BACKGROUND) {
+    ObstacleManager.wrapAroundRectangle(obstacle, Layout.background_rect);
+    //} else if (!obstacle.isDeleted) {
 
-      if (obstacle.explodingFramesCounter > 0) {
-        obstacle.explodingFramesCounter--;
-        ObstacleManager.incrementExplosionAnimation(obstacle);
-      }
-      if (obstacle.damageSafetyCounter > 0) {
-        obstacle.damageSafetyCounter--;
-      }
-      if (obstacle.speed > obstacle.nativeSpeed) {
-        obstacle.speed *= GAME.OBSTACLE_RETURNTONORMALSPEED_RATE;
-        if (obstacle.speed < obstacle.nativeSpeed) {
-          obstacle.speed = obstacle.nativeSpeed;
-        }
-      }
+    //  if (obstacle.speed > obstacle.nativeSpeed) {
+    //    obstacle.speed *= GAME.OBSTACLE_RETURNTONORMALSPEED_RATE;
+    //    if (obstacle.speed < obstacle.nativeSpeed) {
+    //      obstacle.speed = obstacle.nativeSpeed;
+    //    }
+    //  }
 
-      // At start of level obstacles are placed outside the gameplay area so that they gradually enter
-      // We don't want wrapping to happen during that time as it pops the obstacles instantly into view
-      if (obstacle.hasEnteredGameplayArea) {
-        ObstacleManager.wrapAroundRectangle(obstacle, Layout.gameplay_rect);
-      } else {
-        if (pointIsInRect(obstacle.pos, Layout.gameplay_rect)) {
-          obstacle.hasEnteredGameplayArea = true;
-        }
-      }
-      ObstacleManager.bounceInRectangle(obstacle, Layout.gameplay_rect);
-    }
+    //  // At start of level obstacles are placed outside the gameplay area so that they gradually enter
+    //  // We don't want wrapping to happen during that time as it pops the obstacles instantly into view
+    //  if (obstacle.hasEnteredGameplayArea) {
+    //    ObstacleManager.wrapAroundRectangle(obstacle, Layout.gameplay_rect);
+    //  } else {
+    //    if (pointIsInRect(obstacle.pos, Layout.gameplay_rect)) {
+    //      obstacle.hasEnteredGameplayArea = true;
+    //    }
+    //  }
+    //  ObstacleManager.bounceInRectangle(obstacle, Layout.gameplay_rect);
+    //}
 
     if (!obstacle.isDeleted) {
-
       obstacle.pos.x += obstacle.vector.x * obstacle.speed * _frames;
       obstacle.pos.y += obstacle.vector.y * obstacle.speed * _frames;
 
@@ -937,21 +800,6 @@ ObstacleManager.update = function (_frames) {
         // need) to wrap rotation and keep it between 0-360
         obstacle.rotation = modulo(obstacle.rotation, 360);
       }
-    }
-  }
-
-  if (Game.doPerfLog) {
-    __(
-      "ObstacleManager.update() " + (performance.now() - t1),
-      RCSI.FMT_PERFORMANCE
-    );
-  }
-
-  // If level outro is happening...
-  if (ObstacleManager.levelOutroExplodeNextFrameCount > 0) {
-    ObstacleManager.levelOutroExplodeNextFrameCount--;
-    if (ObstacleManager.levelOutroExplodeNextFrameCount === 0) {
-      ObstacleManager.levelOutroExplodeNext();
     }
   }
 };

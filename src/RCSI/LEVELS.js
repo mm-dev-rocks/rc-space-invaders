@@ -11,9 +11,8 @@
  * - Sets the order in which levels are played
  */
 
-
-import { BASIC } from "./LEVEL_DATA/BASIC.js";
 import { INTRO } from "./LEVEL_DATA/INTRO.js";
+import { BASIC } from "./LEVEL_DATA/BASIC.js";
 
 export const LEVEL_DATA = {
   INTRO: INTRO,

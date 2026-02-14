@@ -32,6 +32,7 @@ class Layout {
   /** @type {number} */ static gameplayHeight;
 
   /** @type {Object} */ static canvas_rect;
+  /** @type {Object} */ static playerBounds_rect;
   /** @type {Object} */ static gameplay_rect;
   /** @type {Object} */ static background_rect;
   /** @type {Object} */ static floating_rect;
@@ -107,10 +108,12 @@ Layout.update = function (_data) {
   Layout.gameplay_rect = Layout.getRectangle(RECTANGLE.GAMEAREA);
   Layout.background_rect = Layout.getRectangle(RECTANGLE.BACKGROUND);
   Layout.floating_rect = Layout.getRectangle(RECTANGLE.FLOATING);
+  Layout.playerBounds_rect = Layout.getRectangle(RECTANGLE.PLAYERBOUNDS);
   __("\tLayout.canvas_rect: " + JSON.stringify(Layout.canvas_rect), RCSI.FMT_LAYOUT);
   __("\tLayout.gameplay_rect: " + JSON.stringify(Layout.gameplay_rect), RCSI.FMT_LAYOUT);
   __("\tLayout.background_rect: " + JSON.stringify(Layout.background_rect), RCSI.FMT_LAYOUT);
   __("\tLayout.floating_rect: " + JSON.stringify(Layout.floating_rect), RCSI.FMT_LAYOUT);
+  __("\tLayout.playerBounds_rect: " + JSON.stringify(Layout.playerBounds_rect), RCSI.FMT_LAYOUT);
 
   Layout.gameAreaOffsetLateral = (Layout.canvasWidth - Layout.gameplayWidth) / 2;
 
@@ -172,6 +175,15 @@ Layout.getRectangle = function (_type) {
       bottom: Layout.gameplayHeight,
     };
     rect.bottom *= 2;
+    //
+    //
+  } else if (_type === RECTANGLE.PLAYERBOUNDS) {
+    rect = {
+      left: GAME.MAIN_PADDING_PX,
+      right: Layout.gameplayWidth - GAME.MAIN_PADDING_PX,
+      top: GAME.MAIN_PADDING_PX,
+      bottom: Layout.gameplayHeight - GAME.MAIN_PADDING_PX,
+    };
     //
     //
   } else if (_type === RECTANGLE.MAINTITLE) {

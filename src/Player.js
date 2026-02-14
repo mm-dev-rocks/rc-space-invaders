@@ -16,17 +16,17 @@ import { Layout } from "./Layout.js";
 
 import { Display } from "./Display.js";
 import { Game } from "./Game.js";
-import { Shape } from "./Shape.js";
 
-import { hexOpacityToRGBA, vectorToDegrees } from "./utils.js";
+import { ImageManager } from "./ImageManager.js";
+import * as IMAGE_IDS from "./RCSI/IMAGE_IDS.js";
 
 class Player {
-  static get drawnRadius() {
-    return Player.radius * Layout.proportionalMultiplier;
-  }
-
   /** @type {Object} */ static pos;
-  /** @type {Object} */ static radius;
+  /** @type {Object} */ static speedVector;
+  /** @type {Object} */ static image;
+  /** @type {String} */ static color;
+  /** @type {Number} */ static xLimitLeft;
+  /** @type {Number} */ static xLimitRight;
 }
 
 /**
@@ -34,10 +34,12 @@ class Player {
  * @static
  *
  * @description
- * ##### Set a neutral start position
+ * ##### Set the player image and a neutral start position
  */
 Player.init = function () {
+  Player.image = ImageManager.getImageByID(IMAGE_IDS.IMG_PLAYER).image_el;
   Player.pos = { x: 0, y: 0 };
+  Player.speedVector = { x: 1, y: 0 };
 };
 
 /**
@@ -48,13 +50,43 @@ Player.init = function () {
  * ##### Set colour, health, size etc according to the current level configuration
  */
 Player.setupForLevel = function () {
-  Player.health = Game.curLevelData.startHealth;
-  Player.radius = Game.curLevelData.player.radius;
-  Player.originLongitudinal = GAME.PLAYER_ORIGIN_LONGITUDINAL * Layout.proportionalMultiplier;
-  Player.growthDivisor = Game.curLevelData.player.growthDivisor;
   Player.color = Game.curLevelData.player.color;
-  Player.damagedColor = Game.curLevelData.bgColor;
-  Player.damagedFramesCounter = 0;
+};
+
+/**
+ * @function startMoveLeft
+ * @static
+ *
+ * @description
+ * ##### Change vector to initiate movement to the left
+ */
+Player.startMoveLeft = function () {
+  // TODO magic number
+  Player.speedVector.x -= 1;
+};
+
+/**
+ * @function startMoveRight
+ * @static
+ *
+ * @description
+ * ##### Change vector to initiate movement to the right
+ */
+Player.startMoveRight = function () {
+  // TODO magic number
+  Player.speedVector.x += 1;
+};
+
+/**
+ * @function stopMove
+ * @static
+ *
+ * @description
+ * ##### Reset vector to stop movement
+ */
+Player.stopMove = function () {
+  // REDUNDANT FOR NOW AS INERTIA STOPS THE PLAYER MOVEMENT AUTOMATICALLY
+  //Player.speedVector.x = 0;
 };
 
 /**
@@ -65,15 +97,10 @@ Player.setupForLevel = function () {
  * ##### Update some variables to fit the current layout
  */
 Player.updateSizes = function () {
-  Player.pos.x = Math.round(Layout.gameplayWidth / 2);
-  Player.pos.y = Math.round(Player.originLongitudinal);
-
-  //Player.speedCentre =
-  //  Player.originLongitudinal * Layout.proportionalMultiplier;
-
-  Player.outlineThickness = Math.round(GAME.PLAYER_OUTLINE_THICKNESS * Layout.proportionalMultiplier);
-
-  Player.dampSpeedMultiplier = GAME.PLAYER_DAMPSPEED_MULTIPLIER * Layout.proportionalMultiplier;
+  Player.pos.x = Math.round(Layout.gameplayWidth / 2) - (Player.image.width * GAME.PLAYER_DRAW_SCALE) / 2;
+  Player.pos.y = Layout.playerBounds_rect.bottom - Player.image.height * GAME.PLAYER_DRAW_SCALE;
+  Player.xLimitLeft = Layout.playerBounds_rect.left;
+  Player.xLimitRight = Layout.playerBounds_rect.right - Player.image.width * GAME.PLAYER_DRAW_SCALE;
 };
 
 /**
@@ -86,7 +113,14 @@ Player.updateSizes = function () {
  * - If currently damaged, or eating, decrement the counters for those states
  *
  */
-Player.update = function () {};
+Player.update = function () {
+  Player.pos.x += Player.speedVector.x;
+  Player.pos.x = Math.max(Player.xLimitLeft, Math.min(Player.pos.x, Player.xLimitRight));
+  if (Player.speedVector.x != 0) {
+    // TODO magic number
+    Player.speedVector.x *= 0.95;
+  }
+};
 
 /**
  * @function draw
@@ -101,68 +135,27 @@ Player.update = function () {};
  * - Add any extra layers such as hats etc
  */
 Player.draw = function () {
-  var i,
-    color,
-    tailColor,
-    segmentColor,
-    playerDrawnPosX,
-    playerDrawnPosY,
-    segmentX,
-    segmentY,
-    ellipseStretch,
-    drawnRadius = Player.drawnRadius,
-    radiusExtra = 1;
+  var color, playerDrawnPosX, playerDrawnPosY;
 
-  // Color
-  if (Player.damagedFramesCounter > 0 && Display.flashIsOff(GAME.DAMAGE_FLASH_ON_SECS, GAME.DAMAGE_FLASH_OFF_SECS)) {
-    color = Player.damagedColor;
-  } else if (
-    Player.playerEatsFramesCounter > 0 &&
-    Display.flashIsOff(GAME.PLAYEREATS_FLASH_ON_SECS, GAME.PLAYEREATS_FLASH_OFF_SECS)
-  ) {
-    color = Player.eatenColor;
-    radiusExtra += GAME.PLAYEREATS_RADIUS_GROWTH;
-  } else {
-    color = Player.color;
-  }
-
-  // Player position
-  playerDrawnPosX = Player.pos.x + Layout.gameAreaOffsetLateral;
+  playerDrawnPosX = Player.pos.x;
+  //playerDrawnPosX = Player.pos.x + Layout.gameAreaOffsetLateral;
   playerDrawnPosY = Player.pos.y;
+  color = Player.color;
 
-  // Ellipse stretch
-  ellipseStretch = 1;
-
-  if (Display.levelIsDark) {
-    tailColor = GAME.PLAYER_TAILCOLOR_DARKLEVEL;
-  } else {
-    tailColor = GAME.PLAYER_TAILCOLOR_LIGHTLEVEL;
+  if (Display.ctx) {
+    Display.ctx.drawImage(
+      Player.image,
+      0,
+      0,
+      Player.image.width,
+      Player.image.height,
+      playerDrawnPosX,
+      playerDrawnPosY,
+      // TODO magic number
+      Player.image.width * GAME.PLAYER_DRAW_SCALE,
+      Player.image.height * GAME.PLAYER_DRAW_SCALE,
+    );
   }
-
-  // Draw segments
-  for (i = 0; i < numSegments; i++) {
-    segmentColor = hexOpacityToRGBA(tailColor, Math.max(0, GAME.PLAYER_TAIL_ALPHA - GAME.PLAYER_TAIL_ALPHA_DROP * i));
-
-    // Segment position
-    segmentX = Math.round(playerDrawnPosX - xOffset * i);
-    segmentY = Math.round(playerDrawnPosY - yOffset * i);
-
-    Shape.drawEllipse(segmentX, segmentY, drawnRadius * radiusExtra, segmentColor, ellipseStretch);
-
-    radiusExtra *= GAME.PLAYER_TAIL_RADIUS_GROWTH;
-  }
-
-  // Main player piece
-  Shape.drawEllipse(
-    playerDrawnPosX,
-    playerDrawnPosY,
-    drawnRadius,
-    hexOpacityToRGBA(color, GAME.PLAYER_HEAD_ALPHA),
-    ellipseStretch,
-  );
-  Display.ctx.strokeStyle = hexOpacityToRGBA(Display.bgColor, GAME.PLAYER_OUTLINE_ALPHA);
-  Display.ctx.lineWidth = Player.outlineThickness;
-  Display.ctx.stroke();
 };
 
 export { Player };

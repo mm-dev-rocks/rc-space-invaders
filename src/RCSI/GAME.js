@@ -13,7 +13,7 @@
  * - Tweakable controls affecting difficulty, playability etc
  */
 
-import { HORIZ_ALIGN, VERT_ALIGN } from "./ENUM.js";
+import { KEY_ACTIONS, HORIZ_ALIGN, VERT_ALIGN } from "./ENUM.js";
 import * as STRING from "./STRING.js";
 
 /*
@@ -33,15 +33,7 @@ export const BITMAPIMAGE_DEFAULT_OPTIONS = { resizeQuality: "pixelated" };
     @type {number}
     @default
 */
-// TODO Decide if this is going to be a constant or not
-//export const PIXEL_SCALE = Math.ceil(window.devicePixelRatio);
-//export const PIXEL_SCALE = 4;
-//export const PIXEL_SCALE = 2;
-//export const PIXEL_SCALE = window.devicePixelRatio;
-export const PIXEL_SCALE = Math.max(
-  Math.min(Math.ceil(window.devicePixelRatio), 2),
-  1
-);
+export const PIXEL_SCALE = Math.max(Math.min(Math.ceil(window.devicePixelRatio), 2), 1);
 
 /** @constant
     @type {number}
@@ -79,73 +71,7 @@ export const VERSIONNUMBER_COLOR = "#8a0500";
 // For FPS counter, how many recent FPS counts are stored and averaged
 export const FPSDISPLAY_AVERAGE_FRAMES_SPAN = TARGET_FPS * 7;
 
-export const UI_LANDSCAPE = {
-  controller: {
-    alignV: VERT_ALIGN.CENTER,
-    alignH: HORIZ_ALIGN.RIGHT,
-    mouseWidthPercent: 35,
-    mouseHeightPercent: 50,
-    touchWidthPercent: 20,
-    touchHeightPercent: 30,
-  },
-  healthMeter: {
-    alignV: VERT_ALIGN.BOTTOM,
-    alignH: HORIZ_ALIGN.LEFT,
-    //offsetByCharsV: 1,
-  },
-  levelText: {
-    alignV: VERT_ALIGN.TOP,
-    alignH: HORIZ_ALIGN.LEFT,
-  },
-  timer: {
-    alignV: VERT_ALIGN.TOP,
-    alignH: HORIZ_ALIGN.LEFT,
-    offsetByCharsV: 1,
-  },
-  collectText: {
-    alignV: VERT_ALIGN.BOTTOM,
-    alignH: HORIZ_ALIGN.LEFT,
-    offsetByCharsH: 3,
-  },
-  soundToggle: {
-    alignV: VERT_ALIGN.BOTTOM,
-    alignH: HORIZ_ALIGN.RIGHT,
-  },
-  fullscreenToggle: {
-    alignV: VERT_ALIGN.TOP,
-    alignH: HORIZ_ALIGN.RIGHT,
-  },
-  mainTitle: {
-    sizeRatio: 0.6,
-    alignV: VERT_ALIGN.TOP,
-    alignH: HORIZ_ALIGN.CENTER,
-    offsetByCharsV: 1,
-  },
-  fps: {
-    alignV: VERT_ALIGN.CENTER,
-    alignH: HORIZ_ALIGN.RIGHT,
-  },
-  versionInfoLevelIntro: {
-    alignH: HORIZ_ALIGN.RIGHT,
-    alignV: VERT_ALIGN.BOTTOM,
-    offsetByCharsH: -3,
-  },
-};
-
 export const UI_PORTRAIT = {
-  controller: {
-    alignV: VERT_ALIGN.BOTTOM,
-    alignH: HORIZ_ALIGN.CENTER,
-    mouseWidthPercent: 50,
-    mouseHeightPercent: 35,
-    touchWidthPercent: 30,
-    touchHeightPercent: 20,
-  },
-  healthMeter: {
-    alignV: VERT_ALIGN.TOP,
-    alignH: HORIZ_ALIGN.RIGHT,
-    //offsetByCharsV: 1,
-  },
   levelText: {
     alignV: VERT_ALIGN.TOP,
     alignH: HORIZ_ALIGN.LEFT,
@@ -170,18 +96,18 @@ export const UI_PORTRAIT = {
   },
   mainTitle: {
     sizeRatio: 0.85,
-    alignV: VERT_ALIGN.CENTER,
+    alignV: VERT_ALIGN.TOP,
     alignH: HORIZ_ALIGN.CENTER,
-    offsetByCharsV: -2,
+    offsetByCharsV: 2,
+  },
+  versionInfoLevelIntro: {
+    alignH: HORIZ_ALIGN.CENTER,
+    alignV: VERT_ALIGN.BOTTOM,
   },
   fps: {
     alignV: VERT_ALIGN.BOTTOM,
     alignH: HORIZ_ALIGN.CENTER,
     offsetByCharsV: -1,
-  },
-  versionInfoLevelIntro: {
-    alignH: HORIZ_ALIGN.CENTER,
-    alignV: VERT_ALIGN.BOTTOM,
   },
 };
 
@@ -209,7 +135,7 @@ export const TIME_LOW_SECONDS = 10;
  *
  */
 
-export const PLAYER_ORIGIN_LONGITUDINAL = 230;
+export const PLAYER_DRAW_SCALE = 8;
 
 export const PLAYER_DAMPSPEED_MULTIPLIER = 7;
 
@@ -286,45 +212,6 @@ export const INTRO_OBSTACLE_DEFAULT_ROTATION = 315;
 export const OBSTACLE_RETURNTONORMALSPEED_RATE = 0.1;
 
 export const FLOATING_OBSTACLE_LEVELOUTRO_ACCEL_RATE = 0.1;
-/*
- *
- *
- * Pipe wall
- *
- */
-
-export const PIPE_WALL_SEGMENT_AR = [
-  {
-    thickness: 8,
-    zoomFactor: 0.4,
-    perspectiveOffsetDivisor: 1.01,
-  },
-  {
-    thickness: 32,
-    zoomFactor: 0.49,
-    perspectiveOffsetDivisor: 1.001,
-  },
-  {
-    thickness: 8,
-    zoomFactor: 0.4,
-    perspectiveOffsetDivisor: 1.01,
-  },
-];
-export const PIPE_WALL_THICKNESS = 48;
-export const PIPE_WALL_EDGE_THICKNESS = 8;
-// Amount pipe wall glass zooms stuff behind it
-// MUST BE ABOVE 0 AND BELOW 0.5 --- NOT 0.5!
-export const PIPE_WALL_ZOOM_FACTOR = 0.49;
-// Whether visual distortions in the wall occur on the main or the cross axis
-export const PIPE_WALL_DISTORT_CROSSAXIS = true;
-// Approximates something like the vertical angle of refraction, so how close
-// the refracted version of the background appears offset from the normal
-// version
-export const PIPE_WALL_PERSPECTIVE_OFFSET_DIVISOR = 1.001;
-
-export const PIPE_GRADIENTCOLOR_1 = "rgba(255, 255, 255, 0.01)";
-export const PIPE_GRADIENTCOLOR_2 = "rgba(255, 255, 255, 0.017)";
-export const PIPE_GRADIENTCOLOR_3 = "rgba(0, 0, 0, 0.03)";
 
 export const TEXT_BACKGROUND_FILL_ALPHA = 0.66;
 
@@ -336,18 +223,6 @@ export const TITLE_COLOR = "#00ffff";
 export const OVERLAY_TEXT_ALIGN_H = HORIZ_ALIGN.CENTER;
 export const OVERLAY_TEXT_ALIGN_V = VERT_ALIGN.CENTER;
 export const LEVEL_INTRO_CIRCLE_RADIUS_PX = 30;
-
-
-/*
- *
- *
- * Health meter
- *
- */
-
-export const HEALTHMETER_SIZE_CHARS = 5;
-export const HEALTHMETER_BAR_COLOR = "#ffff00";
-export const HEALTHMETER_DAMAGED_BAR_COLOR = "#ff0000";
 
 /*
  *
@@ -422,5 +297,9 @@ export const CHARS_IN_SPRITESHEET_AR = [
   STRING.CLOCK,
   ".",
 ];
-// TODO unused?
-export const CHARS_NARROW_AR = ["I", "!", "."];
+
+export const KEYS = {
+  ArrowLeft: KEY_ACTIONS.MOVE_LEFT,
+  ArrowRight: KEY_ACTIONS.MOVE_RIGHT,
+  k: KEY_ACTIONS.FIRE,
+};

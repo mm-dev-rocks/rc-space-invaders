@@ -10,20 +10,20 @@
  * ## Some string-indexed enum-type data
  */
 
-/** 
-* @readonly
-* @enum {string}
-*/
+/**
+ * @readonly
+ * @enum {string}
+ */
 export const GAMEOVER_REASON = {
   TIMES_UP: "gameOverReasonTimesUp",
   HEALTH_DEPLETED: "gameOverReasonHealthDepleted",
   GAME_COMPLETED: "gameOverReasonGameCompleted",
 };
 
-/** 
-* @readonly
-* @enum {string}
-*/
+/**
+ * @readonly
+ * @enum {string}
+ */
 export const OBSTACLE_TYPE = {
   COLLECT: "obstacleTypeCollect",
   AVOID: "obstacleTypeAvoid",
@@ -32,10 +32,10 @@ export const OBSTACLE_TYPE = {
   LEVELINTRO: "obstacleTypeLevelIntro",
 };
 
-/** 
-* @readonly
-* @enum {string}
-*/
+/**
+ * @readonly
+ * @enum {string}
+ */
 export const OBSTACLE_SUBTYPE = {
   FLOWER: "obstacleSubtypeFlower",
   SQUARCLE: "obstacleSubtypeSquarcle",
@@ -43,10 +43,10 @@ export const OBSTACLE_SUBTYPE = {
   SKEWED_CIRCLE: "obstacleSubtypeSkewedCircle",
 };
 
-/** 
-* @readonly
-* @enum {string}
-*/
+/**
+ * @readonly
+ * @enum {string}
+ */
 export const ADDED_LAYER = {
   SPOKES: "addedLayerSpokes",
   MOUTH: "addedLayerMouth",
@@ -58,13 +58,14 @@ export const ADDED_LAYER = {
   TRIANGLES: "addedLayerTriangles",
 };
 
-/** 
-* @readonly
-* @enum {string}
-*/
+/**
+ * @readonly
+ * @enum {string}
+ */
 export const RECTANGLE = {
   CANVAS: "rectangleCanvas",
   GAMEAREA: "rectangleGameArea",
+  PLAYERBOUNDS: "rectanglePlayerBounds",
   BACKGROUND: "rectangleBackground",
   FLOATING: "rectangleFloating",
   SOUNDTOGGLEICON: "rectangleSoundToggleIcon",
@@ -72,10 +73,10 @@ export const RECTANGLE = {
   FULLSCREENICON: "rectangleFullscreenIcon",
 };
 
-/** 
-* @readonly
-* @enum {string}
-*/
+/**
+ * @readonly
+ * @enum {string}
+ */
 export const GRADIENT_TYPE = {
   LINEAR: "gradientTypeLinear",
   RADIAL: "gradientTypeRadial",
@@ -83,52 +84,62 @@ export const GRADIENT_TYPE = {
   RADIAL_TUMBLING: "gradientTypeRadialTumbling",
 };
 
-/** 
-* @readonly
-* @enum {string}
-*/
+/**
+ * @readonly
+ * @enum {string}
+ */
 export const VERT_ALIGN = {
-	TOP: "verticalAlignmentTop",
-	CENTER: "verticalAlignmentCenter",
-	BOTTOM: "verticalAlignmentBottom",
-}
+  TOP: "verticalAlignmentTop",
+  CENTER: "verticalAlignmentCenter",
+  BOTTOM: "verticalAlignmentBottom",
+};
 
-/** 
-* @readonly
-* @enum {string}
-*/
+/**
+ * @readonly
+ * @enum {string}
+ */
 export const HORIZ_ALIGN = {
-	LEFT: "horizontalAlignmentLeft",
-	CENTER: "horizontalAlignmentCenter",
-	RIGHT: "horizontalAlignmentRight",
-}
+  LEFT: "horizontalAlignmentLeft",
+  CENTER: "horizontalAlignmentCenter",
+  RIGHT: "horizontalAlignmentRight",
+};
 
-/** 
-* @readonly
-* @enum {string}
-*/
+/**
+ * @readonly
+ * @enum {string}
+ */
 export const TIMER_ID = {
-	LEVELOUTRO_END: "timerIdLevelOutroEnd",
-	LEVELINTRO_ADD_OBSTACLES: "timerIdLevelIntroAddObstacles",
-	TEXT_FADEOUT_START: "timerIdTextFadeoutStart",
-	TEXT_FADEIN_START: "timerIdTextFadeinStart",
-	LEVELINTRO_END: "timerIdLevelIntroEnd",
-}
+  LEVELOUTRO_END: "timerIdLevelOutroEnd",
+  LEVELINTRO_ADD_OBSTACLES: "timerIdLevelIntroAddObstacles",
+  TEXT_FADEOUT_START: "timerIdTextFadeoutStart",
+  TEXT_FADEIN_START: "timerIdTextFadeinStart",
+  LEVELINTRO_END: "timerIdLevelIntroEnd",
+};
 
-/** 
-* @readonly
-* @enum {string}
-*/
+/**
+ * @readonly
+ * @enum {string}
+ */
 export const FADE_DIRECTION = {
-	IN: "fadeDirectionIn",
-	OUT: "fadeDirectionOut",
-}
+  IN: "fadeDirectionIn",
+  OUT: "fadeDirectionOut",
+};
 
-/** 
-* @readonly
-* @enum {string}
-*/
+/**
+ * @readonly
+ * @enum {string}
+ */
 export const LEVEL_TRANSITION_PROPERTY_TYPE = {
-	COLOR: "levelTransitionPropertyTypeColor",
-	NUMBER: "levelTransitionPropertyTypeNumber",
-}
+  COLOR: "levelTransitionPropertyTypeColor",
+  NUMBER: "levelTransitionPropertyTypeNumber",
+};
+
+/**
+ * @readonly
+ * @enum {string}
+ */
+export const KEY_ACTIONS = {
+  MOVE_LEFT: "keyActionMoveLeft",
+  MOVE_RIGHT: "keyActionMoveRight",
+  FIRE: "keyActionFire",
+};

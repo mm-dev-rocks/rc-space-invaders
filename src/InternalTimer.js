@@ -22,11 +22,17 @@ import { Game } from "./Game.js";
 
 import { __ } from "./utils.js";
 
-class InternalTimer {}
+class InternalTimer {
+  /** @type {Number} */ static lastTick_ms;
+  /** @type {Number} */ static tickAnimationFrameRef;
+  /** @type {Number} */ static currentFps;
+  /** @type {Number} */ static frameCount;
+  /** @type {Array} */ static fpsRecent_ar;
+}
 
 /**
  * @function init
- * @static 
+ * @static
  *
  * @description
  * ##### Main init
@@ -40,7 +46,7 @@ InternalTimer.init = function () {
 
 /**
  * @function startTicking
- * @static 
+ * @static
  *
  * @description
  * ##### Start the internal clock
@@ -58,7 +64,7 @@ InternalTimer.startTicking = function () {
 
 /**
  * @function tick
- * @static 
+ * @static
  *
  * @description
  * ##### This function is given as a callback for `requestAnimationFrame()`
@@ -76,38 +82,30 @@ InternalTimer.tick = function (_timestamp_ms) {
   if (sinceLastTick_ms > GAME.FRAME_MS) {
     InternalTimer.lastTick_ms = _timestamp_ms;
     framesSinceLastTick = Math.floor(sinceLastTick_ms / GAME.FRAME_MS);
-    //__('framesSinceLastTick: ' + framesSinceLastTick, RCSI.FMT_GAME);
-
     InternalTimer.frameCount += framesSinceLastTick;
-
     Game.updateByFrameCount(framesSinceLastTick);
 
     InternalTimer.updateFpsAverage(1000 / sinceLastTick_ms);
   }
 
-  // TODO remove this check and handle inbetween levels properly while animation continues
-  //if (Game.isInPlay) {
-    InternalTimer.nextTick();
-  //}
+  InternalTimer.nextTick();
 };
 
 /**
  * @function nextTick
- * @static 
+ * @static
  *
  * @description
  * ##### Call `requestAnimationFrame()` for the next opportunity to run `InternalTimer.tick()`
  */
 InternalTimer.nextTick = function () {
   cancelAnimationFrame(InternalTimer.tickAnimationFrameRef);
-  InternalTimer.tickAnimationFrameRef = requestAnimationFrame(
-    InternalTimer.tick
-  );
+  InternalTimer.tickAnimationFrameRef = requestAnimationFrame(InternalTimer.tick);
 };
 
 /**
  * @function updateFpsAverage
- * @static 
+ * @static
  *
  * @description
  * ##### Keep a rolling average of how many frames per second we are achieving
@@ -127,23 +125,18 @@ InternalTimer.updateFpsAverage = function (_latestFps) {
   InternalTimer.fpsRecent_ar.unshift(_latestFps);
 
   // Chop old values off the end of the array
-  InternalTimer.fpsRecent_ar.length = Math.min(
-    InternalTimer.fpsRecent_ar.length,
-    GAME.FPSDISPLAY_AVERAGE_FRAMES_SPAN
-  );
+  InternalTimer.fpsRecent_ar.length = Math.min(InternalTimer.fpsRecent_ar.length, GAME.FPSDISPLAY_AVERAGE_FRAMES_SPAN);
 
   for (i = 0; i < InternalTimer.fpsRecent_ar.length; i++) {
     sum += InternalTimer.fpsRecent_ar[i];
   }
   // Get average (mean) value of array
-  InternalTimer.currentFps = Math.floor(
-    sum / InternalTimer.fpsRecent_ar.length
-  );
+  InternalTimer.currentFps = Math.floor(sum / InternalTimer.fpsRecent_ar.length);
 };
 
 /**
  * @function secondsToFrames
- * @static 
+ * @static
  *
  * @description
  * ##### Convert seconds to number of frames
@@ -153,7 +146,7 @@ InternalTimer.updateFpsAverage = function (_latestFps) {
  *
  * @returns {number} The **estimated** number of frames it will take for `_secs` seconds to expire
  */
-InternalTimer.secondsToFrames = function(_secs) {
+InternalTimer.secondsToFrames = function (_secs) {
   return Math.ceil(_secs * InternalTimer.currentFps);
 };
 
