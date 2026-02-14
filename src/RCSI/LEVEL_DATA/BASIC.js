@@ -39,35 +39,5 @@ export const BASIC = {
       // 0.01 - 0.99
       gradientFadePoint: 0.01,
     },
-    {
-      type: OBSTACLE_TYPE.AVOID,
-      total: 3,
-      color_ar: ["#ff0000"],
-      radiusRange: [36, 48],
-      directionRange: [150, 190],
-      speedRange: [1.5, 2.5],
-    },
-    {
-      type: OBSTACLE_TYPE.COLLECT,
-      collectSfx_ar: SOUND_DATA.ORDERED_TWANG_SFX_AR,
-      total: 22,
-      color_ar: ["#999999", "#ffffff"],
-      radiusRange: [25, 35],
-      directionRange: [140, 220],
-      speedRange: [2, 3],
-      // 0.01 - 0.99
-      gradientFadePoint: 0.01,
-    },
-    {
-      type: OBSTACLE_TYPE.COLLECT,
-      collectSfx_ar: SOUND_DATA.ORDERED_TWANG_SFX_AR,
-      total: 11,
-      color_ar: ["#ffffff"],
-      radiusRange: [48, 72],
-      directionRange: [140, 220],
-      speedRange: [3, 4],
-      // 0.01 - 0.99
-      gradientFadePoint: 0.01,
-    },
   ],
 };

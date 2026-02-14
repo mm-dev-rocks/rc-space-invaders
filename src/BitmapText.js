@@ -26,7 +26,17 @@ import { Layout } from "./Layout.js";
 
 import { __, getOffscreenOrNormalCanvas } from "./utils.js";
 
-class BitmapText {}
+class BitmapText {
+  /** @type {number} */ static drawnCharWidth;
+  /** @type {number} */ static drawnCharHeight;
+  /** @type {number} */ static fullCharWidth;
+  /** @type {number} */ static lineHeight;
+  /** @type {number} */ static lineSpacing;
+  /** @type {number} */ static letterSpacing;
+  /** @type {number} */ static spritesheetScale;
+
+  /** @type {boolean} */ static useShortVersions;
+}
 
 /**
  * @function init
@@ -42,11 +52,10 @@ class BitmapText {}
  */
 BitmapText.init = function () {
   BitmapText.coloredStringBufferCanvas = getOffscreenOrNormalCanvas();
-  BitmapText.coloredStringBufferCtx =
-    BitmapText.coloredStringBufferCanvas.getContext("2d", {
-      willReadFrequently: true,
-      desynchronized: true,
-    });
+  BitmapText.coloredStringBufferCtx = BitmapText.coloredStringBufferCanvas.getContext("2d", {
+    willReadFrequently: true,
+    desynchronized: true,
+  });
   BitmapText.coloredStringBufferCtx.imageSmoothingEnabled = false;
 
   BitmapText.stringCacheCanvas = getOffscreenOrNormalCanvas();
@@ -105,9 +114,7 @@ BitmapText.recreateCharCacheCanvas = function () {
 BitmapText.precacheAllCharacters = function () {
   var i,
     currentChar,
-    spritesheetRows =
-      (BitmapText.spritesheetImage.height / BitmapText.drawnCharHeight) *
-      BitmapText.spritesheetScale,
+    spritesheetRows = (BitmapText.spritesheetImage.height / BitmapText.drawnCharHeight) * BitmapText.spritesheetScale,
     spritesheetTotalChars = GAME.BITMAPFONT_SPRITESHEET_COLS * spritesheetRows;
 
   BitmapText.charCanvasCache = {};
@@ -155,12 +162,8 @@ BitmapText.chooseBestFittingFont = function () {
       for (i = 0; i < multiples.length; i++) {
         currentMultiple = multiples[i];
 
-        fullLineWidth =
-          (currentFontData.width + currentFontData.letterSpacing) *
-          GAME.CHARS_IN_CANVAS_WIDTH;
-        fullLineHeight =
-          (currentFontData.height + currentFontData.lineSpacing) *
-          GAME.CHARS_IN_CANVAS_HEIGHT;
+        fullLineWidth = (currentFontData.width + currentFontData.letterSpacing) * GAME.CHARS_IN_CANVAS_WIDTH;
+        fullLineHeight = (currentFontData.height + currentFontData.lineSpacing) * GAME.CHARS_IN_CANVAS_HEIGHT;
         characterArea = currentFontData.width * currentFontData.height;
 
         fullLineWidth *= currentMultiple;
@@ -192,51 +195,31 @@ BitmapText.chooseBestFittingFont = function () {
   } else {
     BitmapText.useShortVersions = false;
   }
-  __(
-    "BitmapText.useShortVersions: " + BitmapText.useShortVersions,
-    RCSI.FMT_TEXT
-  );
+  __("BitmapText.useShortVersions: " + BitmapText.useShortVersions, RCSI.FMT_TEXT);
 
   BitmapText.drawnCharWidth = bestFittingFontData.width;
   BitmapText.letterSpacing = bestFittingFontData.letterSpacing;
-  BitmapText.fullCharWidth =
-    bestFittingFontData.width + bestFittingFontData.letterSpacing;
+  BitmapText.fullCharWidth = bestFittingFontData.width + bestFittingFontData.letterSpacing;
 
   BitmapText.drawnCharHeight = bestFittingFontData.height;
   BitmapText.lineSpacing = bestFittingFontData.lineSpacing;
-  BitmapText.lineHeight =
-    bestFittingFontData.height + bestFittingFontData.lineSpacing;
+  BitmapText.lineHeight = bestFittingFontData.height + bestFittingFontData.lineSpacing;
 
   BitmapText.drawnCharWidth *= BitmapText.spritesheetScale;
-  BitmapText.letterSpacing = Math.ceil(
-    BitmapText.spritesheetScale / GAME.SCALED_TEXT_SPACINGROWTH_DIVISOR
-  );
+  BitmapText.letterSpacing = Math.ceil(BitmapText.spritesheetScale / GAME.SCALED_TEXT_SPACINGROWTH_DIVISOR);
   BitmapText.fullCharWidth *= BitmapText.spritesheetScale;
 
   BitmapText.drawnCharHeight *= BitmapText.spritesheetScale;
-  BitmapText.lineSpacing = Math.ceil(
-    BitmapText.spritesheetScale / GAME.SCALED_TEXT_SPACINGROWTH_DIVISOR
-  );
+  BitmapText.lineSpacing = Math.ceil(BitmapText.spritesheetScale / GAME.SCALED_TEXT_SPACINGROWTH_DIVISOR);
   BitmapText.lineHeight *= BitmapText.spritesheetScale;
 
-  BitmapText.spritesheetImage = ImageManager.getImageByID(
-    bestFittingFontData.id
-  ).image_el;
+  BitmapText.spritesheetImage = ImageManager.getImageByID(bestFittingFontData.id).image_el;
 
-  __(
-    "BitmapText.spritesheetImage.width: " + BitmapText.spritesheetImage.width,
-    RCSI.FMT_TEXT
-  );
+  __("BitmapText.spritesheetImage.width: " + BitmapText.spritesheetImage.width, RCSI.FMT_TEXT);
 
-  __(
-    "BitmapText.spritesheetImage.height: " + BitmapText.spritesheetImage.height,
-    RCSI.FMT_TEXT
-  );
+  __("BitmapText.spritesheetImage.height: " + BitmapText.spritesheetImage.height, RCSI.FMT_TEXT);
 
-  __(
-    "BitmapText.spritesheetScale: " + BitmapText.spritesheetScale,
-    RCSI.FMT_TEXT
-  );
+  __("BitmapText.spritesheetScale: " + BitmapText.spritesheetScale, RCSI.FMT_TEXT);
 
   __("BitmapText.drawnCharWidth: " + BitmapText.drawnCharWidth, RCSI.FMT_TEXT);
   __("BitmapText.letterSpacing: " + BitmapText.letterSpacing, RCSI.FMT_TEXT);
@@ -249,16 +232,12 @@ BitmapText.chooseBestFittingFont = function () {
   __("bestFittingFontData.id: " + bestFittingFontData.id, RCSI.FMT_TEXT);
 
   __(
-    "Max chars in this width: " +
-      Layout.canvasWidth /
-        (bestFittingFontData.width + bestFittingFontData.letterSpacing),
-    RCSI.FMT_TEXT
+    "Max chars in this width: " + Layout.canvasWidth / (bestFittingFontData.width + bestFittingFontData.letterSpacing),
+    RCSI.FMT_TEXT,
   );
   __(
-    "Max chars in this height: " +
-      Layout.canvasHeight /
-        (bestFittingFontData.height + bestFittingFontData.lineSpacing),
-    RCSI.FMT_TEXT
+    "Max chars in this height: " + Layout.canvasHeight / (bestFittingFontData.height + bestFittingFontData.lineSpacing),
+    RCSI.FMT_TEXT,
   );
 };
 
@@ -341,11 +320,7 @@ BitmapText.lineToBitmap = function (_str, _x, _y, _color, _shadowColor) {
   // Fill up `BitmapText.stringCacheCanvas` with this line of text, rendered in
   // the black bitmap font
   for (i = 0; i < _str.length; i++) {
-    BitmapText.drawCharacterToStringCache(
-      _str.charAt(i),
-      i * BitmapText.fullCharWidth,
-      0
-    );
+    BitmapText.drawCharacterToStringCache(_str.charAt(i), i * BitmapText.fullCharWidth, 0);
   }
 
   BitmapText.drawLineShadow(_x, _y, _shadowColor);
@@ -382,13 +357,8 @@ BitmapText.drawLineColor = function (_x, _y, _color) {
   // Draw buffered text on the colour in a way ('destination-atop') that chops
   // off all the transparent pixels, so ends up looking like a solid mask
   // in the shape of the text
-  BitmapText.coloredStringBufferCtx.globalCompositeOperation =
-    "destination-atop";
-  BitmapText.coloredStringBufferCtx.drawImage(
-    BitmapText.stringCacheCanvas,
-    0,
-    0
-  );
+  BitmapText.coloredStringBufferCtx.globalCompositeOperation = "destination-atop";
+  BitmapText.coloredStringBufferCtx.drawImage(BitmapText.stringCacheCanvas, 0, 0);
 
   // Draw the solid-colour-filled bitmap text in the main context
   Display.ctx.drawImage(BitmapText.coloredStringBufferCanvas, _x, _y);
@@ -410,21 +380,9 @@ BitmapText.drawLineColor = function (_x, _y, _color) {
  */
 BitmapText.drawLineShadow = function (_x, _y, _color) {
   // In the main context, draw the (black) cached string at 3 offsets to form the drop shadow
-  BitmapText.drawLineColor(
-    _x + BitmapText.spritesheetScale,
-    _y + BitmapText.spritesheetScale,
-    _color
-  );
-  BitmapText.drawLineColor(
-    _x,
-    _y + BitmapText.spritesheetScale,
-    _color
-  );
-  BitmapText.drawLineColor(
-    _x + BitmapText.spritesheetScale,
-    _y,
-    _color
-  );
+  BitmapText.drawLineColor(_x + BitmapText.spritesheetScale, _y + BitmapText.spritesheetScale, _color);
+  BitmapText.drawLineColor(_x, _y + BitmapText.spritesheetScale, _color);
+  BitmapText.drawLineColor(_x + BitmapText.spritesheetScale, _y, _color);
 };
 
 /**
@@ -440,12 +398,11 @@ BitmapText.drawLineShadow = function (_x, _y, _color) {
  */
 BitmapText.drawCharacterToStringCache = function (_char, _x, _y) {
   BitmapText.stringCacheCtx.drawImage(
-    BitmapText.charCanvasCache[_char] ||
-      BitmapText.charCanvasCache[STRING.UNKNOWN_CHARACTER],
+    BitmapText.charCanvasCache[_char] || BitmapText.charCanvasCache[STRING.UNKNOWN_CHARACTER],
     _x,
     _y,
     BitmapText.drawnCharWidth,
-    BitmapText.drawnCharHeight
+    BitmapText.drawnCharHeight,
   );
 };
 
@@ -473,13 +430,10 @@ BitmapText.cacheCharacter = function (_char) {
     0,
     0,
     BitmapText.drawnCharWidth,
-    BitmapText.drawnCharHeight
+    BitmapText.drawnCharHeight,
   );
   BitmapText.charCanvasCache[_char] = BitmapText.charCacheCanvas;
-  __(
-    "\tBitmapText.charCanvasCache[_char]: " + BitmapText.charCanvasCache[_char],
-    RCSI.FMT_TEXT
-  );
+  __("\tBitmapText.charCanvasCache[_char]: " + BitmapText.charCanvasCache[_char], RCSI.FMT_TEXT);
 };
 
 export { BitmapText };

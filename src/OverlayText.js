@@ -12,19 +12,25 @@
  */
 
 import { RCSI } from "./RCSI/CONST.js";
-import { ASPECT_RATIO, GAMEOVER_REASON, OBSTACLE_TYPE } from "./RCSI/ENUM.js";
+import { GAMEOVER_REASON } from "./RCSI/ENUM.js";
 import * as GAME from "./RCSI/GAME.js";
 import * as STRING from "./RCSI/STRING.js";
 
 import { Game } from "./Game.js";
 
 import { Display } from "./Display.js";
-import { Layout } from "./Layout.js";
 import { Text } from "./Text.js";
 
 import { __, getOffscreenOrNormalCanvas } from "./utils.js";
 
-class OverlayText {}
+class OverlayText {
+  /** @type {Array} */ static text_ar;
+  /** @type {Array} */ static content_ar;
+  /** @type {HTMLCanvasElement | OffscreenCanvas | null} */ static canvas;
+  /** @type {Object} */ static canvasCtx;
+  /** @type {number} */ static levelIntroCollectLineNumber;
+  /** @type {number} */ static levelIntroAvoidLineNumber;
+}
 
 /**
  * @function init
@@ -37,7 +43,6 @@ class OverlayText {}
 OverlayText.init = function () {
   if (OverlayText.canvas) {
     OverlayText.canvas = null;
-    delete OverlayText.canvas;
   }
   OverlayText.canvas = getOffscreenOrNormalCanvas();
 
@@ -45,7 +50,9 @@ OverlayText.init = function () {
     willReadFrequently: true,
     desynchronized: true,
   });
-  OverlayText.canvasCtx.imageSmoothingEnabled = false;
+  if (OverlayText.canvasCtx) {
+    OverlayText.canvasCtx.imageSmoothingEnabled = false;
+  }
 };
 
 /**
@@ -83,7 +90,6 @@ OverlayText.init = function () {
 OverlayText.draw = function () {
   var collectLinePos,
     avoidLinePos,
-    textMeasurements,
     textConfig = {
       text: OverlayText.content_ar,
       alignH: GAME.OVERLAY_TEXT_ALIGN_H,
@@ -91,21 +97,13 @@ OverlayText.draw = function () {
       measureOnly: true,
     },
     // If both these are false we must be in a level intro
-    isLevelIntro =
-      !Game.isOnFrontPage && !Game.isInLevelOutro && !Game.isInGameOver,
-
-  // This is where we measure out the final positions of the text - no drawing happens here
-  textMeasurements = Text.draw(textConfig);
+    isLevelIntro = !Game.isOnFrontPage && !Game.isInGameOver,
+    // This is where we measure out the final positions of the text - no drawing happens here
+    textMeasurements = Text.draw(textConfig);
 
   // Now we know the size of the text (including background and padding)
-  OverlayText.wipeAndResizeCanvas(
-    textMeasurements.bgMeasurements.width,
-    textMeasurements.bgMeasurements.height
-  );
-  OverlayText.canvasCtx.translate(
-    0 - textMeasurements.bgMeasurements.left,
-    0 - textMeasurements.bgMeasurements.top
-  );
+  OverlayText.wipeAndResizeCanvas(textMeasurements.bgMeasurements.width, textMeasurements.bgMeasurements.height);
+  OverlayText.canvasCtx.translate(0 - textMeasurements.bgMeasurements.left, 0 - textMeasurements.bgMeasurements.top);
   Display.swapContext({ contextToSwapTo: OverlayText.canvasCtx });
 
   // Draw exactly the same text again, we had to draw it before the obstacles to get measurements, but now the obstacles might cover parts of the text, so re-draw it
@@ -114,32 +112,27 @@ OverlayText.draw = function () {
       measureOnly: false,
       drawBackground: true,
       groupIsFadeable: true,
-    })
+    }),
   );
 
   if (isLevelIntro) {
-    collectLinePos =
-      textMeasurements.lines_rect_ar[OverlayText.levelIntroCollectLineNumber];
-    avoidLinePos =
-      textMeasurements.lines_rect_ar[OverlayText.levelIntroAvoidLineNumber];
+    collectLinePos = textMeasurements.lines_rect_ar[OverlayText.levelIntroCollectLineNumber];
+    avoidLinePos = textMeasurements.lines_rect_ar[OverlayText.levelIntroAvoidLineNumber];
   }
 
   // Draw everything to the main canvas
   Display.swapContext({ backToDefault: true });
 
-  if (Game.textIsFading) {
-    Display.ctx.globalAlpha = Game.introTextFadeAlpha;
+  if (Display.ctx && OverlayText.canvas) {
+    Display.ctx.drawImage(
+      OverlayText.canvas,
+      textMeasurements.bgMeasurements.left,
+      textMeasurements.bgMeasurements.top,
+    );
+
+    Display.ctx.globalAlpha = 1;
   }
-
-  Display.ctx.drawImage(
-    OverlayText.canvas,
-    textMeasurements.bgMeasurements.left,
-    textMeasurements.bgMeasurements.top
-  );
-
-  Display.ctx.globalAlpha = 1;
 };
-
 
 /**
  * @function wipeAndResizeCanvas
@@ -152,8 +145,10 @@ OverlayText.draw = function () {
  * @param {number} _h - Desired height of the canvas
  */
 OverlayText.wipeAndResizeCanvas = function (_w, _h) {
-  OverlayText.canvas.width = _w;
-  OverlayText.canvas.height = _h;
+  if (OverlayText.canvas) {
+    OverlayText.canvas.width = _w;
+    OverlayText.canvas.height = _h;
+  }
   OverlayText.canvasCtx.clearRect(0, 0, _w, _h);
 };
 
@@ -176,29 +171,18 @@ OverlayText.getCurrentLevelDescription = function () {
     //levelStr = STRING.LEVEL_TEXT + " " + Game.curLevelId,
     tipStr = Game.curLevelData.tip ? " " + Game.curLevelData.tip : "";
 
-  if (Layout.sessionAspectRatio === ASPECT_RATIO.LANDSCAPE) {
-    text_ar = [
-      {
-        text: levelStr + tipStr,
-        color: Game.curLevelData.textColor,
-        flashing: true,
-      },
-      GAME.TEXT_BLANKLINE,
-    ];
-  } else {
-    text_ar = [
-      {
-        text: levelStr,
-        color: Game.curLevelData.textColor,
-      },
-      {
-        text: tipStr,
-        color: Game.curLevelData.textColor,
-        flashing: true,
-      },
-      GAME.TEXT_BLANKLINE,
-    ];
-  }
+  text_ar = [
+    {
+      text: levelStr,
+      color: Game.curLevelData.textColor,
+    },
+    {
+      text: tipStr,
+      color: Game.curLevelData.textColor,
+      flashing: true,
+    },
+    GAME.TEXT_BLANKLINE,
+  ];
 
   return text_ar;
 };
@@ -246,7 +230,7 @@ OverlayText.addCompletedLevelOutro = function () {
         color: Game.curLevelData.textColor,
       },
       GAME.TEXT_BLANKLINE,
-    ]
+    ],
   );
 };
 
@@ -305,26 +289,23 @@ OverlayText.addHitToStart = function () {
 OverlayText.addNormalLevelIntro = function () {
   __("Normal level intro - Setting level intro text", RCSI.FMT_OVERLAYTEXT);
   __("\t\tSETTING OVERLAY TEXT", RCSI.FMT_OVERLAYTEXT);
-  OverlayText.content_ar = OverlayText.content_ar.concat(
-    OverlayText.getCurrentLevelDescription(),
-    [
-      {
-        text: STRING.CURRENT_SCORE + " " + Game.currentScore,
-        color: Game.curLevelData.textColorHighlight,
-      },
-      GAME.TEXT_BLANKLINE,
-      {
-        text: STRING.COLLECT_TEXT,
-        color: Game.curLevelData.textColorHighlight,
-      },
-      GAME.TEXT_BLANKLINE,
-      {
-        text: STRING.AVOID_TEXT,
-        color: Game.curLevelData.textColorHighlight,
-      },
-      GAME.TEXT_BLANKLINE,
-    ]
-  );
+  OverlayText.content_ar = OverlayText.content_ar.concat(OverlayText.getCurrentLevelDescription(), [
+    {
+      text: STRING.CURRENT_SCORE + " " + Game.currentScore,
+      color: Game.curLevelData.textColorHighlight,
+    },
+    GAME.TEXT_BLANKLINE,
+    {
+      text: STRING.COLLECT_TEXT,
+      color: Game.curLevelData.textColorHighlight,
+    },
+    GAME.TEXT_BLANKLINE,
+    {
+      text: STRING.AVOID_TEXT,
+      color: Game.curLevelData.textColorHighlight,
+    },
+    GAME.TEXT_BLANKLINE,
+  ]);
 
   OverlayText.updateLevelIntroSpecialLineNumbers();
 };
@@ -343,10 +324,7 @@ OverlayText.blankOutHitToStart = function () {
 
   if (OverlayText.content_ar?.length) {
     for (i = 0; i < OverlayText.content_ar.length; i++) {
-      if (
-        OverlayText.content_ar[i] === STRING.HIT_TO_START ||
-        OverlayText.content_ar[i] === STRING.HIT_TO_REPLAY
-      ) {
+      if (OverlayText.content_ar[i] === STRING.HIT_TO_START || OverlayText.content_ar[i] === STRING.HIT_TO_REPLAY) {
         OverlayText.content_ar[i] = blankString;
       } else if (
         OverlayText.content_ar[i].text === STRING.HIT_TO_START ||
@@ -405,12 +383,7 @@ OverlayText.setGameOver = function (_reason) {
   if (_reason !== GAMEOVER_REASON.GAME_COMPLETED) {
     OverlayText.content_ar = OverlayText.content_ar.concat([
       {
-        text:
-          STRING.REMAINING +
-          " " +
-          Game.collectableRemaining +
-          "/" +
-          Game.collectableTotal,
+        text: STRING.REMAINING + " " + Game.collectableRemaining + "/" + Game.collectableTotal,
         color: Game.curLevelData.textColor,
         flashing: true,
       },

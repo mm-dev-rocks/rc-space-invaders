@@ -23,8 +23,19 @@ import { Layout } from "./Layout.js";
 import { Player } from "./Player.js";
 
 import { __, isEmpty, padString } from "./utils.js";
+import { UI_PORTRAIT } from "./RCSI/GAME.js";
 
-class Text {}
+class Text {
+  /** @type {number} */ static drawnCharWidth;
+  /** @type {number} */ static drawnCharHeight;
+  /** @type {number} */ static fullCharWidth;
+  /** @type {number} */ static lineHeight;
+  /** @type {number} */ static lineSpacing;
+  /** @type {number} */ static letterSpacing;
+  /** @type {number} */ static drawnPixelSize;
+
+  /** @type {boolean} */ static useShortVersions;
+}
 
 Text.init = function () {
   BitmapText.init();
@@ -88,7 +99,7 @@ Text.draw = function (_ob) {
     blockWidth,
     Text.lineHeight * text_ar.length,
     _ob.offsetH,
-    _ob.offsetV
+    _ob.offsetV,
   );
 
   // bg
@@ -96,20 +107,12 @@ Text.draw = function (_ob) {
     left: itemPos.x - Layout.textBgPaddingProportional,
     top: itemPos.y - Layout.textBgPaddingProportional,
     width: blockWidth + Layout.textBgPaddingProportional * 2,
-    height:
-      Text.lineHeight * text_ar.length +
-      Layout.textBgPaddingProportional * 2 -
-      Text.lineSpacing,
+    height: Text.lineHeight * text_ar.length + Layout.textBgPaddingProportional * 2 - Text.lineSpacing,
   };
 
   if (_ob.drawBackground) {
     Display.ctx.fillStyle = Display.overlayBgColor;
-    Display.ctx.fillRect(
-      bgMeasurements.left,
-      bgMeasurements.top,
-      bgMeasurements.width,
-      bgMeasurements.height
-    );
+    Display.ctx.fillRect(bgMeasurements.left, bgMeasurements.top, bgMeasurements.width, bgMeasurements.height);
   }
 
   for (i = 0; i < text_ar.length; i++) {
@@ -131,15 +134,14 @@ Text.draw = function (_ob) {
     if (
       !_ob.measureOnly &&
       !isEmpty(line_str) &&
-      (!flashing ||
-        !Display.flashIsOff(GAME.TEXT_FLASH_ON_SECS, GAME.TEXT_FLASH_OFF_SECS))
+      (!flashing || !Display.flashIsOff(GAME.TEXT_FLASH_ON_SECS, GAME.TEXT_FLASH_OFF_SECS))
     ) {
       BitmapText.lineToBitmap(
         line_str,
         Math.round(itemPos.x + (blockWidth - lineWidth) / 2),
         Math.round(itemPos.y + Text.lineHeight * i),
         color,
-        colorSecondary
+        colorSecondary,
       );
     }
 
@@ -160,10 +162,7 @@ Text.draw = function (_ob) {
 };
 
 Text.drawLevel = function () {
-  var levelNumber =
-      Game.isInLevelOutro || Game.isInGameOver
-        ? STRING.NO_LEVEL
-        : Game.levelsCompletedThisSession + 1,
+  var levelNumber = Game.isInLevelOutro || Game.isInGameOver ? STRING.NO_LEVEL : Game.levelsCompletedThisSession + 1,
     str = Text.useShortVersions
       ? Game.curLevelId + " " + padString(levelNumber, STRING.LEVEL_PADSTRING)
       : padString(levelNumber, STRING.LEVEL_PADSTRING) +
@@ -175,8 +174,8 @@ Text.drawLevel = function () {
   Text.draw({
     text: str,
     drawBackground: true,
-    alignH: Layout.currentAspectUI.levelText.alignH,
-    alignV: Layout.currentAspectUI.levelText.alignV,
+    alignH: UI_PORTRAIT.levelText.alignH,
+    alignV: UI_PORTRAIT.levelText.alignV,
     color: Text.accentColor,
   });
 };
@@ -185,12 +184,10 @@ Text.drawFps = function () {
   Text.draw({
     text: InternalTimer.currentFps.toString() + "/" + GAME.TARGET_FPS,
     drawBackground: true,
-    alignH: Layout.currentAspectUI.fps.alignH,
-    alignV: Layout.currentAspectUI.fps.alignV,
-    offsetH: Layout.currentAspectUI.fps.offsetByCharsH * Text.fullCharWidth,
-    offsetV:
-      Layout.currentAspectUI.fps.offsetByCharsV *
-      (Text.lineHeight + Layout.textBgPaddingProportional * 2),
+    alignH: UI_PORTRAIT.fps.alignH,
+    alignV: UI_PORTRAIT.fps.alignV,
+    offsetH: UI_PORTRAIT.fps.offsetByCharsH * Text.fullCharWidth,
+    offsetV: UI_PORTRAIT.fps.offsetByCharsV * (Text.lineHeight + Layout.textBgPaddingProportional * 2),
   });
 };
 
@@ -202,24 +199,17 @@ Text.drawVersionInfo = function (_ob) {
     str = window.RcSpaceInvaders.versionInfo.displayString.toUpperCase();
 
   if (_ob?.isInLevelIntro) {
-    alignH = Layout.currentAspectUI.versionInfoLevelIntro.alignH;
-    alignV = Layout.currentAspectUI.versionInfoLevelIntro.alignV;
-    offsetH =
-      Layout.currentAspectUI.versionInfoLevelIntro.offsetByCharsH *
-      Text.fullCharWidth;
+    alignH = UI_PORTRAIT.versionInfoLevelIntro.alignH;
+    alignV = UI_PORTRAIT.versionInfoLevelIntro.alignV;
+    offsetH = UI_PORTRAIT.versionInfoLevelIntro.offsetByCharsH * Text.fullCharWidth;
     offsetV = 0;
   } else {
-    alignH = Layout.currentAspectUI.mainTitle.alignH;
-    alignV = Layout.currentAspectUI.mainTitle.alignV;
+    alignH = UI_PORTRAIT.mainTitle.alignH;
+    alignV = UI_PORTRAIT.mainTitle.alignV;
     offsetV = 0;
     offsetH =
-      Math.round(
-        (Layout.mainTitle_rect.right - Layout.mainTitle_rect.left) / 2 -
-          Text.getStringWidth(str) / 2
-      ) + Layout.textBgPaddingProportional;
-    if (Display.isLandscapeAspect) {
-      offsetV += Layout.mainTitle_rect.bottom - Layout.mainTitle_rect.top;
-    }
+      Math.round((Layout.mainTitle_rect.right - Layout.mainTitle_rect.left) / 2 - Text.getStringWidth(str) / 2) +
+      Layout.textBgPaddingProportional;
   }
 
   Text.draw({
@@ -236,8 +226,7 @@ Text.drawVersionInfo = function (_ob) {
 Text.drawTimeRemaining = function (_data) {
   var str = Text.useShortVersions
     ? Game.timeRemaining + " " + STRING.CLOCK
-    : STRING.TIME_TEXT +
-      padString(Game.timeRemaining || 0, STRING.TIME_PADSTRING);
+    : STRING.TIME_TEXT + padString(Game.timeRemaining || 0, STRING.TIME_PADSTRING);
 
   Text.draw({
     text: {
@@ -245,32 +234,25 @@ Text.drawTimeRemaining = function (_data) {
       flashing: _data?.timeIsLow,
     },
     drawBackground: true,
-    alignH: Layout.currentAspectUI.timer.alignH,
-    alignV: Layout.currentAspectUI.timer.alignV,
-    offsetH: Layout.currentAspectUI.timer.offsetByCharsH * Text.fullCharWidth,
-    offsetV:
-      Layout.currentAspectUI.timer.offsetByCharsV *
-      (Text.lineHeight + Layout.textBgPaddingProportional * 2),
+    alignH: UI_PORTRAIT.timer.alignH,
+    alignV: UI_PORTRAIT.timer.alignV,
+    offsetH: UI_PORTRAIT.timer.offsetByCharsH * Text.fullCharWidth,
+    offsetV: UI_PORTRAIT.timer.offsetByCharsV * (Text.lineHeight + Layout.textBgPaddingProportional * 2),
   });
 };
 
 Text.drawCollected = function () {
   var str = Text.useShortVersions
     ? "! " + padString(Game.collectableRemaining || 0, STRING.COLLECT_PADSTRING)
-    : STRING.COLLECT_TEXT +
-      " " +
-      padString(Game.collectableRemaining || 0, STRING.COLLECT_PADSTRING);
+    : STRING.COLLECT_TEXT + " " + padString(Game.collectableRemaining || 0, STRING.COLLECT_PADSTRING);
 
   Text.draw({
     text: str,
     drawBackground: true,
-    alignH: Layout.currentAspectUI.collectText.alignH,
-    alignV: Layout.currentAspectUI.collectText.alignV,
-    offsetH:
-      Layout.currentAspectUI.collectText.offsetByCharsH * Text.fullCharWidth,
-    offsetV:
-      Layout.currentAspectUI.collectText.offsetByCharsV *
-      (Text.lineHeight + Layout.textBgPaddingProportional * 2),
+    alignH: UI_PORTRAIT.collectText.alignH,
+    alignV: UI_PORTRAIT.collectText.alignV,
+    offsetH: UI_PORTRAIT.collectText.offsetByCharsH * Text.fullCharWidth,
+    offsetV: UI_PORTRAIT.collectText.offsetByCharsV * (Text.lineHeight + Layout.textBgPaddingProportional * 2),
   });
 };
 
@@ -280,22 +262,12 @@ Text.drawInstructions = function (_ar) {
   for (i = 0; i < _ar.length; i++) {
     text_ob = _ar[i];
 
-    if (Display.isLandscapeAspect) {
-      alignH = text_ob.landscapeAlignH;
-      alignV = text_ob.landscapeAlignV;
-      offsetH = Math.round(text_ob.landscapeOffsetCharsH * Text.fullCharWidth);
-      offsetV = Math.round(text_ob.landscapeOffsetCharsV * Text.lineHeight);
-      if (text_ob.isPlayer) {
-        offsetH += Player.pos.x;
-      }
-    } else {
-      alignH = text_ob.portraitAlignH;
-      alignV = text_ob.portraitAlignV;
-      offsetH = Math.round(text_ob.portraitOffsetCharsH * Text.fullCharWidth);
-      offsetV = Math.round(text_ob.portraitOffsetCharsV * Text.lineHeight);
-      if (text_ob.isPlayer) {
-        offsetV += Player.pos.y;
-      }
+    alignH = text_ob.portraitAlignH;
+    alignV = text_ob.portraitAlignV;
+    offsetH = Math.round(text_ob.portraitOffsetCharsH * Text.fullCharWidth);
+    offsetV = Math.round(text_ob.portraitOffsetCharsV * Text.lineHeight);
+    if (text_ob.isPlayer) {
+      offsetV += Player.pos.y;
     }
 
     Text.draw({

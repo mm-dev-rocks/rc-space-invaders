@@ -23,8 +23,8 @@ export const INTRO = {
       total: 500,
       color_ar: ["#bbbbbb", "#666666", "#999999", "#ffffff"],
       radiusRange: [1, 3],
-      directionRange: [175, 185],
-      speedRange: [0.001, 0.0],
+      directionRange: [0, 20],
+      speedRange: [0.0001, 0.0],
     },
   ],
   instruct_text: [

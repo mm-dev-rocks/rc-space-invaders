@@ -12,14 +12,31 @@
  */
 
 import { RCSI } from "./RCSI/CONST.js";
-import { ASPECT_RATIO, HORIZ_ALIGN, RECTANGLE, VERT_ALIGN } from "./RCSI/ENUM.js";
+import { HORIZ_ALIGN, RECTANGLE, VERT_ALIGN } from "./RCSI/ENUM.js";
 import * as GAME from "./RCSI/GAME.js";
+import { UI_PORTRAIT } from "./RCSI/GAME.js";
 
-import { Game } from "./Game.js";
 import { Text } from "./Text.js";
 import { __, roundToPlaces } from "./utils.js";
 
-class Layout {}
+class Layout {
+  /** @type {number} */ static canvasWidth;
+  /** @type {number} */ static canvasHeight;
+  /** @type {number} */ static proportionalMultiplier;
+  /** @type {number} */ static mainPaddingProportional;
+  /** @type {number} */ static textBgPaddingProportional;
+  /** @type {number} */ static hitAreaPaddingProportional;
+  /** @type {number} */ static gameplayAreaToCanvasLateralRatio;
+  /** @type {number} */ static gameAreaOffsetLateral;
+  /** @type {number} */ static gameplayWidth;
+  /** @type {number} */ static gameplayHeight;
+
+  /** @type {Object} */ static canvas_rect;
+  /** @type {Object} */ static gameplay_rect;
+  /** @type {Object} */ static background_rect;
+  /** @type {Object} */ static floating_rect;
+  /** @type {Object} */ static mainTitle_rect;
+}
 
 /**
  * @function init
@@ -49,29 +66,17 @@ Layout.init = function () {
 Layout.setProportionalSizes = function () {
   // used to relatively-size some objects based on canvas size
   Layout.proportionalMultiplier =
-    Math.sqrt(Layout.canvas_rect.right * Layout.canvas_rect.bottom) /
-    GAME.SCALING_TARGET_SIZE;
-  Layout.proportionalMultiplier = roundToPlaces(
-    Layout.proportionalMultiplier,
-    4
-  );
-  __(
-    "Layout.proportionalMultiplier: " + Layout.proportionalMultiplier,
-    RCSI.FMT_LAYOUT
-  );
+    Math.sqrt(Layout.canvas_rect.right * Layout.canvas_rect.bottom) / GAME.SCALING_TARGET_SIZE;
+  Layout.proportionalMultiplier = roundToPlaces(Layout.proportionalMultiplier, 4);
+  __("Layout.proportionalMultiplier: " + Layout.proportionalMultiplier, RCSI.FMT_LAYOUT);
 
-  Layout.mainPaddingProportional = Math.ceil(
-    GAME.MAIN_PADDING_PX * Layout.proportionalMultiplier
-  );
+  Layout.mainPaddingProportional = Math.ceil(GAME.MAIN_PADDING_PX * Layout.proportionalMultiplier);
 
   Layout.textBgPaddingProportional = Math.ceil(
-    Text.drawnCharWidth *
-      GAME.TEXT_BG_PADDING_TO_CHARWIDTH_RATIO *
-      Layout.proportionalMultiplier
+    Text.drawnCharWidth * GAME.TEXT_BG_PADDING_TO_CHARWIDTH_RATIO * Layout.proportionalMultiplier,
   );
 
-  Layout.hitAreaPaddingProportional =
-    Layout.mainPaddingProportional + Layout.textBgPaddingProportional;
+  Layout.hitAreaPaddingProportional = Layout.mainPaddingProportional + Layout.textBgPaddingProportional;
 };
 
 /**
@@ -86,35 +91,15 @@ Layout.setProportionalSizes = function () {
  */
 Layout.update = function (_data) {
   __("Layout.update()::", RCSI.FMT_LAYOUT);
-  Layout.gameplayAreaToCanvasLateralRatio =
-    _data.gameplayAreaToCanvasLateralRatio;
+  Layout.gameplayAreaToCanvasLateralRatio = _data.gameplayAreaToCanvasLateralRatio;
 
-  Layout.canvasWidth = Math.round(
-    document.documentElement.clientWidth / GAME.PIXEL_SCALE
-  );
-  Layout.canvasHeight = Math.round(
-    document.documentElement.clientHeight / GAME.PIXEL_SCALE
-  );
-
-  // Don't switch aspect ratios during a session
-  if (!Layout.sessionAspectRatio) {
-    if (Layout.canvasWidth > Layout.canvasHeight) {
-      Layout.sessionAspectRatio = ASPECT_RATIO.LANDSCAPE;
-      Layout.currentAspectUI = GAME.UI_LANDSCAPE;
-    } else {
-      Layout.sessionAspectRatio = ASPECT_RATIO.PORTRAIT;
-      Layout.currentAspectUI = GAME.UI_PORTRAIT;
-    }
-  }
+  Layout.canvasWidth = Math.round(document.documentElement.clientWidth / GAME.PIXEL_SCALE);
+  Layout.canvasHeight = Math.round(document.documentElement.clientHeight / GAME.PIXEL_SCALE);
 
   Layout.gameplayWidth = Layout.canvasWidth;
   Layout.gameplayHeight = Layout.canvasHeight;
   // Size field-of-play as a % of canvas size depending on level (`gameplayAreaToCanvasLateralRatio` comes from level data)
-  if (Layout.sessionAspectRatio === ASPECT_RATIO.LANDSCAPE) {
-    Layout.gameplayHeight *= Layout.gameplayAreaToCanvasLateralRatio;
-  } else {
-    Layout.gameplayWidth *= Layout.gameplayAreaToCanvasLateralRatio;
-  }
+  Layout.gameplayWidth *= Layout.gameplayAreaToCanvasLateralRatio;
   __("\tLayout.gameplayHeight: " + Layout.gameplayHeight, RCSI.FMT_LAYOUT);
   __("\tLayout.gameplayWidth: " + Layout.gameplayWidth, RCSI.FMT_LAYOUT);
 
@@ -122,55 +107,14 @@ Layout.update = function (_data) {
   Layout.gameplay_rect = Layout.getRectangle(RECTANGLE.GAMEAREA);
   Layout.background_rect = Layout.getRectangle(RECTANGLE.BACKGROUND);
   Layout.floating_rect = Layout.getRectangle(RECTANGLE.FLOATING);
-  __(
-    "\tLayout.canvas_rect: " + JSON.stringify(Layout.canvas_rect),
-    RCSI.FMT_LAYOUT
-  );
-  __(
-    "\tLayout.gameplay_rect: " + JSON.stringify(Layout.gameplay_rect),
-    RCSI.FMT_LAYOUT
-  );
-  __(
-    "\tLayout.background_rect: " + JSON.stringify(Layout.background_rect),
-    RCSI.FMT_LAYOUT
-  );
-  __(
-    "\tLayout.floating_rect: " + JSON.stringify(Layout.floating_rect),
-    RCSI.FMT_LAYOUT
-  );
+  __("\tLayout.canvas_rect: " + JSON.stringify(Layout.canvas_rect), RCSI.FMT_LAYOUT);
+  __("\tLayout.gameplay_rect: " + JSON.stringify(Layout.gameplay_rect), RCSI.FMT_LAYOUT);
+  __("\tLayout.background_rect: " + JSON.stringify(Layout.background_rect), RCSI.FMT_LAYOUT);
+  __("\tLayout.floating_rect: " + JSON.stringify(Layout.floating_rect), RCSI.FMT_LAYOUT);
 
-  // Convert % control area sizes to px
-  if (Game.deviceIsTouchEnabled) {
-    Layout.currentAspectUI.controller.height =
-      ((Layout.canvas_rect.bottom - Layout.canvas_rect.top) / 100) *
-      Layout.currentAspectUI.controller.touchHeightPercent;
-    Layout.currentAspectUI.controller.width =
-      ((Layout.canvas_rect.right - Layout.canvas_rect.left) / 100) *
-      Layout.currentAspectUI.controller.touchWidthPercent;
-  } else {
-    Layout.currentAspectUI.controller.height =
-      ((Layout.canvas_rect.bottom - Layout.canvas_rect.top) / 100) *
-      Layout.currentAspectUI.controller.mouseHeightPercent;
-    Layout.currentAspectUI.controller.width =
-      ((Layout.canvas_rect.right - Layout.canvas_rect.left) / 100) *
-      Layout.currentAspectUI.controller.mouseWidthPercent;
-  }
-
-  if (Layout.sessionAspectRatio === ASPECT_RATIO.LANDSCAPE) {
-    Layout.gameAreaOffsetLateral =
-      (Layout.canvasHeight - Layout.gameplayHeight) / 2;
-  } else {
-    Layout.gameAreaOffsetLateral =
-      (Layout.canvasWidth - Layout.gameplayWidth) / 2;
-  }
+  Layout.gameAreaOffsetLateral = (Layout.canvasWidth - Layout.gameplayWidth) / 2;
 
   Layout.setProportionalSizes();
-
-  Layout.soundToggleIcon_rect = Layout.getRectangle(RECTANGLE.SOUNDTOGGLEICON);
-
-  Layout.fullscreenToggleIcon_rect = Layout.getRectangle(
-    RECTANGLE.FULLSCREENICON
-  );
 
   Layout.mainTitle_rect = Layout.getRectangle(RECTANGLE.MAINTITLE);
 };
@@ -216,14 +160,8 @@ Layout.getRectangle = function (_type) {
       bottom: Layout.canvas_rect.bottom,
       left: Layout.canvas_rect.left,
     };
-    if (Layout.sessionAspectRatio === ASPECT_RATIO.LANDSCAPE) {
-      rect.top -= (Layout.canvasHeight / 2) * GAME.FLOATING_LATERAL_MULTIPLIER;
-      rect.bottom +=
-        (Layout.canvasHeight / 2) * GAME.FLOATING_LATERAL_MULTIPLIER;
-    } else {
-      rect.left -= (Layout.canvasWidth / 2) * GAME.FLOATING_LATERAL_MULTIPLIER;
-      rect.right += (Layout.canvasWidth / 2) * GAME.FLOATING_LATERAL_MULTIPLIER;
-    }
+    rect.left -= (Layout.canvasWidth / 2) * GAME.FLOATING_LATERAL_MULTIPLIER;
+    rect.right += (Layout.canvasWidth / 2) * GAME.FLOATING_LATERAL_MULTIPLIER;
     //
     //
   } else if (_type === RECTANGLE.GAMEAREA) {
@@ -233,26 +171,22 @@ Layout.getRectangle = function (_type) {
       top: 0,
       bottom: Layout.gameplayHeight,
     };
-    if (Layout.sessionAspectRatio === ASPECT_RATIO.LANDSCAPE) {
-      rect.right *= 2;
-    } else {
-      rect.bottom *= 2;
-    }
+    rect.bottom *= 2;
     //
     //
   } else if (_type === RECTANGLE.MAINTITLE) {
     w = Layout.canvasWidth - Layout.mainPaddingProportional * 2;
     h = w / (GAME.MAINTITLE_WIDTH_PX / GAME.MAINTITLE_HEIGHT_PX);
-    w *= Layout.currentAspectUI.mainTitle.sizeRatio;
-    h *= Layout.currentAspectUI.mainTitle.sizeRatio;
+    w *= UI_PORTRAIT.mainTitle.sizeRatio;
+    h *= UI_PORTRAIT.mainTitle.sizeRatio;
     pos = Layout.getAlignedPos(
-      Layout.currentAspectUI.mainTitle.alignH,
-      Layout.currentAspectUI.mainTitle.alignV,
+      UI_PORTRAIT.mainTitle.alignH,
+      UI_PORTRAIT.mainTitle.alignV,
       w,
       h,
       0,
       //0
-      Layout.currentAspectUI.mainTitle.offsetByCharsV * Text.drawnCharHeight
+      UI_PORTRAIT.mainTitle.offsetByCharsV * Text.drawnCharHeight,
     );
     rect = {
       left: pos.x,
@@ -264,10 +198,10 @@ Layout.getRectangle = function (_type) {
     //
   } else if (_type === RECTANGLE.SOUNDTOGGLEICON) {
     pos = Layout.getAlignedPos(
-      Layout.currentAspectUI.soundToggle.alignH,
-      Layout.currentAspectUI.soundToggle.alignV,
+      UI_PORTRAIT.soundToggle.alignH,
+      UI_PORTRAIT.soundToggle.alignV,
       Text.drawnCharWidth,
-      Text.drawnCharHeight
+      Text.drawnCharHeight,
     );
     rect = {
       left: pos.x - Layout.hitAreaPaddingProportional,
@@ -279,10 +213,10 @@ Layout.getRectangle = function (_type) {
     //
   } else if (_type === RECTANGLE.FULLSCREENICON) {
     pos = Layout.getAlignedPos(
-      Layout.currentAspectUI.fullscreenToggle.alignH,
-      Layout.currentAspectUI.fullscreenToggle.alignV,
+      UI_PORTRAIT.fullscreenToggle.alignH,
+      UI_PORTRAIT.fullscreenToggle.alignV,
       Text.drawnCharWidth,
-      Text.drawnCharHeight
+      Text.drawnCharHeight,
     );
     rect = {
       left: pos.x - Layout.hitAreaPaddingProportional,
@@ -310,14 +244,7 @@ Layout.getRectangle = function (_type) {
  *
  * @returns {object}  x/y coordinates for the item
  */
-Layout.getAlignedPos = function (
-  _alignmentH,
-  _alignmentV,
-  _itemWidth,
-  _itemHeight,
-  _offsetH,
-  _offsetV
-) {
+Layout.getAlignedPos = function (_alignmentH, _alignmentV, _itemWidth, _itemHeight, _offsetH, _offsetV) {
   var x,
     y,
     padding = Layout.mainPaddingProportional,
@@ -331,10 +258,7 @@ Layout.getAlignedPos = function (
   } else if (_alignmentH === HORIZ_ALIGN.CENTER) {
     x = Layout.canvas_rect.right / 2 - _itemWidth / 2;
   } else {
-    __(
-      "Layout::getAlignedPos:: _alignmentH NOT RECOGNISED: " + _alignmentH,
-      RCSI.FMT_ERROR
-    );
+    __("Layout::getAlignedPos:: _alignmentH NOT RECOGNISED: " + _alignmentH, RCSI.FMT_ERROR);
   }
 
   if (_alignmentV === VERT_ALIGN.TOP) {
@@ -344,10 +268,7 @@ Layout.getAlignedPos = function (
   } else if (_alignmentV === VERT_ALIGN.CENTER) {
     y = Layout.canvas_rect.bottom / 2 - _itemHeight / 2;
   } else {
-    __(
-      "Layout::getAlignedPos:: _alignmentV NOT RECOGNISED: " + _alignmentH,
-      RCSI.FMT_ERROR
-    );
+    __("Layout::getAlignedPos:: _alignmentV NOT RECOGNISED: " + _alignmentH, RCSI.FMT_ERROR);
   }
   x += offsetH;
   y += offsetV;

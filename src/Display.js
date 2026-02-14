@@ -11,15 +11,11 @@
  */
 
 import { RCSI } from "./RCSI/CONST.js";
-import { ASPECT_RATIO, OBSTACLE_SUBTYPE, OBSTACLE_TYPE } from "./RCSI/ENUM.js";
+import { OBSTACLE_SUBTYPE, OBSTACLE_TYPE } from "./RCSI/ENUM.js";
 import * as GAME from "./RCSI/GAME.js";
 import * as IMAGE_IDS from "./RCSI/IMAGE_IDS.js";
-import * as STRING from "./RCSI/STRING.js";
 
-import { Controller } from "./Controller.js";
-import { FullscreenManager } from "./FullscreenManager.js";
 import { Game } from "./Game.js";
-import { HealthMeter } from "./HealthMeter.js";
 import { ImageManager } from "./ImageManager.js";
 import { InternalTimer } from "./InternalTimer.js";
 import { Layout } from "./Layout.js";
@@ -31,7 +27,20 @@ import { Text } from "./Text.js";
 
 import { __, hexOpacityToRGBA, modulo } from "./utils.js";
 
-class Display {}
+class Display {
+  /** @type {HTMLCanvasElement} */ static canvas;
+  /** @type {CanvasRenderingContext2D | null} */ static ctx;
+  /** @type {CanvasRenderingContext2D | null} */ static ctxDefault;
+  /** @type {Object} */ static titleImage;
+  /** @type {boolean} */ static levelIsDark;
+  /** @type {number} */ static textColor;
+  /** @type {number} */ static textColorHighlight;
+  /** @type {number} */ static bgFadeAlpha;
+  /** @type {number} */ static shadowColor;
+  /** @type {String} */ static overlayBgColor;
+  /** @type {number} */ static bgColor;
+  /** @type {String} */ static instruct_text;
+}
 
 /**
  * @function init
@@ -72,8 +81,7 @@ Display.setupForLevel = function () {
   Display.textColor = Game.curLevelData.textColor;
   Display.textColorHighlight = Game.curLevelData.textColorHighlight;
   Display.bgFadeAlpha = Game.curLevelData.bgFadeAlpha;
-  Display.shadowColor =
-    Game.curLevelData.textColorShadow || GAME.TEXT_DEFAULT_SHADOW_COLOR;
+  Display.shadowColor = Game.curLevelData.textColorShadow || GAME.TEXT_DEFAULT_SHADOW_COLOR;
   if (Game.isOnFrontPage) {
     Display.instruct_text = Game.curLevelData.instruct_text;
   }
@@ -109,10 +117,7 @@ Display.updateColors = function (_data) {
  */
 Display.setBackgroundColor = function (_hexColor) {
   Display.bgColor = _hexColor;
-  Display.overlayBgColor = hexOpacityToRGBA(
-    _hexColor,
-    GAME.TEXT_BACKGROUND_FILL_ALPHA,
-  );
+  Display.overlayBgColor = hexOpacityToRGBA(_hexColor, GAME.TEXT_BACKGROUND_FILL_ALPHA);
   document.body.style.backgroundColor = Game.curLevelData.bgColor;
 };
 
@@ -125,18 +130,10 @@ Display.setBackgroundColor = function (_hexColor) {
  * Most of the work is done by calling similar methods in other classes.
  */
 Display.updateLayout = function () {
-  if (Layout.sessionAspectRatio === ASPECT_RATIO.LANDSCAPE) {
-    Display.isLandscapeAspect = true;
-  } else {
-    Display.isLandscapeAspect = false;
-  }
   Display.canvas.width = Layout.canvasWidth;
   Display.canvas.height = Layout.canvasHeight;
 
   Player.updateSizes();
-  HealthMeter.updateSizes();
-  Controller.updateSizes();
-  IntroObstacles.updateSizes();
   Shape.updateSizes();
 };
 
@@ -163,7 +160,10 @@ Display.createCanvas = function () {
     // browsers TODO Why??
     //desynchronized: true,
   });
-  Display.ctx.imageSmoothingEnabled = false;
+
+  if (Display.ctx) {
+    Display.ctx.imageSmoothingEnabled = false;
+  }
 
   Display.ctxDefault = Display.ctx;
 
@@ -185,12 +185,6 @@ Display.createCanvas = function () {
  * - Decides what to show/hide depending on the current state of the game
  */
 Display.update = function () {
-  var t1, t2;
-
-  if (Game.doPerfLog) {
-    t1 = performance.now();
-  }
-
   Display.drawBackground();
   Display.drawBackgroundObstacles();
   if (!Game.isOnFrontPage) {
@@ -206,24 +200,11 @@ Display.update = function () {
   Player.draw();
 
   if (!Game.isOnFrontPage) {
-    if (Game.doPerfLog) {
-      t2 = performance.now();
-    }
     Display.drawFloatingObstacles();
   }
 
-  if (!Game.isInGameOver) {
-    Controller.draw();
-  }
-
-  HealthMeter.draw();
-
   if (!Game.isOnFrontPage) {
-    if (!Game.timeIsLow) {
-      Text.drawTimeRemaining();
-    } else {
-      Text.drawTimeRemaining({ timeIsLow: true });
-    }
+    Text.drawTimeRemaining();
     Text.drawCollected();
     Text.drawLevel();
   }
@@ -232,34 +213,8 @@ Display.update = function () {
     OverlayText.draw();
   }
 
-  Display.drawSoundToggle();
-  Display.drawFullscreenToggle();
-
   if (!Game.isOnFrontPage && Game.isInLevelIntro) {
     Text.drawVersionInfo({ isInLevelIntro: true, color: Display.textColor });
-  }
-
-  //if (Game.textIsFading) {
-  //  Game.introTextFadeAlpha += Game.introTextFadeStepSize;
-  //  if (Game.introTextFadeStepSize > 0) {
-  //    // Fading in
-  //    if (Game.introTextFadeAlpha > 1 - Game.introTextFadeStepSize) {
-  //      Game.introTextFadeAlpha = 1;
-  //    }
-  //  } else {
-  //    // Fading out
-  //    if (Game.introTextFadeAlpha < Game.introTextFadeStepSize) {
-  //      Game.introTextFadeAlpha = 0;
-  //    }
-  //  }
-  //}
-
-  if (Game.showFps) {
-    Text.drawFps();
-  }
-
-  if (Game.doPerfLog) {
-    __("Display.update() " + (performance.now() - t1), RCSI.FMT_PERFORMANCE);
   }
 };
 
@@ -285,44 +240,6 @@ Display.drawTitle = function () {
     Layout.mainTitle_rect.bottom - Layout.mainTitle_rect.top,
   );
   Display.ctx.filter = "none";
-};
-
-/**
- * @function drawFullscreenToggle
- * @static
- *
- * @description
- * ##### The enter/exit fullscreen toggle icon
- */
-Display.drawFullscreenToggle = function () {
-  Text.draw({
-    text: STRING.FULLSCREEN,
-    color: FullscreenManager.isFullscreen
-      ? Display.textColorHighlight
-      : Display.textColor,
-    drawBackground: true,
-    alignH: Layout.currentAspectUI.fullscreenToggle.alignH,
-    alignV: Layout.currentAspectUI.fullscreenToggle.alignV,
-  });
-};
-
-/**
- * @function drawSoundToggle
- * @static
- *
- * @description
- * ##### The sound on/off toggle icon
- */
-Display.drawSoundToggle = function () {
-  Text.draw({
-    text: Game.soundIsEnabled ? STRING.SOUND_ENABLED : STRING.SOUND_DISABLED,
-    color: Game.soundIsEnabled ? Display.textColorHighlight : Display.textColor,
-    drawBackground: true,
-    alignH: Layout.currentAspectUI.soundToggle.alignH,
-    alignV: Layout.currentAspectUI.soundToggle.alignV,
-    offsetV:
-      Layout.currentAspectUI.soundToggle.offsetByCharsV * Text.drawnCharHeight,
-  });
 };
 
 /**
@@ -423,11 +340,7 @@ Display.drawForegroundObstacles = function () {
   var i, obstacle;
   for (i = 0; i < ObstacleManager.obstacles.length; i++) {
     obstacle = ObstacleManager.obstacles[i];
-    if (
-      !obstacle.isDeleted &&
-      (obstacle.type === OBSTACLE_TYPE.COLLECT ||
-        obstacle.type === OBSTACLE_TYPE.AVOID)
-    ) {
+    if (!obstacle.isDeleted && (obstacle.type === OBSTACLE_TYPE.COLLECT || obstacle.type === OBSTACLE_TYPE.AVOID)) {
       Display.drawObstacle(obstacle);
     }
   }
@@ -476,19 +389,9 @@ Display.drawObstacle = function (_obstacle) {
   } else if (_obstacle.type === OBSTACLE_TYPE.FLOATING) {
     parallaxMultiplier = GAME.FLOATING_LATERAL_MULTIPLIER;
   }
-  if (_obstacle.type !== OBSTACLE_TYPE.LEVELINTRO) {
-    lateralOffset =
-      (Controller.lateralOffset + Layout.gameAreaOffsetLateral) *
-      parallaxMultiplier;
-  }
 
-  if (Display.isLandscapeAspect) {
-    displayX = _obstacle.pos.x;
-    displayY = _obstacle.pos.y + lateralOffset;
-  } else {
-    displayX = _obstacle.pos.x + lateralOffset;
-    displayY = _obstacle.pos.y;
-  }
+  displayX = _obstacle.pos.x + lateralOffset;
+  displayY = _obstacle.pos.y;
 
   //if (_obstacle.type === OBSTACLE_TYPE.AVOID) {
   //  // AVOIDABLE

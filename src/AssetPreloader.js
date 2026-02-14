@@ -11,27 +11,32 @@
  * - Images
  * - Sounds
  * - JSON
- * 
+ *
  * Broadcasts events during the process so that other classes can keep track:
  * - `assetsloadupdate` - A single item has just loaded, including a percentage of items loaded so far
  * - `assetsloaded` - All items have finished loading
  */
-
-
 
 import { RCSI } from "./RCSI/CONST.js";
 
 import { __, manualEvent } from "./utils.js";
 
 import { ImageManager } from "./ImageManager.js";
-import { SoundManagerHowler } from "./SoundManagerHowler.js";
 import { JsonManager } from "./JsonManager.js";
 
-class AssetPreloader {}
+class AssetPreloader {
+  /** @type {Array} */ static sound_ar;
+  /** @type {Array} */ static image_ar;
+  /** @type {Array} */ static json_ar;
+
+  /** @type {number} */ static imagesDone;
+  /** @type {number} */ static jsonsDone;
+  /** @type {number} */ static totalItems;
+}
 
 /**
  * @function init
- * @static 
+ * @static
  *
  * @description
  * ##### Initialise the preloader
@@ -45,26 +50,22 @@ AssetPreloader.init = function () {
   AssetPreloader.json_ar = RCSI.JSONFILES_DATA.JSON_AR;
 
   // Use respective managers to preload their assets
-  SoundManagerHowler.init({ sound_ar: AssetPreloader.sound_ar });
   ImageManager.init({ image_ar: AssetPreloader.image_ar });
   JsonManager.init({ json_ar: AssetPreloader.json_ar });
 
   // set counters and watch preload events
-  AssetPreloader.totalItems =
-    AssetPreloader.sound_ar.length +
-    AssetPreloader.image_ar.length +
-    AssetPreloader.json_ar.length;
+  AssetPreloader.totalItems = AssetPreloader.image_ar.length + AssetPreloader.json_ar.length;
 
-  AssetPreloader.soundsDone = 0;
   AssetPreloader.imagesDone = 0;
   AssetPreloader.jsonsDone = 0;
 
+  // @ts-ignore
   document.addEventListener("itempreload", AssetPreloader.onItemDone);
 };
 
 /**
  * @function onItemDone
- * @static 
+ * @static
  *
  * @description
  * ##### An item has finished loading
@@ -73,27 +74,22 @@ AssetPreloader.init = function () {
  * - Broadcast the details in an `assetsloadupdate` event to be used eg by `LoadingIndicator`
  * - Call `onComplete()` when all done
  *
- * @param {Event} event
- * @param {object} event.detail
- * @param {string} [event.detail.audioItemsLoaded] Count of audio items loaded so far
- * @param {string} [event.detail.imageItemsLoaded] Count of image items loaded so far
- * @param {string} [event.detail.jsonItemsLoaded] Count of JSON items loaded so far
+ * @param {CustomEvent} event
+ * @property {object} event.detail
+ * @property {string} [event.detail.audioItemsLoaded] Count of audio items loaded so far
+ * @property {string} [event.detail.imageItemsLoaded] Count of image items loaded so far
+ * @property {string} [event.detail.jsonItemsLoaded] Count of JSON items loaded so far
  */
 AssetPreloader.onItemDone = function (event) {
   var totalItemsDone, percentDone;
 
-  if (event.detail.audioItemsLoaded) {
-    AssetPreloader.soundsDone = event.detail.audioItemsLoaded;
-  } else if (event.detail.imageItemsLoaded) {
+  if (event.detail.imageItemsLoaded) {
     AssetPreloader.imagesDone = event.detail.imageItemsLoaded;
   } else if (event.detail.jsonItemsLoaded) {
     AssetPreloader.jsonsDone = event.detail.jsonItemsLoaded;
   }
 
-  totalItemsDone =
-    AssetPreloader.soundsDone +
-    AssetPreloader.imagesDone +
-    AssetPreloader.jsonsDone;
+  totalItemsDone = AssetPreloader.imagesDone + AssetPreloader.jsonsDone;
 
   percentDone = (totalItemsDone / AssetPreloader.totalItems) * 100;
   //__("percentDone: " + percentDone, RCSI.LOG_FORMAT_INFO);
@@ -106,7 +102,7 @@ AssetPreloader.onItemDone = function (event) {
 
 /**
  * @function onComplete
- * @static 
+ * @static
  *
  * @description
  * ##### Everything has finished preloading

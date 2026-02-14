@@ -62,15 +62,6 @@ export const ADDED_LAYER = {
 * @readonly
 * @enum {string}
 */
-export const ASPECT_RATIO = {
-  LANDSCAPE: "aspectRatioLandscape",
-  PORTRAIT: "aspectRatioPortrait",
-};
-
-/** 
-* @readonly
-* @enum {string}
-*/
 export const RECTANGLE = {
   CANVAS: "rectangleCanvas",
   GAMEAREA: "rectangleGameArea",

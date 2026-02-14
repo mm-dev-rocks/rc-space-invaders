@@ -15,45 +15,72 @@ else
 endif
 badd +9 README.md
 badd +5 build-watch.sh
-badd +198 src/Game.js
-badd +105 ./src/AssetPreloader.js
+badd +29 src/Game.js
+badd +77 ./src/AssetPreloader.js
 badd +231 ./src/BitmapText.js
-badd +24 ./src/Controller.js
-badd +98 ./src/Display.js
-badd +186 ./src/FullscreenManager.js
-badd +97 ./src/HealthMeter.js
+badd +281 ./src/Display.js
 badd +99 ./src/ImageManager.js
 badd +79 ./src/InternalTimer.js
 badd +57 ./src/JsonManager.js
-badd +349 ./src/Layout.js
-badd +15 ./src/LevelTransition.js
-badd +17 ./src/LoadingIndicator.js
-badd +216 ./src/ObstacleManager.js
-badd +161 ./src/OverlayText.js
-badd +245 ./src/Player.js
+badd +254 ./src/Layout.js
+badd +70 ./src/LoadingIndicator.js
+badd +740 ./src/ObstacleManager.js
+badd +191 ./src/OverlayText.js
+badd +76 ./src/Player.js
 badd +8 ./src/RCSI/CLASSNAMES.js
 badd +25 ./src/RCSI/CONST.js
 badd +14 ./src/RCSI/EL_IDS.js
-badd +7 ./src/RCSI/ENUM.js
-badd +427 ./src/RCSI/GAME.js
+badd +60 ./src/RCSI/ENUM.js
+badd +340 ./src/RCSI/GAME.js
 badd +1 ./src/RCSI/GRADIENT.js
 badd +7 ./src/RCSI/IMAGE_DATA.js
 badd +7 ./src/RCSI/IMAGE_IDS.js
 badd +1 ./src/RCSI/JSONFILES_DATA.js
 badd +1 ./src/RCSI/JSONFILE_IDS.js
-badd +1 ./src/RCSI/LEVELS.js
+badd +15 ./src/RCSI/LEVELS.js
 badd +7 ./src/RCSI/SOUND_DATA.js
 badd +7 ./src/RCSI/SOUND_IDS.js
 badd +7 ./src/RCSI/STRING.js
 badd +7 ./src/RCSI/TIMINGS.js
 badd +14 ./src/Shape.js
-badd +10 ./src/SoundManagerHowler.js
-badd +16 ./src/Text.js
-badd +52 ./src/utils.js
-badd +65 ./src/RCSI/LEVEL_DATA/BASIC.js
-badd +22 ./src/RCSI/LEVEL_DATA/INTRO.js
-badd +34 ./src/Timers.js
-badd +1 ./src/main.js
+badd +272 ./src/Text.js
+badd +519 ./src/utils.js
+badd +42 ./src/RCSI/LEVEL_DATA/BASIC.js
+badd +34 ./src/RCSI/LEVEL_DATA/INTRO.js
+badd +46 ./src/Timers.js
+badd +38 ./src/main.js
+badd +0 ./src/AddedLayer.js
+badd +0 ./src/Controller.js
+badd +0 ./src/FullscreenManager.js
+badd +0 ./src/HealthMeter.js
+badd +0 ./src/IntroObstacles.js
+badd +0 ./src/LevelTransition.js
+badd +0 ./src/PipeWalls.js
+badd +0 ./src/RCSI/LEVEL_DATA/ALIEN.js
+badd +0 ./src/RCSI/LEVEL_DATA/BLRDS.js
+badd +0 ./src/RCSI/LEVEL_DATA/CHPLN.js
+badd +0 ./src/RCSI/LEVEL_DATA/DENSE.js
+badd +0 ./src/RCSI/LEVEL_DATA/GARDN.js
+badd +0 ./src/RCSI/LEVEL_DATA/GNSMK.js
+badd +0 ./src/RCSI/LEVEL_DATA/JUNGL.js
+badd +0 ./src/RCSI/LEVEL_DATA/LMOLV.js
+badd +0 ./src/RCSI/LEVEL_DATA/MAUVE.js
+badd +0 ./src/RCSI/LEVEL_DATA/MERNG.js
+badd +0 ./src/RCSI/LEVEL_DATA/MULT1.js
+badd +0 ./src/RCSI/LEVEL_DATA/MULT2.js
+badd +0 ./src/RCSI/LEVEL_DATA/MUSTD.js
+badd +0 ./src/RCSI/LEVEL_DATA/NTPOR.js
+badd +0 ./src/RCSI/LEVEL_DATA/OPRTN.js
+badd +0 ./src/RCSI/LEVEL_DATA/PEKMN.js
+badd +0 ./src/RCSI/LEVEL_DATA/REDDD.js
+badd +0 ./src/RCSI/LEVEL_DATA/RRRED.js
+badd +0 ./src/RCSI/LEVEL_DATA/STRRY.js
+badd +0 ./src/RCSI/LEVEL_DATA/SWARM.js
+badd +0 ./src/RCSI/LEVEL_DATA/TOOEZ.js
+badd +0 ./src/RCSI/LEVEL_DATA/WISTA.js
+badd +0 ./src/SoundManagerHowler.js
+badd +0 ./src/howler.core.min.js
+badd +0 ./src/howler.min.js
 argglobal
 %argdel
 $argadd README.md
@@ -123,14 +150,14 @@ $argadd ./src/howler.core.min.js
 $argadd ./src/howler.min.js
 $argadd ./src/main.js
 $argadd ./src/utils.js
-edit src/Game.js
+edit ./src/AssetPreloader.js
 argglobal
 67argu
-if bufexists(fnamemodify("src/Game.js", ":p")) | buffer src/Game.js | else | edit src/Game.js | endif
+if bufexists(fnamemodify("./src/AssetPreloader.js", ":p")) | buffer ./src/AssetPreloader.js | else | edit ./src/AssetPreloader.js | endif
 if &buftype ==# 'terminal'
-  silent file src/Game.js
+  silent file ./src/AssetPreloader.js
 endif
-balt build-watch.sh
+balt src/Game.js
 setlocal foldmethod=manual
 setlocal foldexpr=0
 setlocal foldmarker={{{,}}}
@@ -141,11 +168,11 @@ setlocal foldnestmax=20
 setlocal nofoldenable
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 215 - ((21 * winheight(0) + 15) / 30)
+let s:l = 77 - ((21 * winheight(0) + 15) / 30)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 215
+keepjumps 77
 normal! 0
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'

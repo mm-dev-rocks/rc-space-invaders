@@ -15,7 +15,6 @@
  *
  */
 
-import { RCSI } from "./RCSI/CONST.js";
 import * as JSONFILE_IDS from "./RCSI/JSONFILE_IDS.js";
 
 import { AssetPreloader } from "./AssetPreloader.js";
@@ -23,7 +22,7 @@ import { Game } from "./Game.js";
 import { LoadingIndicator } from "./LoadingIndicator.js";
 import { JsonManager } from "./JsonManager.js";
 
-import { __, importHashParamsTo } from "./utils.js";
+import { __ } from "./utils.js";
 
 /**
  * @function createApp
@@ -34,13 +33,6 @@ import { __, importHashParamsTo } from "./utils.js";
  * - Start the asset preloader and listen for an event telling us when it's finished
  */
 var createApp = function () {
-  window.RcSpaceInvaders.hashParams = {};
-  importHashParamsTo({
-    recipient_ob: window.RcSpaceInvaders.hashParams,
-    filter_ar: RCSI.IMPORTABLE_HASH_PARAMS,
-    forceLowerCase: true,
-  });
-
   AssetPreloader.init();
   LoadingIndicator.init();
 
@@ -56,10 +48,8 @@ var createApp = function () {
  * - Initialise the game
  */
 var onAssetsLoaded = function () {
-  window.RcSpaceInvaders.versionInfo = JSON.parse(
-    JsonManager.getJsonByID(JSONFILE_IDS.JSON_VERSIONINFO)
-  );
-  __("versionInfo: " + JSON.stringify(window.RcSpaceInvaders.versionInfo));
+  window["RcSpaceInvaders"].versionInfo = JSON.parse(JsonManager.getJsonByID(JSONFILE_IDS.JSON_VERSIONINFO));
+  __("versionInfo: " + JSON.stringify(window["RcSpaceInvaders"].versionInfo));
   Game.init();
 };
 

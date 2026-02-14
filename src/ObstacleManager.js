@@ -32,11 +32,10 @@ import {
 } from "./utils.js";
 
 import { RCSI } from "./RCSI/CONST.js";
-import { ASPECT_RATIO, OBSTACLE_SUBTYPE, OBSTACLE_TYPE } from "./RCSI/ENUM.js";
+import { OBSTACLE_SUBTYPE, OBSTACLE_TYPE } from "./RCSI/ENUM.js";
 import * as GAME from "./RCSI/GAME.js";
 import * as TIMINGS from "./RCSI/TIMINGS.js";
 
-import { Controller } from "./Controller.js";
 import { Player } from "./Player.js";
 import { Game } from "./Game.js";
 import { InternalTimer } from "./InternalTimer.js";
@@ -136,10 +135,8 @@ ObstacleManager.addGroup = function (_data) {
  * @return {object} A normalised vector
  */
 ObstacleManager.getRandomVector = function (_degreesMin, _degreesMax) {
-  if (Layout.sessionAspectRatio === ASPECT_RATIO.PORTRAIT) {
     _degreesMin += 90;
     _degreesMax += 90;
-  }
 
   return degreesToVector(randomIntBetween(_degreesMin, _degreesMax));
 };
@@ -245,16 +242,6 @@ ObstacleManager.spawn = function (_data) {
     );
   } else {
     // AVOID / COLLECT
-    if (Layout.sessionAspectRatio === ASPECT_RATIO.LANDSCAPE) {
-      x = randomFloatBetween(
-        bounds_rect.right + obstacle.radius * 2,
-        bounds_rect.right * 2 - obstacle.radius * 2
-      );
-      y = randomFloatBetween(
-        bounds_rect.top + obstacle.radius,
-        bounds_rect.bottom - obstacle.radius
-      );
-    } else {
       x = randomFloatBetween(
         bounds_rect.left + obstacle.radius,
         bounds_rect.right - obstacle.radius
@@ -263,7 +250,6 @@ ObstacleManager.spawn = function (_data) {
         bounds_rect.bottom + obstacle.radius * 2,
         bounds_rect.bottom * 2 + obstacle.radius * 2
       );
-    }
 
     if (_data.type === OBSTACLE_TYPE.AVOID) {
       // AVOIDABLE
@@ -411,7 +397,7 @@ ObstacleManager.wrapAroundRectangle = function (_obstacle, _rect) {
   wrapHeight = _rect.bottom - _rect.top + diameter * 2;
 
   // Handle left/right edges
-  if (wrapBothAspects || Layout.sessionAspectRatio === ASPECT_RATIO.LANDSCAPE) {
+  if (wrapBothAspects) {
     if (
       _obstacle.pos.x + diameter < _rect.left &&
       (_obstacle.vector.x < 0 || ignoreDirectionOfTravel)
@@ -428,7 +414,6 @@ ObstacleManager.wrapAroundRectangle = function (_obstacle, _rect) {
   }
 
   // Handle top/bottom edges
-  if (wrapBothAspects || Layout.sessionAspectRatio === ASPECT_RATIO.PORTRAIT) {
     if (
       _obstacle.pos.y + diameter < _rect.top &&
       (_obstacle.vector.y < 0 || ignoreDirectionOfTravel)
@@ -442,7 +427,6 @@ ObstacleManager.wrapAroundRectangle = function (_obstacle, _rect) {
       _obstacle.pos.y -= wrapHeight;
       hasWrapped = true;
     }
-  }
 
   if (hasWrapped) {
     // if mid-explosion when wrap happens, cancel explosion
@@ -744,17 +728,6 @@ ObstacleManager.bounceOffPlayer = function (_obstacle) {
 ObstacleManager.bounceInRectangle = function (_obstacle, _rect) {
   var hasBounced = false;
 
-  if (Layout.sessionAspectRatio === ASPECT_RATIO.LANDSCAPE) {
-    if (_obstacle.pos.y < _rect.top + _obstacle.radius) {
-      _obstacle.vector.y *= -1;
-      _obstacle.pos.y = _rect.top + _obstacle.radius;
-      hasBounced = true;
-    } else if (_obstacle.pos.y > _rect.bottom - _obstacle.radius) {
-      _obstacle.vector.y *= -1;
-      _obstacle.pos.y = _rect.bottom - _obstacle.radius;
-      hasBounced = true;
-    }
-  } else {
     if (_obstacle.pos.x < _rect.left + _obstacle.radius) {
       _obstacle.vector.x *= -1;
       _obstacle.pos.x = _rect.left + _obstacle.radius;
@@ -764,7 +737,6 @@ ObstacleManager.bounceInRectangle = function (_obstacle, _rect) {
       _obstacle.pos.x = _rect.right - _obstacle.radius;
       hasBounced = true;
     }
-  }
   if (hasBounced) {
     _obstacle.rotation = vectorToDegrees(_obstacle.vector);
   }
@@ -954,11 +926,6 @@ ObstacleManager.update = function (_frames) {
     }
 
     if (!obstacle.isDeleted) {
-      if (Layout.sessionAspectRatio === ASPECT_RATIO.LANDSCAPE) {
-        obstacle.pos.x -= Controller.speedOffset * _frames;
-      } else {
-        obstacle.pos.y -= Controller.speedOffset * _frames;
-      }
 
       obstacle.pos.x += obstacle.vector.x * obstacle.speed * _frames;
       obstacle.pos.y += obstacle.vector.y * obstacle.speed * _frames;

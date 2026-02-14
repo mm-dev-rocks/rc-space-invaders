@@ -337,45 +337,6 @@ export const OVERLAY_TEXT_ALIGN_H = HORIZ_ALIGN.CENTER;
 export const OVERLAY_TEXT_ALIGN_V = VERT_ALIGN.CENTER;
 export const LEVEL_INTRO_CIRCLE_RADIUS_PX = 30;
 
-/*
- *
- *
- * Controller
- *
- */
-
-// active padding is invisible border around controller where activity is detected
-// Lower values (NOT BELOW 1, 3 > works best): More precise / instant / can feel choppy with big movements
-// Higher values: Less instantaneous / more of a glide / smoother
-export const CONTROLLER_SLIPPERINESS = 15;
-export const CONTROLLER_SPEED_DAMP = 24;
-
-export const CONTROLLER_ACTIVE_PADDING_PX = 0;
-export const CONTROLLER_CORNER_RADIUS = 20;
-export const CONTROLLER_ARROW_WIDTH = 60;
-export const CONTROLLER_SPEED_ARROW_MULTIPLIER = 0.5;
-// As speed increases, controller colour fades up
-export const CONTROLLER_SPEED_ALPHA_MULTIPLIER = 0.2;
-export const CONTROLLER_STICK_COLOR_INACTIVE = "#888888";
-export const CONTROLLER_STICK_COLOR_ACTIVE_BACKWARDS = "#880000";
-export const CONTROLLER_STICK_COLOR_ACTIVE_FORWARDS = "#008800";
-export const CONTROLLER_STICK_THICKNESS = 18;
-export const CONTROLLER_OUTLINE_THICKNESS = 12;
-export const CONTROLLER_STICK_LINECAP = "square";
-// midpos of control stick can be offset based on fractions eg 0.5 is the centre
-// Anything above zero for `CONTROLLER_STICK_MIDPOS_SPEED` will allow backwards
-// movement
-// Negative values mean stopping is impossible (lower = faster minimum speed)
-export const CONTROLLER_STICK_MIDPOS_SPEED = -0.02;
-export const CONTROLLER_STICK_MIDPOS_LATERAL = 0.5;
-
-//export const CONTROLAREA_OVERLAY_COLOR = "rgba(128, 128, 128, 0.05)";
-export const CONTROLAREA_OVERLAY_COLOR = "rgba(128, 128, 128, 0.13";
-//export const CONTROLAREA_OVERLAY_COLOR = "rgba(128, 128, 128, 0.175)";
-
-export const CONTROLAREA_OVERLAY_SOLID_COLOR = "#888888";
-export const CONTROLAREA_OVERLAY_ALPHA_MIN = 0.001;
-export const CONTROLAREA_OVERLAY_ALPHA_MAX = 0.3;
 
 /*
  *
