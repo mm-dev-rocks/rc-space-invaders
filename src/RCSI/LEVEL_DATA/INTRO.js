@@ -1,4 +1,4 @@
-import { HORIZ_ALIGN, OBSTACLE_TYPE, VERT_ALIGN } from "./../ENUM.js";
+import { HORIZ_ALIGN, THING_TYPE, VERT_ALIGN } from "./../ENUM.js";
 
 // first 'level' is actually the intro/instructions screen
 export const INTRO = {
@@ -11,9 +11,9 @@ export const INTRO = {
   player: {
     color: "#ffffff",
   },
-  obstacles: [
+  things: [
     {
-      type: OBSTACLE_TYPE.BACKGROUND,
+      type: THING_TYPE.BACKGROUND,
       total: 500,
       color_ar: ["#bbbbbb", "#666666", "#999999", "#ffffff"],
       radiusRange: [1, 3],

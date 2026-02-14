@@ -24,23 +24,22 @@ export const GAMEOVER_REASON = {
  * @readonly
  * @enum {string}
  */
-export const OBSTACLE_TYPE = {
-  COLLECT: "obstacleTypeCollect",
-  AVOID: "obstacleTypeAvoid",
-  BACKGROUND: "obstacleTypeBackground",
-  FLOATING: "obstacleTypeFloating",
-  LEVELINTRO: "obstacleTypeLevelIntro",
+export const THING_TYPE = {
+  COLLECT: "thingTypeCollect",
+  ALIEN: "thingTypeAlien",
+  BACKGROUND: "thingTypeBackground",
+  LEVELINTRO: "thingTypeLevelIntro",
 };
 
 /**
  * @readonly
  * @enum {string}
  */
-export const OBSTACLE_SUBTYPE = {
-  FLOWER: "obstacleSubtypeFlower",
-  SQUARCLE: "obstacleSubtypeSquarcle",
-  STAR: "obstacleSubtypeStar",
-  SKEWED_CIRCLE: "obstacleSubtypeSkewedCircle",
+export const THING_SUBTYPE = {
+  FLOWER: "thingSubtypeFlower",
+  SQUARCLE: "thingSubtypeSquarcle",
+  STAR: "thingSubtypeStar",
+  SKEWED_CIRCLE: "thingSubtypeSkewedCircle",
 };
 
 /**
@@ -110,7 +109,7 @@ export const HORIZ_ALIGN = {
  */
 export const TIMER_ID = {
   LEVELOUTRO_END: "timerIdLevelOutroEnd",
-  LEVELINTRO_ADD_OBSTACLES: "timerIdLevelIntroAddObstacles",
+  LEVELINTRO_ADD_THINGS: "timerIdLevelIntroAddThings",
   TEXT_FADEOUT_START: "timerIdTextFadeoutStart",
   TEXT_FADEIN_START: "timerIdTextFadeinStart",
   LEVELINTRO_END: "timerIdLevelIntroEnd",
@@ -142,4 +141,5 @@ export const KEY_ACTIONS = {
   MOVE_LEFT: "keyActionMoveLeft",
   MOVE_RIGHT: "keyActionMoveRight",
   FIRE: "keyActionFire",
+  START_GAME: "keyActionStartGame",
 };

@@ -151,8 +151,8 @@ export const DAMAGED_SECS_TOTAL = 0.8;
 
 // size of throb
 export const PLAYEREATS_RADIUS_GROWTH = 0.1;
-export const EATEN_OBSTACLE_INITIAL_GROWTH = 1.33;
-export const EATEN_OBSTACLE_ALPHA = 0.33;
+export const EATEN_THING_INITIAL_GROWTH = 1.33;
+export const EATEN_THING_ALPHA = 0.33;
 
 // Tail shows above this speed
 export const PLAYER_TAIL_MINSPEED = 1;
@@ -178,16 +178,16 @@ export const DAMAGE_FLASH_OFF_SECS = 0.1;
 /*
  *
  *
- * Obstacles
+ * Things
  *
  */
 
-// For non-moving obstacles (eg trees), setting speed to 0 can cause errors/bugs relating to dividing/multiplying by 0, so use this value instead
-export const STATIC_OBSTACLE_SPEED = Number.MIN_VALUE;
+// For non-moving things (eg trees), setting speed to 0 can cause errors/bugs relating to dividing/multiplying by 0, so use this value instead
+export const STATIC_THING_SPEED = Number.MIN_VALUE;
 
-export const OBSTACLE_FADE_GRADIENT_STOP = 0.7;
+export const THING_FADE_GRADIENT_STOP = 0.7;
 
-// Prevent player getting stuck inside obstacle by rendering it unable to inflict damage for a few frames
+// Prevent player getting stuck inside thing by rendering it unable to inflict damage for a few frames
 export const DAMAGE_SAFETY_SECS_TOTAL = DAMAGED_SECS_TOTAL;
 
 export const EXPLODING_FRAMES_TOTAL = 50;
@@ -201,17 +201,17 @@ export const EXPLODING_FRAMES_REDUCE_RADIUS_MULTIPLIER_MAX = 0.99;
 export const EXPLODING_FRAMES_ANGLE_INCREASE_MIN = 0.05;
 export const EXPLODING_FRAMES_ANGLE_INCREASE_MAX = 0.15;
 
-export const EXPLODING_OBSTACLE_ALPHA = 1;
+export const EXPLODING_THING_ALPHA = 1;
 
 export const SHAPE_STROKE_THICKNESS = 7;
 export const SHAPE_STROKE_ALPHA = 0.6;
 
-export const INTRO_OBSTACLE_GROUP_COLS = 7;
-export const INTRO_OBSTACLE_DEFAULT_ROTATION = 315;
+export const INTRO_THING_GROUP_COLS = 7;
+export const INTRO_THING_DEFAULT_ROTATION = 315;
 
-export const OBSTACLE_RETURNTONORMALSPEED_RATE = 0.1;
+export const THING_RETURNTONORMALSPEED_RATE = 0.1;
 
-export const FLOATING_OBSTACLE_LEVELOUTRO_ACCEL_RATE = 0.1;
+export const FLOATING_THING_LEVELOUTRO_ACCEL_RATE = 0.1;
 
 export const TEXT_BACKGROUND_FILL_ALPHA = 0.66;
 

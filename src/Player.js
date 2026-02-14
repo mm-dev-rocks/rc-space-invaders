@@ -129,7 +129,7 @@ Player.update = function () {
  * @description
  * ##### Draw the character
  * - If currently being damaged, flash a different colour based on the level background
- * - If currently eating, flash a different colour based on the eaten obstacle
+ * - If currently eating, flash a different colour based on the eaten thing
  * - Draw the tail/friction effect
  * - At faster speeds, distort the circular shape into an ellipse to suggest stretching in the direction of travel
  * - Add any extra layers such as hats etc

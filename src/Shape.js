@@ -16,12 +16,7 @@ import * as GAME from "./RCSI/GAME.js";
 import { Display } from "./Display.js";
 import { Layout } from "./Layout.js";
 
-import {
-  degreesToRadians,
-  degreesToVector,
-  hexOpacityToRGBA,
-  vectorGetUnitNormal,
-} from "./utils.js";
+import { degreesToRadians, degreesToVector, hexOpacityToRGBA, vectorGetUnitNormal } from "./utils.js";
 
 class Shape {}
 
@@ -33,9 +28,7 @@ class Shape {}
  * ##### Update the generic outer stroke thickness based on the current layout/viewport
  */
 Shape.updateSizes = function () {
-  Shape.strokeThickness = Math.round(
-    GAME.SHAPE_STROKE_THICKNESS * Layout.proportionalMultiplier
-  );
+  Shape.strokeThickness = Math.round(GAME.SHAPE_STROKE_THICKNESS * Layout.proportionalMultiplier);
 };
 
 /**
@@ -50,7 +43,7 @@ Shape.updateSizes = function () {
  * @param {object} _data - Other details
  */
 Shape.drawCircle = function (_x, _y, _data) {
-  var gradient = Shape.getObstacleGradient(_x, _y, _data);
+  var gradient = Shape.getThingGradient(_x, _y, _data);
 
   Display.ctx.beginPath();
   Display.ctx.arc(_x, _y, _data.radius, 0, GAME.PIx2);
@@ -63,7 +56,7 @@ Shape.drawCircle = function (_x, _y, _data) {
   Display.ctx.fill();
 };
 
-Shape.drawSkewedCircle = function (_x, _y, _obstacle) {
+Shape.drawSkewedCircle = function (_x, _y, _thing) {
   var /*
 ctx.transform(
   [Increases or decreases the size of the pixels horizontally],
@@ -81,14 +74,14 @@ ctx.transform(
     // Skew y coordinates by angle skewVertRadians
     skewVertDegrees = 0,
     skewVertRadians = degreesToRadians(skewVertDegrees),
-    //offsetX = Math.sin(_obstacle.radius * skewHorizRadians),
-    //offsetY = Math.cos(_obstacle.radius * skewVertRadians)
-    //offsetX = Math.sin(skewVertRadians) * _obstacle.radius * 2,
+    //offsetX = Math.sin(_thing.radius * skewHorizRadians),
+    //offsetY = Math.cos(_thing.radius * skewVertRadians)
+    //offsetX = Math.sin(skewVertRadians) * _thing.radius * 2,
     offsetX = 0,
     offsetY = 0;
   // opposite = Math.tan(0.915)*60
   //offsetY = 0
-  //offsetY = _obstacle.radius * skewVertRadians
+  //offsetY = _thing.radius * skewVertRadians
   Display.ctx.save();
 
   //Display.ctx.translate(Layout.canvasWidth / 2, Layout.canvasHeight / 2);
@@ -98,13 +91,13 @@ ctx.transform(
   //Display.ctx.rotate(skewHorizRadians);
 
   Display.ctx.beginPath();
-  Display.ctx.arc(_x, _y, _obstacle.radius, 0, GAME.PIx2);
+  Display.ctx.arc(_x, _y, _thing.radius, 0, GAME.PIx2);
 
-  if (_obstacle.useDefaultStroke) {
+  if (_thing.useDefaultStroke) {
     Shape.defaultStrokeCurrentPath();
   }
 
-  Display.ctx.fillStyle = Shape.getObstacleGradient(_x, _y, _obstacle);
+  Display.ctx.fillStyle = Shape.getThingGradient(_x, _y, _thing);
   Display.ctx.fill();
   //Display.ctx.strokeStyle = "red";
   //Display.ctx.stroke();
@@ -126,107 +119,83 @@ ctx.transform(
  * @param {number} _stretch
  * @param {number} _angleDegrees
  */
-Shape.drawEllipse = function (
-  _x,
-  _y,
-  _radius,
-  _color,
-  _stretch,
-  _angleDegrees
-) {
+Shape.drawEllipse = function (_x, _y, _radius, _color, _stretch, _angleDegrees) {
   var radians = degreesToRadians(_angleDegrees);
 
   Display.ctx.beginPath();
-  Display.ctx.ellipse(
-    Math.round(_x),
-    Math.round(_y),
-    _radius,
-    _radius * _stretch,
-    radians,
-    0,
-    GAME.PIx2
-  );
+  Display.ctx.ellipse(Math.round(_x), Math.round(_y), _radius, _radius * _stretch, radians, 0, GAME.PIx2);
   Display.ctx.fillStyle = _color;
   Display.ctx.fill();
 };
 
 /**
- * @function getObstacleGradient
+ * @function getThingGradient
  * @static 
  *
  * @description
- * ##### Draw a gradient based on obstacle properties
- * - Matches size and rotation of the gradient to the obstacle
+ * ##### Draw a gradient based on thing properties
+ * - Matches size and rotation of the gradient to the thing
  * - Uses defaults where properties aren't specified
  *
  * @param {number} _x - X coordinate to draw at
  * @param {number} _y - Y coordinate to draw at
- * @param {object} _obstacle - The obstacle to get properties from
- * @param {object} _obstacle.gradient - Details about the gradient to be applied
- * @param {object[]} _obstacle.gradient.stop_ar - Gradient stops in `{pos, color}` format
- * @param {GRADIENT_TYPE} _obstacle.gradient.type - Eg linear/radial
- * @param {number} _obstacle.gradient.fadePoint - Used to fade the default gradient out to the background colour of the current level (`0` to `1` - `0` means fade from centre, `1` would be the outer edge so effectively no fade)
+ * @param {object} _thing - The thing to get properties from
+ * @param {object} _thing.gradient - Details about the gradient to be applied
+ * @param {object[]} _thing.gradient.stop_ar - Gradient stops in `{pos, color}` format
+ * @param {GRADIENT_TYPE} _thing.gradient.type - Eg linear/radial
+ * @param {number} _thing.gradient.fadePoint - Used to fade the default gradient out to the background colour of the current level (`0` to `1` - `0` means fade from centre, `1` would be the outer edge so effectively no fade)
  j
  * @returns {CanvasGradient}
  */
-Shape.getObstacleGradient = function (_x, _y, _obstacle) {
+Shape.getThingGradient = function (_x, _y, _thing) {
   var i,
     gradient,
-    gradientType = _obstacle.gradient?.type || GRADIENT_TYPE.RADIAL,
-    gradientStop_ar = _obstacle.gradient?.stop_ar || [
-      { pos: 0, color: _obstacle.color },
+    gradientType = _thing.gradient?.type || GRADIENT_TYPE.RADIAL,
+    gradientStop_ar = _thing.gradient?.stop_ar || [
+      { pos: 0, color: _thing.color },
       {
-        pos: _obstacle.gradientFadePoint || GAME.OBSTACLE_FADE_GRADIENT_STOP,
-        color: _obstacle.color,
+        pos: _thing.gradientFadePoint || GAME.THING_FADE_GRADIENT_STOP,
+        color: _thing.color,
       },
       { pos: 1, color: Display.bgColor },
     ],
-    directionVector = degreesToVector(
-      _obstacle.rotation + (_obstacle.gradient?.rotation || 0)
-    );
+    directionVector = degreesToVector(_thing.rotation + (_thing.gradient?.rotation || 0));
 
-  if (_obstacle.gradient?.offsetX) {
-    _x += _obstacle.gradient.offsetX * _obstacle.radius;
+  if (_thing.gradient?.offsetX) {
+    _x += _thing.gradient.offsetX * _thing.radius;
   }
-  if (_obstacle.gradient?.offsetY) {
-    _y += _obstacle.gradient.offsetY * _obstacle.radius;
+  if (_thing.gradient?.offsetY) {
+    _y += _thing.gradient.offsetY * _thing.radius;
   }
 
   switch (gradientType) {
     case GRADIENT_TYPE.LINEAR:
       gradient = Display.ctx.createLinearGradient(
-        _x - directionVector.x * _obstacle.radius,
-        _y - directionVector.y * _obstacle.radius,
-        _x + directionVector.x * _obstacle.radius,
-        _y + directionVector.y * _obstacle.radius
+        _x - directionVector.x * _thing.radius,
+        _y - directionVector.y * _thing.radius,
+        _x + directionVector.x * _thing.radius,
+        _y + directionVector.y * _thing.radius,
       );
       break;
     case GRADIENT_TYPE.RADIAL:
-      gradient = Display.ctx.createRadialGradient(
-        _x,
-        _y,
-        _obstacle.radius / 2,
-        _x,
-        _y,
-        _obstacle.radius
-      );
+      gradient = Display.ctx.createRadialGradient(_x, _y, _thing.radius / 2, _x, _y, _thing.radius);
       break;
     case GRADIENT_TYPE.LINEAR_TUMBLING:
       gradient = Display.ctx.createLinearGradient(
-        _x - _obstacle.radius,
-        _y - _obstacle.radius,
-        _x + Math.cos(_obstacle.rotation) * _obstacle.radius * 2,
-        _y + Math.sin(_obstacle.rotation) * _obstacle.radius * 2
+        _x - _thing.radius,
+        _y - _thing.radius,
+        _x + Math.cos(_thing.rotation) * _thing.radius * 2,
+        _y + Math.sin(_thing.rotation) * _thing.radius * 2,
       );
       break;
     case GRADIENT_TYPE.RADIAL_TUMBLING:
       gradient = Display.ctx.createRadialGradient(
-        _x + Math.cos(_obstacle.rotation) * _obstacle.radius * 1.2,
-        _y + Math.sin(_obstacle.rotation) * _obstacle.radius * 1.2,
-        _obstacle.radius / 2,
-        _x + Math.cos(_obstacle.rotation) * _obstacle.radius * 1.2,
-        _y + Math.sin(_obstacle.rotation) * _obstacle.radius * 1.2,
-        _obstacle.radius
+        _x + Math.cos(_thing.rotation) * _thing.radius * 1.2,
+        _y + Math.sin(_thing.rotation) * _thing.radius * 1.2,
+        _thing.radius / 2,
+        _x + Math.cos(_thing.rotation) * _thing.radius * 1.2,
+        _y + Math.sin(_thing.rotation) * _thing.radius * 1.2,
+        _thing.radius,
       );
       break;
     default:
@@ -250,56 +219,34 @@ Shape.getObstacleGradient = function (_x, _y, _obstacle) {
  *
  * @param {number} _x
  * @param {number} _y
- * @param {object} _obstacle
+ * @param {object} _thing
  */
-Shape.drawSquarcle = function (_x, _y, _obstacle) {
-  var fillStyle = _obstacle.gradient
-      ? Shape.getObstacleGradient(_x, _y, _obstacle)
-      : _obstacle.color,
-    directionVector = degreesToVector(_obstacle.rotation),
+Shape.drawSquarcle = function (_x, _y, _thing) {
+  var fillStyle = _thing.gradient ? Shape.getThingGradient(_x, _y, _thing) : _thing.color,
+    directionVector = degreesToVector(_thing.rotation),
     directionVectorNormal = vectorGetUnitNormal(directionVector),
-    arcRotation = _obstacle.rotation + 90;
+    arcRotation = _thing.rotation + 90;
 
   // Semicircle
   Display.ctx.beginPath();
-  Display.ctx.arc(
-    _x,
-    _y,
-    _obstacle.radius,
-    degreesToRadians(arcRotation + 180),
-    degreesToRadians(arcRotation)
-  );
+  Display.ctx.arc(_x, _y, _thing.radius, degreesToRadians(arcRotation + 180), degreesToRadians(arcRotation));
 
   // Rectangle
-  Display.ctx.moveTo(
-    _x - directionVectorNormal.x * _obstacle.radius,
-    _y - directionVectorNormal.y * _obstacle.radius
+  Display.ctx.moveTo(_x - directionVectorNormal.x * _thing.radius, _y - directionVectorNormal.y * _thing.radius);
+
+  Display.ctx.lineTo(
+    _x - directionVectorNormal.x * _thing.radius - directionVector.x * _thing.radius,
+    _y - directionVectorNormal.y * _thing.radius - directionVector.y * _thing.radius,
   );
 
   Display.ctx.lineTo(
-    _x -
-      directionVectorNormal.x * _obstacle.radius -
-      directionVector.x * _obstacle.radius,
-    _y -
-      directionVectorNormal.y * _obstacle.radius -
-      directionVector.y * _obstacle.radius
+    _x + directionVectorNormal.x * _thing.radius - directionVector.x * _thing.radius,
+    _y + directionVectorNormal.y * _thing.radius - directionVector.y * _thing.radius,
   );
 
-  Display.ctx.lineTo(
-    _x +
-      directionVectorNormal.x * _obstacle.radius -
-      directionVector.x * _obstacle.radius,
-    _y +
-      directionVectorNormal.y * _obstacle.radius -
-      directionVector.y * _obstacle.radius
-  );
+  Display.ctx.lineTo(_x + directionVectorNormal.x * _thing.radius, _y + directionVectorNormal.y * _thing.radius);
 
-  Display.ctx.lineTo(
-    _x + directionVectorNormal.x * _obstacle.radius,
-    _y + directionVectorNormal.y * _obstacle.radius
-  );
-
-  if (_obstacle.useDefaultStroke) {
+  if (_thing.useDefaultStroke) {
     Shape.defaultStrokeCurrentPath();
   }
   Display.ctx.fillStyle = fillStyle;
@@ -315,12 +262,12 @@ Shape.drawSquarcle = function (_x, _y, _obstacle) {
  *
  * @param {number} _x
  * @param {number} _y
- * @param {object} _obstacle
- * @param {number} _obstacle.numAppendages - Number of points of the star
- * @param {number} _obstacle.shapeCenterRadiusDivisor - Size of the central fill based on the radius of the obstacle
- * @param {boolean} _obstacle.useDefaultStroke - If `true` add the standard stroke around the shape
+ * @param {object} _thing
+ * @param {number} _thing.numAppendages - Number of points of the star
+ * @param {number} _thing.shapeCenterRadiusDivisor - Size of the central fill based on the radius of the thing
+ * @param {boolean} _thing.useDefaultStroke - If `true` add the standard stroke around the shape
  */
-Shape.drawStar = function (_x, _y, _obstacle) {
+Shape.drawStar = function (_x, _y, _thing) {
   var i,
     x1,
     y1,
@@ -329,40 +276,26 @@ Shape.drawStar = function (_x, _y, _obstacle) {
     angle1,
     angle2,
     angle3,
-    fillStyle = _obstacle.gradient
-      ? Shape.getObstacleGradient(_x, _y, _obstacle)
-      : _obstacle.color;
+    fillStyle = _thing.gradient ? Shape.getThingGradient(_x, _y, _thing) : _thing.color;
 
   Display.ctx.moveTo(Math.round(_x), Math.round(_y));
   Display.ctx.beginPath();
-  for (i = 0; i < _obstacle.numAppendages; i++) {
-    angle1 = (GAME.PIx2 / _obstacle.numAppendages) * i;
-    angle2 = (GAME.PIx2 / _obstacle.numAppendages) * (i + 1);
-    angle3 = (GAME.PIx2 / _obstacle.numAppendages) * (i + 2);
+  for (i = 0; i < _thing.numAppendages; i++) {
+    angle1 = (GAME.PIx2 / _thing.numAppendages) * i;
+    angle2 = (GAME.PIx2 / _thing.numAppendages) * (i + 1);
+    angle3 = (GAME.PIx2 / _thing.numAppendages) * (i + 2);
 
-    angle1 += _obstacle.rotation;
-    angle2 += _obstacle.rotation;
-    angle3 += _obstacle.rotation;
+    angle1 += _thing.rotation;
+    angle2 += _thing.rotation;
+    angle3 += _thing.rotation;
 
     // TODO degreesToVector?
-    x1 =
-      (_obstacle.radius / _obstacle.shapeCenterRadiusDivisor) *
-        Math.sin(angle1) +
-      _x;
-    y1 =
-      (_obstacle.radius / _obstacle.shapeCenterRadiusDivisor) *
-        Math.cos(angle1) +
-      _y;
-    x2 = _obstacle.radius * Math.sin(angle2) + _x;
-    y2 = _obstacle.radius * Math.cos(angle2) + _y;
-    x3 =
-      (_obstacle.radius / _obstacle.shapeCenterRadiusDivisor) *
-        Math.sin(angle3) +
-      _x;
-    y3 =
-      (_obstacle.radius / _obstacle.shapeCenterRadiusDivisor) *
-        Math.cos(angle3) +
-      _y;
+    x1 = (_thing.radius / _thing.shapeCenterRadiusDivisor) * Math.sin(angle1) + _x;
+    y1 = (_thing.radius / _thing.shapeCenterRadiusDivisor) * Math.cos(angle1) + _y;
+    x2 = _thing.radius * Math.sin(angle2) + _x;
+    y2 = _thing.radius * Math.cos(angle2) + _y;
+    x3 = (_thing.radius / _thing.shapeCenterRadiusDivisor) * Math.sin(angle3) + _x;
+    y3 = (_thing.radius / _thing.shapeCenterRadiusDivisor) * Math.cos(angle3) + _y;
 
     Display.ctx.lineTo(x1, y1);
     Display.ctx.lineTo(x2, y2);
@@ -370,7 +303,7 @@ Shape.drawStar = function (_x, _y, _obstacle) {
   }
   Display.ctx.closePath();
 
-  if (_obstacle.useDefaultStroke) {
+  if (_thing.useDefaultStroke) {
     Shape.defaultStrokeCurrentPath();
   }
   Display.ctx.fillStyle = fillStyle;
@@ -387,10 +320,7 @@ Shape.drawStar = function (_x, _y, _obstacle) {
  */
 Shape.defaultStrokeCurrentPath = function () {
   Display.ctx.lineWidth = Shape.strokeThickness;
-  Display.ctx.strokeStyle = hexOpacityToRGBA(
-    Display.bgColor,
-    GAME.SHAPE_STROKE_ALPHA
-  );
+  Display.ctx.strokeStyle = hexOpacityToRGBA(Display.bgColor, GAME.SHAPE_STROKE_ALPHA);
   Display.ctx.stroke();
 };
 
@@ -403,13 +333,13 @@ Shape.defaultStrokeCurrentPath = function () {
  *
  * @param {number} _x
  * @param {number} _y
- * @param {object} _obstacle
- * @param {number} _obstacle.numAppendages - Number of petals of the flower
- * @param {number} _obstacle.shapeCenterColor - Colour to use for the flower centre
- * @param {number} _obstacle.shapeCenterRadiusDivisor - Size of the central fill based on the radius of the obstacle
- * @param {boolean} _obstacle.useDefaultStroke - If `true` add the standard stroke around the shape
+ * @param {object} _thing
+ * @param {number} _thing.numAppendages - Number of petals of the flower
+ * @param {number} _thing.shapeCenterColor - Colour to use for the flower centre
+ * @param {number} _thing.shapeCenterRadiusDivisor - Size of the central fill based on the radius of the thing
+ * @param {boolean} _thing.useDefaultStroke - If `true` add the standard stroke around the shape
  */
-Shape.drawFlower = function (_x, _y, _obstacle) {
+Shape.drawFlower = function (_x, _y, _thing) {
   var i,
     x1,
     y1,
@@ -418,22 +348,19 @@ Shape.drawFlower = function (_x, _y, _obstacle) {
     angle1,
     angle2,
     // Collisions with flower petals happened too far away due to bezier curves, this adjusts the draw distance to make things feel more accurate
-    petalCurveAllowance =
-      (_obstacle.radius / _obstacle.numAppendages) * Math.PI,
-    petalRadius = _obstacle.radius + petalCurveAllowance,
-    fillStyle = _obstacle.gradient
-      ? Shape.getObstacleGradient(_x, _y, _obstacle)
-      : _obstacle.color;
+    petalCurveAllowance = (_thing.radius / _thing.numAppendages) * Math.PI,
+    petalRadius = _thing.radius + petalCurveAllowance,
+    fillStyle = _thing.gradient ? Shape.getThingGradient(_x, _y, _thing) : _thing.color;
 
   // petals
   Display.ctx.beginPath();
   Display.ctx.moveTo(Math.round(_x), Math.round(_y));
-  for (i = 0; i < _obstacle.numAppendages; i++) {
-    angle1 = (GAME.PIx2 / _obstacle.numAppendages) * (i + 1);
-    angle2 = (GAME.PIx2 / _obstacle.numAppendages) * i;
+  for (i = 0; i < _thing.numAppendages; i++) {
+    angle1 = (GAME.PIx2 / _thing.numAppendages) * (i + 1);
+    angle2 = (GAME.PIx2 / _thing.numAppendages) * i;
 
-    angle1 += _obstacle.rotation;
-    angle2 += _obstacle.rotation;
+    angle1 += _thing.rotation;
+    angle2 += _thing.rotation;
 
     x1 = petalRadius * Math.sin(angle1) + _x;
     y1 = petalRadius * Math.cos(angle1) + _y;
@@ -444,7 +371,7 @@ Shape.drawFlower = function (_x, _y, _obstacle) {
   }
   Display.ctx.closePath();
 
-  if (_obstacle.useDefaultStroke) {
+  if (_thing.useDefaultStroke) {
     Shape.defaultStrokeCurrentPath();
   }
   Display.ctx.fillStyle = fillStyle;
@@ -452,15 +379,9 @@ Shape.drawFlower = function (_x, _y, _obstacle) {
 
   // center
   Display.ctx.beginPath();
-  Display.ctx.arc(
-    _x,
-    _y,
-    _obstacle.radius / _obstacle.shapeCenterRadiusDivisor,
-    0,
-    GAME.PIx2
-  );
+  Display.ctx.arc(_x, _y, _thing.radius / _thing.shapeCenterRadiusDivisor, 0, GAME.PIx2);
   //Display.ctx.closePath();
-  Display.ctx.fillStyle = _obstacle.shapeCenterColor || fillStyle;
+  Display.ctx.fillStyle = _thing.shapeCenterColor || fillStyle;
   Display.ctx.fill();
 };
 

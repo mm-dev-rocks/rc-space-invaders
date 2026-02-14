@@ -8,7 +8,7 @@
  *
  * @description
  * ## High-level management of the game
- * - Oversees the player, obstacles, level timer, text etc
+ * - Oversees the player, things, level timer, text etc
  * - Most functionality is farmed out to other classes
  */
 
@@ -18,7 +18,7 @@ import * as GAME from "./RCSI/GAME.js";
 import * as LEVELS from "./RCSI/LEVELS.js";
 
 import { Display } from "./Display.js";
-import { ObstacleManager } from "./ObstacleManager.js";
+import { ThingManager } from "./ThingManager.js";
 import { OverlayText } from "./OverlayText.js";
 import { Player } from "./Player.js";
 
@@ -126,7 +126,7 @@ Game.resetAndStartFirstLevel = function () {
  */
 Game.updateByFrameCount = function (_frames) {
   Player.update();
-  ObstacleManager.update(_frames);
+  ThingManager.update(_frames);
 
   Display.update();
 };
@@ -208,7 +208,7 @@ Game.onKeyUp = function (event) {
  * ##### Everything to do with getting the current level ready to play
  * - Get the ID and data for the level
  * - Call methods in other modules to update them
- * - Add the (non-interactive) background obstacles
+ * - Add the (non-interactive) background things
  * - Reset the game timer
  */
 Game.setupCurrentLevel = function () {
@@ -227,8 +227,8 @@ Game.setupCurrentLevel = function () {
   Player.setupForLevel();
   Display.setupForLevel();
 
-  ObstacleManager.reset();
-  ObstacleManager.addAllBackground();
+  ThingManager.reset();
+  ThingManager.addAllBackground();
 
   Game.updateLayout();
 
@@ -261,9 +261,7 @@ Game.setupCurrentLevel = function () {
 Game.updateLayout = function () {
   __("Game.updateLayout()::", RCSI.FMT_GAME);
 
-  Layout.update({
-    gameplayAreaToCanvasLateralRatio: Game.curLevelData.gameplayAreaToCanvasLateralRatio,
-  });
+  Layout.update();
   Display.updateLayout();
 };
 

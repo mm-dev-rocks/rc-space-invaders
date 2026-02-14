@@ -75,14 +75,14 @@ OverlayText.init = function () {
  * **Level intros**
  *
  * These are a special case where we also need to draw examples of
- * obstacles which appear in this level. This complicates things as we want the
- * content to be centred. `OverlayText.padWithSpacesToFitObstacleGroups()` handles that.
+ * things which appear in this level. This complicates things as we want the
+ * content to be centred. `OverlayText.padWithSpacesToFitThingGroups()` handles that.
  *
  * The sequence of operations here may be confusing:
  *
  * 0. Draw the overlay text with `{measureOnly: true}` --- which returns metrics about where the text is without drawing anything
  * positioned
- * 0. Draw the obstacles (which requires info about position of the text as above) --- which gets us the info about the width of the group of obstacles (this differs depending on how many different types of obstacle this level has)
+ * 0. Draw the things (which requires info about position of the text as above) --- which gets us the info about the width of the group of things (this differs depending on how many different types of thing this level has)
  * 0. Draw the text for real into the separate canvas context
  * 0. Finally copy the separate canvas into the main canvas
  *
@@ -106,7 +106,7 @@ OverlayText.draw = function () {
   OverlayText.canvasCtx.translate(0 - textMeasurements.bgMeasurements.left, 0 - textMeasurements.bgMeasurements.top);
   Display.swapContext({ contextToSwapTo: OverlayText.canvasCtx });
 
-  // Draw exactly the same text again, we had to draw it before the obstacles to get measurements, but now the obstacles might cover parts of the text, so re-draw it
+  // Draw exactly the same text again, we had to draw it before the things to get measurements, but now the things might cover parts of the text, so re-draw it
   Text.draw(
     Object.assign(textConfig, {
       measureOnly: false,
@@ -240,7 +240,7 @@ OverlayText.addCompletedLevelOutro = function () {
  *
  * @description
  * ##### Work out where some special lines of text are
- * In the level intros, groups of 'avoid' and 'collect' obstacles are shown next to specific lines of text ('avoid' and 'eat').
+ * In the level intros, groups of 'avoid' and 'collect' things are shown next to specific lines of text ('avoid' and 'eat').
  *
  * The line numbers of those important labels can change depending on what other text is displayed.
  *

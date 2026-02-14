@@ -11,7 +11,7 @@
  */
 
 import { RCSI } from "./RCSI/CONST.js";
-import { OBSTACLE_SUBTYPE, OBSTACLE_TYPE } from "./RCSI/ENUM.js";
+import { THING_SUBTYPE, THING_TYPE } from "./RCSI/ENUM.js";
 import * as GAME from "./RCSI/GAME.js";
 import * as IMAGE_IDS from "./RCSI/IMAGE_IDS.js";
 
@@ -19,7 +19,7 @@ import { Game } from "./Game.js";
 import { ImageManager } from "./ImageManager.js";
 import { InternalTimer } from "./InternalTimer.js";
 import { Layout } from "./Layout.js";
-import { ObstacleManager } from "./ObstacleManager.js";
+import { ThingManager } from "./ThingManager.js";
 import { OverlayText } from "./OverlayText.js";
 import { Player } from "./Player.js";
 import { Shape } from "./Shape.js";
@@ -72,7 +72,7 @@ Display.init = function () {
  * ##### Update some level-specific details
  * - Custom colours
  * - Instruction text if this is the first screen
- * - Which obstacles to show on the level intro screen
+ * - Which things to show on the level intro screen
  */
 Display.setupForLevel = function () {
   __("Display.setupForLevel()", RCSI.FMT_DISPLAY);
@@ -191,9 +191,9 @@ Display.createCanvas = function () {
  */
 Display.update = function () {
   Display.drawBackground();
-  Display.drawBackgroundObstacles();
+  Display.drawBackgroundThings();
   if (!Game.isOnFrontPage) {
-    Display.drawForegroundObstacles();
+    Display.drawForegroundThings();
   }
 
   if (Game.isOnFrontPage) {
@@ -205,7 +205,7 @@ Display.update = function () {
   Player.draw();
 
   if (!Game.isOnFrontPage) {
-    Display.drawFloatingObstacles();
+    Display.drawFloatingThings();
   }
 
   if (!Game.isOnFrontPage) {
@@ -316,111 +316,111 @@ Display.swapContext = function (_data) {
 };
 
 /**
- * @function drawBackgroundObstacles
+ * @function drawBackgroundThings
  * @static
  *
  * @description
- * ##### Background obstacles
+ * ##### Background things
  * - Are below and do not interact with the player
  * - Conceptually are on the **bottom layer**
  */
-Display.drawBackgroundObstacles = function () {
-  var i, obstacle;
-  for (i = 0; i < ObstacleManager.obstacles.length; i++) {
-    obstacle = ObstacleManager.obstacles[i];
-    if (obstacle.type === OBSTACLE_TYPE.BACKGROUND) {
-      Display.drawObstacle(obstacle);
+Display.drawBackgroundThings = function () {
+  var i, thing;
+  for (i = 0; i < ThingManager.things.length; i++) {
+    thing = ThingManager.things[i];
+    if (thing.type === THING_TYPE.BACKGROUND) {
+      Display.drawThing(thing);
     }
   }
 };
 
 /**
- * @function drawForegroundObstacles
+ * @function drawForegroundThings
  * @static
  *
  * @description
- * ##### Foreground obstacles
+ * ##### Foreground things
  * - Can interact with the player by being collected or causing health damage
  * - Conceptually are on the **middle layer**
  */
-Display.drawForegroundObstacles = function () {
-  var i, obstacle;
-  for (i = 0; i < ObstacleManager.obstacles.length; i++) {
-    obstacle = ObstacleManager.obstacles[i];
-    if (!obstacle.isDeleted && (obstacle.type === OBSTACLE_TYPE.COLLECT || obstacle.type === OBSTACLE_TYPE.AVOID)) {
-      Display.drawObstacle(obstacle);
+Display.drawForegroundThings = function () {
+  var i, thing;
+  for (i = 0; i < ThingManager.things.length; i++) {
+    thing = ThingManager.things[i];
+    if (!thing.isDeleted && (thing.type === THING_TYPE.COLLECT || thing.type === THING_TYPE.AVOID)) {
+      Display.drawThing(thing);
     }
   }
 };
 
 /**
- * @function drawFloatingObstacles
+ * @function drawFloatingThings
  * @static
  *
  * @description
- * ##### Floating obstacles
+ * ##### Floating things
  * - Are above and do not interact with the player
  * - Conceptually are on the **top layer**
  */
-Display.drawFloatingObstacles = function () {
-  var i, obstacle;
-  for (i = 0; i < ObstacleManager.obstacles.length; i++) {
-    obstacle = ObstacleManager.obstacles[i];
-    if (obstacle.type === OBSTACLE_TYPE.FLOATING) {
-      Display.drawObstacle(obstacle);
+Display.drawFloatingThings = function () {
+  var i, thing;
+  for (i = 0; i < ThingManager.things.length; i++) {
+    thing = ThingManager.things[i];
+    if (thing.type === THING_TYPE.FLOATING) {
+      Display.drawThing(thing);
     }
   }
 };
 
 /**
- * @function drawObstacle
+ * @function drawThing
  * @static
  *
  * @description
- * ##### Draw an individual obstacle
- * Decide what kind of primitive shape this obstacle is and farm out the drawing of it to the `Shape` class.
- * - Although obstacles have their own `pos.x`/`pos.y` properties, sometimes they are drawn offset to suggest depth/parallax
+ * ##### Draw an individual thing
+ * Decide what kind of primitive shape this thing is and farm out the drawing of it to the `Shape` class.
+ * - Although things have their own `pos.x`/`pos.y` properties, sometimes they are drawn offset to suggest depth/parallax
  * - So `displayX` and `displayY` are calculated here, and may not be the same as the `pos` properties
  *
- * @param {object} _obstacle - The obstacle to be drawn
+ * @param {object} _thing - The thing to be drawn
  */
-Display.drawObstacle = function (_obstacle) {
+Display.drawThing = function (_thing) {
   var displayX,
     displayY,
     lateralOffset = 0,
     parallaxMultiplier = 1;
 
-  if (_obstacle.type === OBSTACLE_TYPE.BACKGROUND) {
+  if (_thing.type === THING_TYPE.BACKGROUND) {
     parallaxMultiplier = GAME.BACKGROUND_LATERAL_MULTIPLIER;
-  } else if (_obstacle.type === OBSTACLE_TYPE.FLOATING) {
+  } else if (_thing.type === THING_TYPE.FLOATING) {
     parallaxMultiplier = GAME.FLOATING_LATERAL_MULTIPLIER;
   }
 
-  displayX = _obstacle.pos.x + lateralOffset;
-  displayY = _obstacle.pos.y;
+  displayX = _thing.pos.x + lateralOffset;
+  displayY = _thing.pos.y;
 
-  switch (_obstacle.subtype) {
-    case OBSTACLE_SUBTYPE.FLOWER:
-      Shape.drawFlower(displayX, displayY, _obstacle);
+  switch (_thing.subtype) {
+    case THING_SUBTYPE.FLOWER:
+      Shape.drawFlower(displayX, displayY, _thing);
       break;
-    case OBSTACLE_SUBTYPE.STAR:
-      Shape.drawStar(displayX, displayY, _obstacle);
+    case THING_SUBTYPE.STAR:
+      Shape.drawStar(displayX, displayY, _thing);
       break;
-    case OBSTACLE_SUBTYPE.SQUARCLE:
-      Shape.drawSquarcle(displayX, displayY, _obstacle);
+    case THING_SUBTYPE.SQUARCLE:
+      Shape.drawSquarcle(displayX, displayY, _thing);
       break;
-    case OBSTACLE_SUBTYPE.SKEWED_CIRCLE:
-      Shape.drawSkewedCircle(displayX, displayY, _obstacle);
+    case THING_SUBTYPE.SKEWED_CIRCLE:
+      Shape.drawSkewedCircle(displayX, displayY, _thing);
       break;
     default:
       Shape.drawCircle(displayX, displayY, {
-        radius: _obstacle.radius,
+        radius: _thing.radius,
         // TODO color/explodingColor are not used, always gradient?
-        color: _obstacle.explodingColor || _obstacle.color,
-        gradientFadePoint: _obstacle.gradientFadePoint,
-        gradient: _obstacle.gradient,
-        rotation: _obstacle.rotation,
-        useDefaultStroke: _obstacle.useDefaultStroke,
+        color: _thing.explodingColor || _thing.color,
+        gradientFadePoint: _thing.gradientFadePoint,
+        gradient: _thing.gradient,
+        rotation: _thing.rotation,
+        useDefaultStroke: _thing.useDefaultStroke,
       });
       break;
   }

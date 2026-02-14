@@ -12,7 +12,7 @@
  * - Every time an update happens, we record the timestamp in `InternalTimer.lastTick_ms`
  * - When we next update, we see how much time has elapsed since the last update
  * - From this, we can calculate how many of our ideal-world (`GAME.FRAME_MS`) frames have passed
- * - If we aren't quite keeping up with the ideal frame rate, eg 2 frames' worth of time has passed since our last update, we can try to keep things looking smooth by moving obstacles twice as far as during a single-frame update
+ * - If we aren't quite keeping up with the ideal frame rate, eg 2 frames' worth of time has passed since our last update, we can try to keep things looking smooth by moving things twice as far as during a single-frame update
  */
 
 import { RCSI } from "./RCSI/CONST.js";

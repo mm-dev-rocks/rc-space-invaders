@@ -1,4 +1,4 @@
-import { OBSTACLE_TYPE } from "./../ENUM.js";
+import { THING_TYPE } from "./../ENUM.js";
 import * as SOUND_DATA from "./../SOUND_DATA.js";
 
 // LEVEL basic
@@ -15,9 +15,9 @@ export const BASIC = {
   player: {
     color: "#ffffff",
   },
-  obstacles: [
+  things: [
     {
-      type: OBSTACLE_TYPE.BACKGROUND,
+      type: THING_TYPE.BACKGROUND,
       total: 300,
       color_ar: ["#bbbbbb", "#dddddd", "#999999", "#ffffff"],
       radiusRange: [1, 2],
@@ -25,7 +25,7 @@ export const BASIC = {
       speedRange: [0.001, 0.03],
     },
     {
-      type: OBSTACLE_TYPE.ALIEN,
+      type: THING_TYPE.ALIEN,
       pattern: `
       -XXX-XXX-XXX-
       XXXXXXXXXXXXX
