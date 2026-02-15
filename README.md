@@ -9,6 +9,12 @@
 ### Dependencies
     
 
+```sh
+esbuild src/main.js --outfile=www/js/rc-space-invaders.js --target=es6 --bundle --minify --sourcemap --global-name=RcSpaceInvaders --format=iife --watch --servedir=www
+```
+
+
+
 ### esbuild  
 JS  bundler, tree shaker, transpiler. I like to install a standalone build but it can also be installed with npm or other methods:  
 [esbuild: Download a build](https://esbuild.github.io/getting-started/#download-a-build)
