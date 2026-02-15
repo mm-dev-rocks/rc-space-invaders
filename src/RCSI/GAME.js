@@ -76,22 +76,8 @@ export const UI_PORTRAIT = {
     alignV: VERT_ALIGN.TOP,
     alignH: HORIZ_ALIGN.LEFT,
   },
-  timer: {
+  score: {
     alignV: VERT_ALIGN.TOP,
-    alignH: HORIZ_ALIGN.RIGHT,
-    offsetByCharsV: 1,
-  },
-  collectText: {
-    alignV: VERT_ALIGN.TOP,
-    alignH: HORIZ_ALIGN.LEFT,
-    offsetByCharsV: 1,
-  },
-  soundToggle: {
-    alignV: VERT_ALIGN.BOTTOM,
-    alignH: HORIZ_ALIGN.LEFT,
-  },
-  fullscreenToggle: {
-    alignV: VERT_ALIGN.BOTTOM,
     alignH: HORIZ_ALIGN.RIGHT,
   },
   mainTitle: {

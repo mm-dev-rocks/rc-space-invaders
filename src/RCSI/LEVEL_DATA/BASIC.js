@@ -18,14 +18,14 @@ export const BASIC = {
     {
       type: THING_TYPE.BACKGROUND,
       total: 300,
-      color_ar: ["#bbbbbb", "#dddddd", "#999999", "#ffffff"],
+      color_ar: ["#FF0000", "#E60000", "#CC0000", "#B30000", "#990000", "#800000", "#660000"],
       radiusRange: [1, 2],
       directionRange: [80, 100],
-      speedRange: [0.01, 0.2],
+      speedRange: [0.2, 0.5],
     },
     {
       type: THING_TYPE.ENEMY,
-      color_ar: ["#00ff00", "#00ff55", "#00ffbb"],
+      color_ar: ["#FF0000", "#FF4500", "#FFFF00", "#00FF00", "#1E90FF", "#8A2BE2", "#FF1493"],
       radiusRange: [10, 10],
       directionRange: [180, 180],
       speedRange: [1, 1],

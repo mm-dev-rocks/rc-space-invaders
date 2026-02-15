@@ -18,7 +18,6 @@ import * as CLASSNAMES from "./CLASSNAMES.js";
 import * as EL_IDS from "./EL_IDS.js";
 import * as IMAGE_DATA from "./IMAGE_DATA.js";
 import * as LEVELS from "./LEVELS.js";
-import * as SOUND_DATA from "./SOUND_DATA.js";
 import * as JSONFILES_DATA from "./JSONFILES_DATA.js";
 import * as TIMINGS from "./TIMINGS.js";
 
@@ -37,7 +36,6 @@ export const RCSI = {
   FMT_FULLSCREEN: "background-color: #00ff00; color: black; ",
 
   TIMINGS: TIMINGS,
-  SOUND_DATA: SOUND_DATA,
   IMAGE_DATA: IMAGE_DATA,
   JSONFILES_DATA: JSONFILES_DATA,
   CLASSNAMES: CLASSNAMES,

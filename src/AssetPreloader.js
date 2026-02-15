@@ -9,7 +9,6 @@
  * @description
  * ## Preloads all asset files used in the game
  * - Images
- * - Sounds
  * - JSON
  *
  * Broadcasts events during the process so that other classes can keep track:
@@ -25,7 +24,6 @@ import { ImageManager } from "./ImageManager.js";
 import { JsonManager } from "./JsonManager.js";
 
 class AssetPreloader {
-  /** @type {Array} */ static sound_ar;
   /** @type {Array} */ static image_ar;
   /** @type {Array} */ static json_ar;
 
@@ -45,7 +43,6 @@ class AssetPreloader {
  * - Set up event listener for items loading
  */
 AssetPreloader.init = function () {
-  AssetPreloader.sound_ar = RCSI.SOUND_DATA.SOUND_AR;
   AssetPreloader.image_ar = RCSI.IMAGE_DATA.IMAGE_AR;
   AssetPreloader.json_ar = RCSI.JSONFILES_DATA.JSON_AR;
 

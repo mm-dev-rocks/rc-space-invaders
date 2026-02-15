@@ -161,14 +161,15 @@ Text.draw = function (_ob) {
 };
 
 Text.drawLevel = function () {
-  var levelNumber = Game.isInLevelOutro || Game.isInGameOver ? STRING.NO_LEVEL : Game.levelsCompletedThisSession + 1,
-    str = Text.useShortVersions
-      ? Game.curLevelId + " " + padString(levelNumber, STRING.LEVEL_PADSTRING)
-      : padString(levelNumber, STRING.LEVEL_PADSTRING) +
-        "/" +
-        padString(Game.lastLevelIndex, STRING.LEVEL_PADSTRING) +
-        " " +
-        Game.curLevelId;
+  var levelNumber = Game.levelIndex,
+    str =
+      STRING.LEVEL_TEXT +
+      " " +
+      padString(levelNumber, STRING.LEVEL_PADSTRING) +
+      "/" +
+      padString(Game.lastLevelIndex, STRING.LEVEL_PADSTRING) +
+      " " +
+      Game.curLevelId;
 
   Text.draw({
     text: str,
@@ -211,21 +212,16 @@ Text.drawVersionInfo = function (_ob) {
   });
 };
 
-Text.drawTimeRemaining = function (_data) {
-  var str = Text.useShortVersions
-    ? Game.timeRemaining + " " + STRING.CLOCK
-    : STRING.TIME_TEXT + padString(Game.timeRemaining || 0, STRING.TIME_PADSTRING);
-
+Text.drawScore = function (_data) {
   Text.draw({
     text: {
-      text: str,
-      flashing: _data?.timeIsLow,
+      text: Game.currentScore.toString(),
     },
     drawBackground: true,
-    alignH: UI_PORTRAIT.timer.alignH,
-    alignV: UI_PORTRAIT.timer.alignV,
-    offsetH: UI_PORTRAIT.timer.offsetByCharsH * Text.fullCharWidth,
-    offsetV: UI_PORTRAIT.timer.offsetByCharsV * (Text.lineHeight + Layout.textBgPaddingProportional * 2),
+    alignH: UI_PORTRAIT.score.alignH,
+    alignV: UI_PORTRAIT.score.alignV,
+    offsetH: UI_PORTRAIT.score.offsetByCharsH * Text.fullCharWidth,
+    offsetV: UI_PORTRAIT.score.offsetByCharsV * (Text.lineHeight + Layout.textBgPaddingProportional * 2),
   });
 };
 

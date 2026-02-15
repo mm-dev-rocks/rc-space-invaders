@@ -19,7 +19,6 @@ import * as LEVELS from "./RCSI/LEVELS.js";
 
 import { Display } from "./Display.js";
 import { ThingManager } from "./ThingManager.js";
-import { OverlayText } from "./OverlayText.js";
 import { Player } from "./Player.js";
 
 import { __ } from "./utils.js";
@@ -29,8 +28,8 @@ import { KEY_ACTIONS } from "./RCSI/ENUM.js";
 
 class Game {
   /** @type {number} */ static currentScore;
-  /** @type {number} */ static scoreForLevel;
   /** @type {number} */ static levelIndex;
+  /** @type {number} */ static lastLevelIndex;
   /** @type {number} */ static resize_timeout;
 
   /** @type {String} */ static curLevelId;
@@ -100,15 +99,14 @@ Game.resetAndStartFirstLevel = function () {
 
   Game.isInGameOver = false;
 
-  OverlayText.blankOutHitToStart();
-
   Game.allLevelsData = LEVELS.LEVEL_DATA;
   Game.levelIndex = 0;
+  Game.lastLevelIndex = allLevelsDataKeys.length - 1;
   for (i = 0; i < allLevelsDataKeys.length; i++) {
     curLevelId = allLevelsDataKeys[i];
   }
 
-  Game.currentScore = 0;
+  Game.currentScore = 12345;
 
   Game.setupCurrentLevel();
 };
@@ -212,7 +210,6 @@ Game.onKeyUp = function (event) {
 Game.setupCurrentLevel = function () {
   __("Game.setupCurrentLevel()::", RCSI.FMT_GAME);
 
-  Game.scoreForLevel = 0;
   Game.curLevelId = Object.keys(Game.allLevelsData)[Game.levelIndex];
   Game.curLevelData = Game.allLevelsData[Game.curLevelId];
   if (Game.levelIndex === 0) {
@@ -228,8 +225,6 @@ Game.setupCurrentLevel = function () {
   ThingManager.reset();
   ThingManager.addAllBackground();
   ThingManager.addAllEnemy();
-
-  OverlayText.setEmpty();
 
   InternalTimer.startTicking();
 };

@@ -275,7 +275,7 @@ ThingManager.update = function (_frames) {
       thing.pos.x += thing.vector.x * thing.speed * _frames;
       thing.pos.y += thing.vector.y * thing.speed * _frames;
     } else if (!thing.isDeleted && !enemyBounceHappened) {
-      enemyBounceHappened = ThingManager.enemyBounceInRectangle(thing, Layout.gameplay_rect);
+      enemyBounceHappened = ThingManager.enemyBounceInRectangle(thing, Layout.playerBounds_rect);
       thing.pos.x += thing.vector.x * thing.speed * _frames;
       thing.pos.y += thing.vector.y * thing.speed * _frames;
     }
@@ -297,7 +297,17 @@ ThingManager.update = function (_frames) {
 ThingManager.wrapAroundRectangle = function (_thing, _rect) {
   var hasWrapped,
     diameter = _thing.radius * 2,
+    wrapWidth = _rect.right - _rect.left + diameter * 2,
     wrapHeight = _rect.bottom - _rect.top + diameter * 2;
+
+  // Handle left/right edges
+  if (_thing.pos.x + diameter < _rect.left && _thing.vector.x < 0) {
+    _thing.pos.x += wrapWidth;
+    hasWrapped = true;
+  } else if (_thing.pos.x - diameter > _rect.right && _thing.vector.x > 0) {
+    _thing.pos.x -= wrapWidth;
+    hasWrapped = true;
+  }
 
   // Handle top/bottom edges
   if (_thing.pos.y + diameter < _rect.top && _thing.vector.y < 0) {

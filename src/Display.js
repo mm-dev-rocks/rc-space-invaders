@@ -20,7 +20,6 @@ import { ImageManager } from "./ImageManager.js";
 import { InternalTimer } from "./InternalTimer.js";
 import { Layout } from "./Layout.js";
 import { ThingManager } from "./ThingManager.js";
-import { OverlayText } from "./OverlayText.js";
 import { Player } from "./Player.js";
 import { Shape } from "./Shape.js";
 import { Text } from "./Text.js";
@@ -64,7 +63,6 @@ Display.init = function () {
 
   Layout.init();
   Text.init();
-  OverlayText.init();
 };
 
 /**
@@ -205,12 +203,8 @@ Display.update = function () {
   Display.drawEnemyThings();
 
   if (!Game.isOnFrontPage) {
-    Text.drawTimeRemaining();
+    Text.drawScore();
     Text.drawLevel();
-  }
-
-  if (OverlayText.content_ar?.length > 0) {
-    OverlayText.draw();
   }
 
   if (!Game.isOnFrontPage && Game.isInLevelIntro) {
@@ -287,30 +281,6 @@ Display.drawBackground = function () {
 };
 
 /**
- * @function swapContext
- * @static
- *
- * @description
- * ##### Swap to a different canvas context
- * - Used eg by OverlayText to temporarily swap to its own special canvas
- * - While swapped, all canvas operations such as in `Text` or other classes will be performed on the swapped canvas
- * - Can be used to set back to the default canvas
- *
- * @param {object} _data - [TODO:description]
- * @param {boolean} [_data.backToDefault] - If `true`, context is switched back to the standard context and any transforms are restored
- * @param {CanvasRenderingContext2D} [_data.contextToSwapTo] - The context to swap to
- */
-Display.swapContext = function (_data) {
-  if (_data.backToDefault) {
-    Display.ctx = Display.ctxDefault;
-    Display.ctx.restore();
-  } else {
-    Display.ctx.save();
-    Display.ctx = _data.contextToSwapTo;
-  }
-};
-
-/**
  * @function drawBackgroundThings
  * @static
  *
@@ -354,7 +324,7 @@ Display.drawEnemyThings = function () {
  *
  * @description
  * ##### Draw an individual thing
- * Decide what kind of primitive shape this thing is and farm out the drawing of it to the `Shape` class.
+ * Decide what kind this thing is and how to draw it.
  * - Although things have their own `pos.x`/`pos.y` properties, sometimes they are drawn offset to suggest depth/parallax
  * - So `displayX` and `displayY` are calculated here, and may not be the same as the `pos` properties
  *
@@ -375,11 +345,14 @@ Display.drawThing = function (_thing) {
   switch (_thing.type) {
     case THING_TYPE.ENEMY:
       if (Display.ctx) {
-        // TODO magic number
         var frame =
-          Math.floor(InternalTimer.frameCount / GAME.ENEMY_WIGGLE_ANIM_FRAMES) %
-          Sprite.frameCountById[IMAGE_IDS.ENEMY_SPRITESHEET_8x8];
-        var enemyImage = ImageManager.allImages_ob[IMAGE_IDS.ENEMY_SPRITESHEET_8x8].image_el;
+            Math.floor(InternalTimer.frameCount / GAME.ENEMY_WIGGLE_ANIM_FRAMES) %
+            Sprite.frameCountById[IMAGE_IDS.ENEMY_SPRITESHEET_8x8],
+          enemyImage = ImageManager.allImages_ob[IMAGE_IDS.ENEMY_SPRITESHEET_8x8].image_el;
+
+        // Draw the current frame to a buffer as it uses compositing effects which are easier to achieve on an empty
+        // canvas. `Sprite.setColoredFrameBuffer()` fills up `Sprite.coloredFrameBufferCanvas`, which we then draw to
+        // the main canvas.
         Sprite.setColoredFrameBuffer(IMAGE_IDS.ENEMY_SPRITESHEET_8x8, frame, _thing.color);
         Display.ctx.drawImage(
           Sprite.coloredFrameBufferCanvas,
@@ -395,7 +368,9 @@ Display.drawThing = function (_thing) {
         Display.ctx.globalCompositeOperation = "source-over";
       }
       break;
+
     default:
+      // Simple circles used for stars
       Shape.drawCircle(displayX, displayY, {
         radius: _thing.radius,
         color: _thing.color,
