@@ -11,7 +11,7 @@
  */
 
 import { RCSI } from "./RCSI/CONST.js";
-import { THING_SUBTYPE, THING_TYPE } from "./RCSI/ENUM.js";
+import { THING_TYPE } from "./RCSI/ENUM.js";
 import * as GAME from "./RCSI/GAME.js";
 import * as IMAGE_IDS from "./RCSI/IMAGE_IDS.js";
 
@@ -199,10 +199,10 @@ Display.update = function () {
   }
 
   Player.draw();
+  Display.drawEnemyThings();
 
   if (!Game.isOnFrontPage) {
     Text.drawTimeRemaining();
-    Text.drawCollected();
     Text.drawLevel();
   }
 
@@ -321,6 +321,27 @@ Display.drawBackgroundThings = function () {
   for (i = 0; i < ThingManager.things.length; i++) {
     thing = ThingManager.things[i];
     if (thing.type === THING_TYPE.BACKGROUND) {
+      Display.drawThing(thing);
+    }
+  }
+};
+
+/**
+ * @function drawEnemyThings
+ * @static
+ *
+ * @description
+ * ##### Enemy things
+ * - Are above and can be hit with projectiles
+ * - Conceptually are on the **middle layer**
+ */
+Display.drawEnemyThings = function () {
+  __(`Display.drawEnemyThings()`);
+  var i, thing;
+  for (i = 0; i < ThingManager.things.length; i++) {
+    thing = ThingManager.things[i];
+    if (thing.type === THING_TYPE.ENEMY) {
+      __(`Display.drawThing(thing)`);
       Display.drawThing(thing);
     }
   }

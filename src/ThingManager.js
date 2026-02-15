@@ -18,12 +18,16 @@ import { __, degreesToVector, getRandomItemFromArray, randomFloatBetween, random
 
 import { THING_TYPE } from "./RCSI/ENUM.js";
 import * as GAME from "./RCSI/GAME.js";
+import * as IMAGE_IDS from "./RCSI/IMAGE_IDS.js";
+import * as STRING from "./RCSI/STRING.js";
 
 import { Game } from "./Game.js";
 import { Layout } from "./Layout.js";
+import { ImageManager } from "./ImageManager.js";
 
 class ThingManager {
   /** @type {Array} */ static things;
+  /** @type {Object} */ static enemyImageData;
 }
 
 /**
@@ -60,11 +64,47 @@ ThingManager.deleteThings = function () {
  */
 ThingManager.addGroup = function (_data) {
   __("ThingManager.addGroup()::");
-  __("\t_data.total: " + _data.total);
-  var i;
+  let i, j;
 
-  for (i = 0; i < _data.total; i++) {
-    ThingManager.spawn(_data);
+  if (_data.type === THING_TYPE.ENEMY) {
+    __("\t_data.pattern: " + _data.pattern);
+    // Enemies are represented in a `pattern` string for visual description of grouping
+    // ENEMY_BLANK = "-", ENEMY_PRESENT = "X";
+    // Eg:
+    // -XXX-XXX-XXX-
+    // XXXXXXXXXXXXX
+    // --XX--X--XX--
+
+    if (!ThingManager.enemyImageData) {
+      ThingManager.enemyImageData = ImageManager.allImages_ob[IMAGE_IDS.ENEMY_SPRITESHEET_8x8].image_el.data;
+    }
+
+    let x = 0,
+      y = 0,
+      xStep = (ThingManager.enemyImageData.width + GAME.ENEMY_DRAW_PAD) * GAME.ENEMY_DRAW_SCALE,
+      yStep = (ThingManager.enemyImageData.height + GAME.ENEMY_DRAW_PAD) * GAME.ENEMY_DRAW_SCALE;
+
+    const rows = _data.pattern.split("\n");
+    for (i = 0; i < rows.length; i++) {
+      const cols = rows[i].split("");
+      for (j = 0; j < cols.length; j++) {
+        const char = cols[j];
+        if (char === STRING.ENEMY_BLANK) {
+          // Just move along to leave a space
+          x += xStep;
+        } else if (char === STRING.ENEMY_PRESENT) {
+          ThingManager.spawn(Object.assign({ fixedStartX: x, fixedStartY: y }, _data));
+          x += xStep;
+        }
+      }
+      x = 0;
+      y += yStep;
+    }
+  } else {
+    __("\t_data.total: " + _data.total);
+    for (i = 0; i < _data.total; i++) {
+      ThingManager.spawn(_data);
+    }
   }
 };
 
@@ -119,9 +159,12 @@ ThingManager.spawn = function (_data) {
   }
 
   if (_data.type === THING_TYPE.BACKGROUND) {
-    // BACKGROUND
     x = randomFloatBetween(bounds_rect.left + thing.radius, bounds_rect.right - thing.radius);
     y = randomFloatBetween(bounds_rect.top + thing.radius, bounds_rect.bottom - thing.radius);
+  } else if (_data.type === THING_TYPE.ENEMY) {
+    __(`ENEMY!!!`);
+    x = bounds_rect.left + _data.fixedStartX;
+    y = bounds_rect.top + _data.fixedStartY;
   } else {
     // OTHER
     x = randomFloatBetween(bounds_rect.left + thing.radius, bounds_rect.right - thing.radius);
@@ -154,6 +197,25 @@ ThingManager.bounceInRectangle = function (_thing, _rect) {
     _thing.vector.x *= -1;
     _thing.pos.x = _rect.right - _thing.radius;
     hasBounced = true;
+  }
+};
+
+/**
+ * @function addAllEnemy
+ * @static
+ *
+ * @description
+ * ##### Add all the groups of enemy things
+ * - Calls `addGroup()` for each group
+ */
+ThingManager.addAllEnemy = function () {
+  __("ThingManager.addAllEnemy");
+  var i;
+  for (i = 0; i < Game.curLevelData.things.length; i++) {
+    __(`Game.curLevelData.things[i].type: ${Game.curLevelData.things[i].type}`);
+    if (Game.curLevelData.things[i].type === THING_TYPE.ENEMY) {
+      ThingManager.addGroup(Game.curLevelData.things[i]);
+    }
   }
 };
 

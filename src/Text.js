@@ -180,17 +180,6 @@ Text.drawLevel = function () {
   });
 };
 
-Text.drawFps = function () {
-  Text.draw({
-    text: InternalTimer.currentFps.toString() + "/" + GAME.TARGET_FPS,
-    drawBackground: true,
-    alignH: UI_PORTRAIT.fps.alignH,
-    alignV: UI_PORTRAIT.fps.alignV,
-    offsetH: UI_PORTRAIT.fps.offsetByCharsH * Text.fullCharWidth,
-    offsetV: UI_PORTRAIT.fps.offsetByCharsV * (Text.lineHeight + Layout.textBgPaddingProportional * 2),
-  });
-};
-
 Text.drawVersionInfo = function (_ob) {
   var alignH,
     alignV,
@@ -238,21 +227,6 @@ Text.drawTimeRemaining = function (_data) {
     alignV: UI_PORTRAIT.timer.alignV,
     offsetH: UI_PORTRAIT.timer.offsetByCharsH * Text.fullCharWidth,
     offsetV: UI_PORTRAIT.timer.offsetByCharsV * (Text.lineHeight + Layout.textBgPaddingProportional * 2),
-  });
-};
-
-Text.drawCollected = function () {
-  var str = Text.useShortVersions
-    ? "! " + padString(Game.collectableRemaining || 0, STRING.COLLECT_PADSTRING)
-    : STRING.COLLECT_TEXT + " " + padString(Game.collectableRemaining || 0, STRING.COLLECT_PADSTRING);
-
-  Text.draw({
-    text: str,
-    drawBackground: true,
-    alignH: UI_PORTRAIT.collectText.alignH,
-    alignV: UI_PORTRAIT.collectText.alignV,
-    offsetH: UI_PORTRAIT.collectText.offsetByCharsH * Text.fullCharWidth,
-    offsetV: UI_PORTRAIT.collectText.offsetByCharsV * (Text.lineHeight + Layout.textBgPaddingProportional * 2),
   });
 };
 

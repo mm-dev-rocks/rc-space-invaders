@@ -26,20 +26,9 @@ export const GAMEOVER_REASON = {
  */
 export const THING_TYPE = {
   COLLECT: "thingTypeCollect",
-  ALIEN: "thingTypeAlien",
+  ENEMY: "thingTypeEnemy",
   BACKGROUND: "thingTypeBackground",
   LEVELINTRO: "thingTypeLevelIntro",
-};
-
-/**
- * @readonly
- * @enum {string}
- */
-export const THING_SUBTYPE = {
-  FLOWER: "thingSubtypeFlower",
-  SQUARCLE: "thingSubtypeSquarcle",
-  STAR: "thingSubtypeStar",
-  SKEWED_CIRCLE: "thingSubtypeSkewedCircle",
 };
 
 /**

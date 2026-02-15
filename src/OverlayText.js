@@ -200,66 +200,6 @@ OverlayText.setEmpty = function () {
 };
 
 /**
- * @function addCompletedLevelOutro
- * @static
- *
- * @description
- * ##### Create and add some text at the end of a level
- * - Creates text objects
- * - Directly appends the text objects to `OverlayText.content_ar`
- */
-OverlayText.addCompletedLevelOutro = function () {
-  __("Normal level completed - Setting level outro text", RCSI.FMT_OVERLAYTEXT);
-  __("\t\tSETTING OVERLAY TEXT", RCSI.FMT_OVERLAYTEXT);
-  OverlayText.content_ar = OverlayText.content_ar.concat(
-    //OverlayText.getCurrentLevelDescription(),
-    [
-      {
-        text: Game.curLevelId + " " + STRING.LEVEL_COMPLETED,
-        color: Game.curLevelData.textColorHighlight,
-      },
-      GAME.TEXT_BLANKLINE,
-      {
-        text: STRING.LEVEL_SCORE + " " + Game.scoreForLevel,
-        color: Game.curLevelData.textColor,
-        flashing: true,
-      },
-      GAME.TEXT_BLANKLINE,
-      {
-        text: Game.timeRemaining.toString() + " " + STRING.TIME_REMAINING,
-        color: Game.curLevelData.textColor,
-      },
-      GAME.TEXT_BLANKLINE,
-    ],
-  );
-};
-
-/**
- * @function updateLevelIntroSpecialLineNumbers
- * @static
- *
- * @description
- * ##### Work out where some special lines of text are
- * In the level intros, groups of 'avoid' and 'collect' things are shown next to specific lines of text ('avoid' and 'eat').
- *
- * The line numbers of those important labels can change depending on what other text is displayed.
- *
- * In this function the lines are detected and stored in variables for other classes to use.
- */
-OverlayText.updateLevelIntroSpecialLineNumbers = function () {
-  var i, currentLine;
-
-  for (i = 0; i < OverlayText.content_ar.length; i++) {
-    currentLine = OverlayText.content_ar[i];
-    if (currentLine.text === STRING.COLLECT_TEXT) {
-      OverlayText.levelIntroCollectLineNumber = i;
-    } else if (currentLine.text === STRING.AVOID_TEXT) {
-      OverlayText.levelIntroAvoidLineNumber = i;
-    }
-  }
-};
-
-/**
  * @function addHitToStart
  * @static
  *
@@ -275,39 +215,6 @@ OverlayText.addHitToStart = function () {
     },
     GAME.TEXT_BLANKLINE,
   ]);
-};
-
-/**
- * @function addNormalLevelIntro
- * @static
- *
- * @description
- * ##### Create and add some text at the beginning of a level
- * - Creates text objects
- * - Directly appends the text objects to `OverlayText.content_ar`
- */
-OverlayText.addNormalLevelIntro = function () {
-  __("Normal level intro - Setting level intro text", RCSI.FMT_OVERLAYTEXT);
-  __("\t\tSETTING OVERLAY TEXT", RCSI.FMT_OVERLAYTEXT);
-  OverlayText.content_ar = OverlayText.content_ar.concat(OverlayText.getCurrentLevelDescription(), [
-    {
-      text: STRING.CURRENT_SCORE + " " + Game.currentScore,
-      color: Game.curLevelData.textColorHighlight,
-    },
-    GAME.TEXT_BLANKLINE,
-    {
-      text: STRING.COLLECT_TEXT,
-      color: Game.curLevelData.textColorHighlight,
-    },
-    GAME.TEXT_BLANKLINE,
-    {
-      text: STRING.AVOID_TEXT,
-      color: Game.curLevelData.textColorHighlight,
-    },
-    GAME.TEXT_BLANKLINE,
-  ]);
-
-  OverlayText.updateLevelIntroSpecialLineNumbers();
 };
 
 /**

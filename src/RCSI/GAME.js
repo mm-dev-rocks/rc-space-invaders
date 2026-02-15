@@ -135,7 +135,9 @@ export const TIME_LOW_SECONDS = 10;
  *
  */
 
-export const PLAYER_DRAW_SCALE = 8;
+export const PLAYER_DRAW_SCALE = 4;
+export const ENEMY_DRAW_SCALE = 4;
+export const ENEMY_DRAW_PAD = 2;
 
 export const PLAYER_DAMPSPEED_MULTIPLIER = 7;
 

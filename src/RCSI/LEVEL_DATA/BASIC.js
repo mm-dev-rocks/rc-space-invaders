@@ -1,5 +1,4 @@
 import { THING_TYPE } from "./../ENUM.js";
-import * as SOUND_DATA from "./../SOUND_DATA.js";
 
 // LEVEL basic
 export const BASIC = {
@@ -25,7 +24,11 @@ export const BASIC = {
       speedRange: [0.01, 0.1],
     },
     {
-      type: THING_TYPE.ALIEN,
+      type: THING_TYPE.ENEMY,
+      color_ar: ["#00ff00"],
+      radiusRange: [10, 10],
+      directionRange: [180, 180],
+      speedRange: [1, 1],
       pattern: `
       -XXX-XXX-XXX-
       XXXXXXXXXXXXX

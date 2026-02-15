@@ -10,9 +10,13 @@
  * ## Strings used in the game
  */
 
+// Enemies are represented in a string to visually describe grouping.
+// These are the characters used.
+export const ENEMY_BLANK = "-";
+export const ENEMY_PRESENT = "X";
 
 // These strings will be replaced by characters from the font bitmap, the choice of strings is arbitraty but they must match up with the expectations of `Text.getCharCoordsInSpritesheet()`
-export const HEART="♥";
+export const HEART = "♥";
 export const SOUND_ENABLED = "Ö"; // ASCII 214
 export const SOUND_DISABLED = "Ø"; // ASCII 216
 export const FULLSCREEN = "‡"; // ASCII 8225
@@ -44,10 +48,6 @@ export const TIME_TEXT = CLOCK + " ";
 export const TIME_PADSTRING = "000";
 
 export const COLLECT_PADSTRING = "0000";
-
-
-export const COLLECT_TEXT = "EAT";
-export const AVOID_TEXT = "AVOID";
 
 export const ASSETS_LOADING = "RC SPACE INVADERS LOADING";
 

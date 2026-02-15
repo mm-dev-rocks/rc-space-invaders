@@ -215,38 +215,24 @@ Game.setupCurrentLevel = function () {
   Game.scoreForLevel = 0;
   Game.curLevelId = Object.keys(Game.allLevelsData)[Game.levelIndex];
   Game.curLevelData = Game.allLevelsData[Game.curLevelId];
-
   if (Game.levelIndex === 0) {
     Game.isOnFrontPage = true;
   } else {
     Game.isOnFrontPage = false;
   }
+  Game.updateLayout();
 
   Player.setupForLevel();
   Display.setupForLevel();
 
   ThingManager.reset();
   ThingManager.addAllBackground();
-
-  Game.updateLayout();
+  ThingManager.addAllEnemy();
 
   OverlayText.setEmpty();
 
   InternalTimer.startTicking();
 };
-
-///**
-// * @function startPlay
-// * @static
-// *
-// * @description
-// * ##### All intros etc have finished, actually start playing
-// */
-//Game.startPlay = function () {
-//  __("Game.startPlay()::", RCSI.FMT_GAME);
-//
-//  OverlayText.setEmpty();
-//};
 
 /**
  * @function updateLayout

@@ -16,7 +16,13 @@ import { RCSI } from "./RCSI/CONST.js";
 import * as GAME from "./RCSI/GAME.js";
 import { __, manualEvent } from "./utils.js";
 
-class ImageManager {}
+class ImageManager {
+  /** @type {Array} */ static data_ar;
+  /** @type {Array} */ static preload_ar;
+  /** @type {Function} */ static preloadCallback;
+  /** @type {Object} */ static allImages_ob;
+  /** @type {boolean} */ static produceBitmaps;
+}
 
 ImageManager.init = function (ob) {
   var i, itemData, image_tmp;
