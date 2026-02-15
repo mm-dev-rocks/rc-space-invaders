@@ -36,6 +36,8 @@ export const REMAINING = "MISSED";
 
 export const EXIT_FULLSCREEN = "[ ESC ] EXITS FULLSCREEN";
 
+export const SCORE_TEXT = "SCORE";
+export const SCORE_PADSTRING = "0000000";
 export const FINAL_SCORE = "FINAL SCORE";
 export const CURRENT_SCORE = "TOTAL SCORE";
 

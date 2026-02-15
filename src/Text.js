@@ -215,7 +215,7 @@ Text.drawVersionInfo = function (_ob) {
 Text.drawScore = function (_data) {
   Text.draw({
     text: {
-      text: Game.currentScore.toString(),
+      text: `${STRING.SCORE_TEXT} ${padString(Game.currentScore, STRING.SCORE_PADSTRING)}`,
     },
     drawBackground: true,
     alignH: UI_PORTRAIT.score.alignH,
