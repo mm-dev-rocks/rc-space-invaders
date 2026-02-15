@@ -183,19 +183,12 @@ Text.drawVersionInfo = function (_ob) {
     offsetH,
     str = window.RcSpaceInvaders.versionInfo.displayString.toUpperCase();
 
-  if (_ob?.isInLevelIntro) {
-    alignH = UI_PORTRAIT.versionInfoLevelIntro.alignH;
-    alignV = UI_PORTRAIT.versionInfoLevelIntro.alignV;
-    offsetH = UI_PORTRAIT.versionInfoLevelIntro.offsetByCharsH * Text.fullCharWidth;
-    offsetV = 0;
-  } else {
-    alignH = UI_PORTRAIT.mainTitle.alignH;
-    alignV = UI_PORTRAIT.mainTitle.alignV;
-    offsetV = 0;
-    offsetH =
-      Math.round((Layout.mainTitle_rect.right - Layout.mainTitle_rect.left) / 2 - Text.getStringWidth(str) / 2) +
-      Layout.textBgPaddingProportional;
-  }
+  alignH = UI_PORTRAIT.mainTitle.alignH;
+  alignV = UI_PORTRAIT.mainTitle.alignV;
+  offsetV = 0;
+  offsetH =
+    Math.round((Layout.mainTitle_rect.right - Layout.mainTitle_rect.left) / 2 - Text.getStringWidth(str) / 2) +
+    Layout.textBgPaddingProportional;
 
   Text.draw({
     text: str,

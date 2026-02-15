@@ -134,7 +134,7 @@ Display.updateLayout = function () {
   Display.canvas.width = Layout.canvasWidth;
   Display.canvas.height = Layout.canvasHeight;
 
-  // IMPORTANT changing width/height resets the drawing states of the context get reset
+  // IMPORTANT changing width/height resets the drawing states of the context
   Display.ctx.imageSmoothingEnabled = false;
   Display.ctxDefault.imageSmoothingEnabled = false;
 
@@ -206,10 +206,6 @@ Display.update = function () {
     Text.drawScore();
     Text.drawLevel();
   }
-
-  if (!Game.isOnFrontPage && Game.isInLevelIntro) {
-    Text.drawVersionInfo({ isInLevelIntro: true, color: Display.textColor });
-  }
 };
 
 /**
@@ -235,36 +231,6 @@ Display.drawTitle = function () {
       Layout.mainTitle_rect.bottom - Layout.mainTitle_rect.top,
     );
     Display.ctx.filter = "none";
-  }
-};
-
-/**
- * @function flashIsOff
- * @static
- *
- * @description
- * ##### For flashing items, decide whether on this frame the item should be 'off' (hidden) rather than an 'on' (displayed)
- * As the display is redrawn for every frame, if we want an item to periodically flash we need a way of calculating when to show it and when to hide it.
- * - The frame rate may be inconsistent, so it makes sense to specify the period of the on/off cycle using seconds
- * - `InternalTimer.currentFps` can be used to roughly convert seconds to frames
- * - `InternalTimer.frameCount` is a simple counter of how many frames have been drawn
- *
- * @param {number} _secsOn - How many seconds or fractions of a second the 'on' part of the flash cycle should last
- * @param {number} _secsOff - As above but for the 'off' part of the cycle
- *
- * @returns {boolean} Whether the item should be 'flashed off'. or hidden during this frame
- */
-// TODO Make the calculations more robust to prevent clashes
-Display.flashIsOff = function (_secsOn, _secsOff) {
-  var i,
-    framesOn = Math.ceil(_secsOn * InternalTimer.currentFps),
-    framesOff = Math.ceil(_secsOff * InternalTimer.currentFps),
-    fullCycleFrames = framesOn + framesOff;
-
-  for (i = 0; i < framesOff; i++) {
-    if ((InternalTimer.frameCount + i) % fullCycleFrames === 0) {
-      return true;
-    }
   }
 };
 
