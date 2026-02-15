@@ -24,8 +24,8 @@ export const INTRO = {
   instruct_text: [
     {
       portraitAlignH: HORIZ_ALIGN.CENTER,
-      portraitAlignV: VERT_ALIGN.BOTTOM,
-      portraitOffsetCharsV: -3,
+      portraitAlignV: VERT_ALIGN.CENTER,
+      portraitOffsetCharsV: 1,
       text: [
         {
           color: "#ffffff",
