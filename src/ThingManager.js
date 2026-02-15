@@ -191,16 +191,16 @@ ThingManager.enemyBounceInRectangle = function (_thing, _rect) {
   var i,
     currentThing,
     overlapSideBy = 0,
-    hasBounced = false;
+    hasBounced = false,
+    thingLeft = _thing.pos.x,
+    thingRight = _thing.pos.x + ThingManager.enemyImageData.width * GAME.ENEMY_DRAW_SCALE;
 
-  if (_thing.pos.x < _rect.left + _thing.radius) {
+  if (thingLeft < _rect.left) {
     hasBounced = true;
-    overlapSideBy = _rect.left + _thing.radius - _thing.pos.x;
-    //overlapSideBy = _thing.radius;
-  } else if (_thing.pos.x > _rect.right - _thing.radius) {
+    overlapSideBy = _rect.left - thingLeft;
+  } else if (thingRight > _rect.right) {
     hasBounced = true;
-    overlapSideBy = 0 - (_thing.pos.x - (_rect.right - _thing.radius));
-    //overlapSideBy = 0 - _thing.radius;
+    overlapSideBy = _rect.right - thingRight;
   }
   if (hasBounced) {
     for (i = 0; i < ThingManager.things.length; i++) {

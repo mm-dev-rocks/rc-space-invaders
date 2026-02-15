@@ -380,7 +380,6 @@ Display.drawThing = function (_thing) {
           Math.floor(InternalTimer.frameCount / GAME.ENEMY_WIGGLE_ANIM_FRAMES) %
           Sprite.frameCountById[IMAGE_IDS.ENEMY_SPRITESHEET_8x8];
         var enemyImage = ImageManager.allImages_ob[IMAGE_IDS.ENEMY_SPRITESHEET_8x8].image_el;
-        __(frame);
         Sprite.setColoredFrameBuffer(IMAGE_IDS.ENEMY_SPRITESHEET_8x8, frame, _thing.color);
         Display.ctx.drawImage(
           Sprite.coloredFrameBufferCanvas,
