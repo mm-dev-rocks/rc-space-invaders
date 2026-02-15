@@ -25,25 +25,8 @@ export const GAMEOVER_REASON = {
  * @enum {string}
  */
 export const THING_TYPE = {
-  COLLECT: "thingTypeCollect",
   ENEMY: "thingTypeEnemy",
   BACKGROUND: "thingTypeBackground",
-  LEVELINTRO: "thingTypeLevelIntro",
-};
-
-/**
- * @readonly
- * @enum {string}
- */
-export const ADDED_LAYER = {
-  SPOKES: "addedLayerSpokes",
-  MOUTH: "addedLayerMouth",
-  EYES: "addedLayerEyes",
-  STETSON: "addedLayerStetson",
-  BOWLER: "addedLayerBowler",
-  STEM: "addedLayerStem",
-  DOT: "addedLayerDot",
-  TRIANGLES: "addedLayerTriangles",
 };
 
 /**
@@ -55,10 +38,7 @@ export const RECTANGLE = {
   GAMEAREA: "rectangleGameArea",
   PLAYERBOUNDS: "rectanglePlayerBounds",
   BACKGROUND: "rectangleBackground",
-  FLOATING: "rectangleFloating",
-  SOUNDTOGGLEICON: "rectangleSoundToggleIcon",
   MAINTITLE: "rectangleMainTitle",
-  FULLSCREENICON: "rectangleFullscreenIcon",
 };
 
 /**
@@ -79,36 +59,6 @@ export const HORIZ_ALIGN = {
   LEFT: "horizontalAlignmentLeft",
   CENTER: "horizontalAlignmentCenter",
   RIGHT: "horizontalAlignmentRight",
-};
-
-/**
- * @readonly
- * @enum {string}
- */
-export const TIMER_ID = {
-  LEVELOUTRO_END: "timerIdLevelOutroEnd",
-  LEVELINTRO_ADD_THINGS: "timerIdLevelIntroAddThings",
-  TEXT_FADEOUT_START: "timerIdTextFadeoutStart",
-  TEXT_FADEIN_START: "timerIdTextFadeinStart",
-  LEVELINTRO_END: "timerIdLevelIntroEnd",
-};
-
-/**
- * @readonly
- * @enum {string}
- */
-export const FADE_DIRECTION = {
-  IN: "fadeDirectionIn",
-  OUT: "fadeDirectionOut",
-};
-
-/**
- * @readonly
- * @enum {string}
- */
-export const LEVEL_TRANSITION_PROPERTY_TYPE = {
-  COLOR: "levelTransitionPropertyTypeColor",
-  NUMBER: "levelTransitionPropertyTypeNumber",
 };
 
 /**

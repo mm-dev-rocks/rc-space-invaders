@@ -3,8 +3,6 @@ import { HORIZ_ALIGN, THING_TYPE, VERT_ALIGN } from "./../ENUM.js";
 // first 'level' is actually the intro/instructions screen
 export const INTRO = {
   isDark: true,
-  startHealth: 100,
-  timeAllowedSecs: 100,
   textColor: "#ffffff",
   bgColor: "#000000",
   bgFadeAlpha: 0.4,

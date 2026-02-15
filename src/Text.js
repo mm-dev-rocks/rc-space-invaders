@@ -130,11 +130,7 @@ Text.draw = function (_ob) {
     line_str = currentText;
     lineWidth = Text.getStringWidth(line_str);
 
-    if (
-      !_ob.measureOnly &&
-      !isEmpty(line_str) &&
-      (!flashing || !Display.flashIsOff(GAME.TEXT_FLASH_ON_SECS, GAME.TEXT_FLASH_OFF_SECS))
-    ) {
+    if (!_ob.measureOnly && !isEmpty(line_str)) {
       BitmapText.lineToBitmap(
         line_str,
         Math.round(itemPos.x + (blockWidth - lineWidth) / 2),

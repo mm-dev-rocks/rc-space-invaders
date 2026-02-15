@@ -19,7 +19,6 @@ import * as EL_IDS from "./EL_IDS.js";
 import * as IMAGE_DATA from "./IMAGE_DATA.js";
 import * as LEVELS from "./LEVELS.js";
 import * as JSONFILES_DATA from "./JSONFILES_DATA.js";
-import * as TIMINGS from "./TIMINGS.js";
 
 export const RCSI = {
   FMT_ERROR: "font-weight: bold; color: white; background-color: red; ",
@@ -35,7 +34,6 @@ export const RCSI = {
   FMT_PERFORMANCE: "background-color: #ffffff; color: black; ",
   FMT_FULLSCREEN: "background-color: #00ff00; color: black; ",
 
-  TIMINGS: TIMINGS,
   IMAGE_DATA: IMAGE_DATA,
   JSONFILES_DATA: JSONFILES_DATA,
   CLASSNAMES: CLASSNAMES,

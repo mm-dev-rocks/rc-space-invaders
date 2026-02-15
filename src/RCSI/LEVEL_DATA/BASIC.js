@@ -3,14 +3,11 @@ import { THING_TYPE } from "./../ENUM.js";
 // LEVEL basic
 export const BASIC = {
   isDark: true,
-  startHealth: 50,
-  timeAllowedSecs: 75,
   textColor: "#cccccc",
   textColorHighlight: "#ff4444",
   textColorShadow: "#3a3a3a",
   bgColor: "#000000",
   bgFadeAlpha: 0.56,
-  tip: "EAT AND GROW!",
   player: {
     color: "#ffffff",
   },
@@ -28,7 +25,7 @@ export const BASIC = {
       color_ar: ["#FF0000", "#FF4500", "#FFFF00", "#00FF00", "#1E90FF", "#8A2BE2", "#FF1493"],
       radiusRange: [10, 10],
       directionRange: [180, 180],
-      speedRange: [1, 1],
+      speedRange: [0.5, 0.5],
       pattern: `
       -XXX-XXX-XXX-
       XXXXXXXXXXXXX
