@@ -177,27 +177,42 @@ ThingManager.spawn = function (_data) {
 };
 
 /**
- * @function bounceInRectangle
+ * @function enemyBounceInRectangle
  * @static
  *
  * @description
- * ##### Bounce a thing off the walls of a rectangle
+ * ##### Bounce an enemy thing off the walls of a rectangle
+ * Enemies move in unison, so when one bounces, they all change direction
  *
  * @param {object} _thing
  * @param {object} _rect - A rectangle with top, right, bottom, left properties
  */
-ThingManager.bounceInRectangle = function (_thing, _rect) {
-  var hasBounced = false;
+ThingManager.enemyBounceInRectangle = function (_thing, _rect) {
+  var i,
+    currentThing,
+    overlapSideBy = 0,
+    hasBounced = false;
 
   if (_thing.pos.x < _rect.left + _thing.radius) {
-    _thing.vector.x *= -1;
-    _thing.pos.x = _rect.left + _thing.radius;
     hasBounced = true;
+    overlapSideBy = _rect.left + _thing.radius - _thing.pos.x;
+    //overlapSideBy = _thing.radius;
   } else if (_thing.pos.x > _rect.right - _thing.radius) {
-    _thing.vector.x *= -1;
-    _thing.pos.x = _rect.right - _thing.radius;
     hasBounced = true;
+    overlapSideBy = 0 - (_thing.pos.x - (_rect.right - _thing.radius));
+    //overlapSideBy = 0 - _thing.radius;
   }
+  if (hasBounced) {
+    for (i = 0; i < ThingManager.things.length; i++) {
+      currentThing = ThingManager.things[i];
+      if (currentThing.type === THING_TYPE.ENEMY) {
+        currentThing.vector.x *= -1;
+        currentThing.pos.x += overlapSideBy;
+        currentThing.pos.y += (ThingManager.enemyImageData.height + GAME.ENEMY_DRAW_PAD) * GAME.ENEMY_DRAW_SCALE;
+      }
+    }
+  }
+  return hasBounced;
 };
 
 /**
@@ -249,14 +264,16 @@ ThingManager.addAllBackground = function () {
 ThingManager.update = function (_frames) {
   var i,
     thing,
-    totalThings = ThingManager.things.length;
+    totalThings = ThingManager.things.length,
+    enemyBounceHappened = false;
 
   for (i = totalThings - 1; i >= 0; i--) {
     thing = ThingManager.things[i];
 
     if (thing.type === THING_TYPE.BACKGROUND) {
       ThingManager.wrapAroundRectangle(thing, Layout.background_rect);
-    } else if (!thing.isDeleted) {
+    } else if (!thing.isDeleted && !enemyBounceHappened) {
+      enemyBounceHappened = ThingManager.enemyBounceInRectangle(thing, Layout.gameplay_rect);
       //  if (thing.speed > thing.nativeSpeed) {
       //    thing.speed *= GAME.THING_RETURNTONORMALSPEED_RATE;
       //    if (thing.speed < thing.nativeSpeed) {

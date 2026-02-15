@@ -336,12 +336,10 @@ Display.drawBackgroundThings = function () {
  * - Conceptually are on the **middle layer**
  */
 Display.drawEnemyThings = function () {
-  __(`Display.drawEnemyThings()`);
   var i, thing;
   for (i = 0; i < ThingManager.things.length; i++) {
     thing = ThingManager.things[i];
     if (thing.type === THING_TYPE.ENEMY) {
-      __(`Display.drawThing(thing)`);
       Display.drawThing(thing);
     }
   }

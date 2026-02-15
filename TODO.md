@@ -1,5 +1,6 @@
 # BUGS
 MUST TAP TO START to allow capture of kb
+enemies on left edge, each bounce moves inwards,
 
 
 # README
