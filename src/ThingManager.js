@@ -208,10 +208,20 @@ ThingManager.enemyBounceInRectangle = function (_thing, _rect) {
       if (currentThing.type === THING_TYPE.ENEMY) {
         currentThing.vector.x *= -1;
         currentThing.pos.x += overlapSideBy;
-        currentThing.pos.y += (ThingManager.enemyImageData.height + GAME.ENEMY_DRAW_PAD) * GAME.ENEMY_DRAW_SCALE;
+        currentThing.aimY =
+          currentThing.pos.y + (ThingManager.enemyImageData.height + GAME.ENEMY_DRAW_PAD) * GAME.ENEMY_DRAW_SCALE;
+        //currentThing.pos.y += (ThingManager.enemyImageData.height + GAME.ENEMY_DRAW_PAD) * GAME.ENEMY_DRAW_SCALE;
       }
     }
   }
+
+  if (_thing.pos.y < _thing.aimY) {
+    _thing.pos.y += 20;
+    if (_thing.pos.y > _thing.aimY) {
+      _thing.pos.y = _thing.aimY;
+    }
+  }
+
   return hasBounced;
 };
 
