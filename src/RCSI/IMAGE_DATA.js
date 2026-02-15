@@ -43,4 +43,8 @@ export const IMAGE_AR = [
     id: IMAGE_IDS.IMG_PLAYER,
     file: "images/player.png",
   },
+  {
+    id: IMAGE_IDS.ENEMY_SPRITESHEET_8x8,
+    file: "images/enemy-sprites.png",
+  },
 ];
