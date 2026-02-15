@@ -26,6 +26,7 @@ import { Shape } from "./Shape.js";
 import { Text } from "./Text.js";
 
 import { __, hexOpacityToRGBA, modulo } from "./utils.js";
+import { Sprite } from "./Sprite.js";
 
 class Display {
   /** @type {HTMLCanvasElement} */ static canvas;
@@ -58,6 +59,8 @@ Display.init = function () {
   }
 
   Display.titleImage = ImageManager.getImageByID(IMAGE_IDS.MAIN_TITLE).image_el;
+  Sprite.init();
+  Sprite.precacheSheet(IMAGE_IDS.ENEMY_SPRITESHEET_8x8);
 
   Layout.init();
   Text.init();
@@ -360,17 +363,39 @@ Display.drawEnemyThings = function () {
 Display.drawThing = function (_thing) {
   var displayX,
     displayY,
-    lateralOffset = 0,
     parallaxMultiplier = 1;
 
   if (_thing.type === THING_TYPE.BACKGROUND) {
     parallaxMultiplier = GAME.BACKGROUND_LATERAL_MULTIPLIER;
   }
 
-  displayX = _thing.pos.x + lateralOffset;
+  displayX = _thing.pos.x;
   displayY = _thing.pos.y;
 
-  switch (_thing.subtype) {
+  switch (_thing.type) {
+    case THING_TYPE.ENEMY:
+      if (Display.ctx) {
+        // TODO magic number
+        var frame =
+          Math.floor(InternalTimer.frameCount / GAME.ENEMY_WIGGLE_ANIM_FRAMES) %
+          Sprite.frameCountById[IMAGE_IDS.ENEMY_SPRITESHEET_8x8];
+        var enemyImage = ImageManager.allImages_ob[IMAGE_IDS.ENEMY_SPRITESHEET_8x8].image_el;
+        __(frame);
+        Sprite.setColoredFrameBuffer(IMAGE_IDS.ENEMY_SPRITESHEET_8x8, frame, _thing.color);
+        Display.ctx.drawImage(
+          Sprite.coloredFrameBufferCanvas,
+          0,
+          0,
+          enemyImage.width,
+          enemyImage.height,
+          displayX,
+          displayY,
+          enemyImage.width * GAME.ENEMY_DRAW_SCALE,
+          enemyImage.height * GAME.ENEMY_DRAW_SCALE,
+        );
+        Display.ctx.globalCompositeOperation = "source-over";
+      }
+      break;
     default:
       Shape.drawCircle(displayX, displayY, {
         radius: _thing.radius,

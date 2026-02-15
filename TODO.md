@@ -10,6 +10,8 @@ Mention that CSS isn't big for this project
 # Comments
 Identify which classes will be used most and make sure comments are rock solid
 
+# Clean up redundant stuff from CONST files"#00ff00"
+
 # First Level
 Remove unwanted text at top
 Add score readout at top

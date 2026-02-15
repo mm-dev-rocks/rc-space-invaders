@@ -21,11 +21,11 @@ export const BASIC = {
       color_ar: ["#bbbbbb", "#dddddd", "#999999", "#ffffff"],
       radiusRange: [1, 2],
       directionRange: [80, 100],
-      speedRange: [0.01, 0.1],
+      speedRange: [0.01, 0.2],
     },
     {
       type: THING_TYPE.ENEMY,
-      color_ar: ["#00ff00"],
+      color_ar: ["#00ff00", "#00ff55", "#00ffbb"],
       radiusRange: [10, 10],
       directionRange: [180, 180],
       speedRange: [1, 1],

@@ -18,7 +18,6 @@ import * as STRING from "./RCSI/STRING.js";
 import { BitmapText } from "./BitmapText.js";
 import { Display } from "./Display.js";
 import { Game } from "./Game.js";
-import { InternalTimer } from "./InternalTimer.js";
 import { Layout } from "./Layout.js";
 import { Player } from "./Player.js";
 

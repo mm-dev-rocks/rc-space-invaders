@@ -272,16 +272,10 @@ ThingManager.update = function (_frames) {
 
     if (thing.type === THING_TYPE.BACKGROUND) {
       ThingManager.wrapAroundRectangle(thing, Layout.background_rect);
+      thing.pos.x += thing.vector.x * thing.speed * _frames;
+      thing.pos.y += thing.vector.y * thing.speed * _frames;
     } else if (!thing.isDeleted && !enemyBounceHappened) {
       enemyBounceHappened = ThingManager.enemyBounceInRectangle(thing, Layout.gameplay_rect);
-      //  if (thing.speed > thing.nativeSpeed) {
-      //    thing.speed *= GAME.THING_RETURNTONORMALSPEED_RATE;
-      //    if (thing.speed < thing.nativeSpeed) {
-      //      thing.speed = thing.nativeSpeed;
-      //    }
-    }
-
-    if (!thing.isDeleted) {
       thing.pos.x += thing.vector.x * thing.speed * _frames;
       thing.pos.y += thing.vector.y * thing.speed * _frames;
     }
