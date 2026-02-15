@@ -29,6 +29,7 @@ export const BASIC = {
       pattern: `
       -XXX-XXX-XXX-
       XXXXXXXXXXXXX
+      XXXXXXXXXXXXX
       --XX--X--XX--
       `,
     },
