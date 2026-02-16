@@ -8,11 +8,14 @@
  *
  * @description
  * ## Everything starts here
- * - This file is the JS entry point, where the code starts
- * - The process is:
- *   `index.html` -> `main.js` -> IIFE -> App starts
- * - Although this file is called `main.js` by convention, this, the main module, is referred to as `window.RcSpaceInvaders` throughout the app.
  *
+ * This file is the JS entry point, where the code starts. The process is:
+ * -  `index.html` calls `RcSpaceInvaders.init()`
+ * - `init()` calls `createApp()`
+ * - etc...
+ *
+ * To bundle the JS, `esbuild` must be run with `--global-name=RcSpaceInvaders`. This means this module is exported into `window` with that name.
+ * So although this file is called `main.js` by convention, this main module is referred to as `window.RcSpaceInvaders` throughout the app.
  */
 
 import * as JSONFILE_IDS from "./RCSI/JSONFILE_IDS.js";

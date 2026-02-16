@@ -17,7 +17,6 @@ esbuild src/main.js \
     --outfile=www/js/rc-space-invaders.js \
     --target=es6 \
     --global-name=RcSpaceInvaders \
-    --format=iife \
     --watch \
     --servedir=www \
     --bundle \
