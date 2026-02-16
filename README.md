@@ -21,10 +21,10 @@ Hopefully orientation will be straightforward but for a quick start:
 
 ## Building
 
-Really **all we need to do is bundle the JS with esbuild** (there is some minimal CSS but rarely any need to edit it).    
+**All we need to do is bundle the JS with esbuild**
 
 ### esbuild  
-JS  bundler, tree shaker, transpiler. I like to install a standalone build but it can also be installed with npm or other methods:  
+JS bundler/tree shaker/transpiler. I install a standalone build but there are other ways eg `npm install --save-exact --save-dev esbuild`:  
 [esbuild: Download a build](https://esbuild.github.io/getting-started/#download-a-build)
 
 From the project root:
@@ -43,6 +43,9 @@ esbuild src/main.js \
 
 
 ### SASS  
+
+**CSS is minimal and there's rarely any need to edit it**
+
 For compiling and bundling SASS/SCSS:  
 [SASS: Install SASS](https://sass-lang.com/install)
 
