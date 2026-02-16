@@ -10,25 +10,39 @@
 import { RCSI } from "./RCSI/CONST.js";
 import { __, manualEvent } from "./utils.js";
 
-class JsonManager {}
+class JsonManager {
+  /** @type {Object} */ static allJson_ob;
+  /** @type {Function} */ static preloadCallback;
+  /** @type {Array} */ static data_ar;
+  /** @type {Array} */ static preload_ar;
+}
 
-JsonManager.init = function (ob) {
+/**
+ * @function init
+ * @static
+ *
+ * @description
+ * ##### Initialise the JSON manager
+ *
+ * @param {Object} _ob - Data object with following properties:
+ *
+ * @property {Array} _ob.json_ar - Array of JSON data (each item has `id` and `file`)
+ *
+ * @property {Function} _ob.preloadCallback - Function to call when all JSON files have loaded
+ */
+JsonManager.init = function (_ob) {
   var i, json_tmp;
 
-  JsonManager.data_ar = ob.json_ar;
-  JsonManager.preloadCallback = ob.preloadCallback;
+  JsonManager.data_ar = _ob.json_ar;
+  JsonManager.preloadCallback = _ob.preloadCallback;
   JsonManager.preload_ar = [];
   JsonManager.allJson_ob = {};
 
-  // loop through array of json files
-  // create file objects from them, add them to the preload_ar
-  // and watch for them to finish loading
+  // Loop through array of json files
+  // Create file objects from them, add them to the preload_ar, and watch for them to finish loading
   for (i = 0; i < JsonManager.data_ar.length; i++) {
     if (JsonManager.allJson_ob[JsonManager.data_ar[i].id]) {
-      __(
-        "" + JsonManager.data_ar[i].id + ": already exists - skipping preload",
-        RCSI.FMT_JSONMANAGER
-      );
+      __("" + JsonManager.data_ar[i].id + ": already exists - skipping preload", RCSI.FMT_JSONMANAGER);
     } else {
       json_tmp = new XMLHttpRequest();
       json_tmp.open("GET", JsonManager.data_ar[i].file);
@@ -41,14 +55,38 @@ JsonManager.init = function (ob) {
   }
 };
 
-JsonManager.getJsonByID = function (id) {
-  return JsonManager.allJson_ob[id];
+/**
+ * @function getJsonByID
+ * @static
+ *
+ * @description
+ * ##### Get some JSON
+ *
+ * @param {String} _id - The JSON ID as used during initialisation
+ *
+ * @returns {String} A JSON string
+ */
+JsonManager.getJsonByID = function (_id) {
+  return JsonManager.allJson_ob[_id];
 };
 
-JsonManager.onJsonLoad = function (event) {
+/**
+ * @function onJsonLoad
+ * @static
+ *
+ * @description
+ * ##### Process a JSON load event
+ *
+ * - Update the `allJson_ob` object with final data
+ *
+ * - Check whether all JSON files are now loaded and call the `preloadCallback` function if so
+ *
+ * @param {Event} _event - A load event
+ */
+JsonManager.onJsonLoad = function (_event) {
   var i,
-    id = event.target.id,
-    json_request = event.target;
+    id = _event.target.id,
+    json_request = _event.target;
 
   for (i = 0; i < JsonManager.preload_ar.length; i++) {
     if (JsonManager.preload_ar[i] === json_request) {

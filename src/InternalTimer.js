@@ -68,9 +68,11 @@ InternalTimer.startTicking = function () {
  *
  * @description
  * ##### This function is given as a callback for `requestAnimationFrame()`
+ *
  * - Calculate how many frames have passed since the last tick
  * - Increment the internal frame count variable
  * - Call the main game update function `Game.updateByFrameCount()`, passing it the number of frames
+ * - Update the average FPS (used in some animation calculations)
  * - Start the next tick
  *
  * @param {DOMHighResTimeStamp} _timestamp_ms - The time of the previous frame's rendering (automatically passed in by `requestAnimationFrame()`)
@@ -110,10 +112,10 @@ InternalTimer.nextTick = function () {
  * @description
  * ##### Keep a rolling average of how many frames per second we are achieving
  * - On each `InternalTimer.tick()` an estimate of FPS for the latest frame is calculated and passed in to this function
- * - The most recent few (`GAME.FPSDISPLAY_AVERAGE_FRAMES_SPAN`) fps timings are kept in an array
+ * - The most recent few (`GAME.FPSDISPLAY_AVERAGE_FRAMES_SPAN`) FPS timings are kept in an array
  * - The array is summed and the sum is divided by the array length to get an average (mean) which is stored as `InternalTimer.currentFps`
  *
- * @param {number} _latestFps - The most recent FPS reading
+ * @param {Number} _latestFps - The most recent FPS reading
  */
 InternalTimer.updateFpsAverage = function (_latestFps) {
   var i,
@@ -142,9 +144,9 @@ InternalTimer.updateFpsAverage = function (_latestFps) {
  * ##### Convert seconds to number of frames
  * Eg when an animation wants to run for 10secs, how many frames should it last for?
  *
- * @param {number} _secs - How many seconds to convert
+ * @param {Number} _secs - How many seconds to convert
  *
- * @returns {number} The **estimated** number of frames it will take for `_secs` seconds to expire
+ * @returns {Number} The **estimated** number of frames it will take for `_secs` seconds to expire
  */
 InternalTimer.secondsToFrames = function (_secs) {
   return Math.ceil(_secs * InternalTimer.currentFps);

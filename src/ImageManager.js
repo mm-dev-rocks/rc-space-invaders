@@ -8,8 +8,8 @@
  *
  * @description
  * ## Pre-load required images
+ *
  * - Cache as `<image>` elements
- * - Optionally also produce and cache `ImageBitmap`s
  */
 
 import { RCSI } from "./RCSI/CONST.js";
@@ -22,17 +22,30 @@ class ImageManager {
   /** @type {Object} */ static allImages_ob;
 }
 
-ImageManager.init = function (ob) {
+/**
+ * @function init
+ * @static
+ *
+ * @description
+ * ##### Initialise the image manager
+ *
+ * @param {Object} _ob - Data object with following properties:
+ *
+ * @property {Array} _ob.image_ar - Array of image data (each image has at least `id` and `file` and possibly other
+ * metadata, see `/RCSI/IMAGE_DATA.js`)
+ *
+ * @property {Function} _ob.preloadCallback - Function to call when all images have loaded
+ */
+ImageManager.init = function (_ob) {
   var i, itemData, image_tmp;
 
-  ImageManager.data_ar = ob.image_ar;
-  ImageManager.preloadCallback = ob.preloadCallback;
+  ImageManager.data_ar = _ob.image_ar;
+  ImageManager.preloadCallback = _ob.preloadCallback;
   ImageManager.preload_ar = [];
   ImageManager.allImages_ob = {};
 
-  // loop through array of image files
-  // create image objects from them, add them to the preload_ar
-  // and watch for them to finish loading
+  // Loop through array of image files.
+  // create image objects from them, add them to the preload_ar, and watch for them to finish loading.
   for (i = 0; i < ImageManager.data_ar.length; i++) {
     itemData = ImageManager.data_ar[i];
     if (ImageManager.allImages_ob[itemData.id]) {
@@ -48,10 +61,32 @@ ImageManager.init = function (ob) {
   }
 };
 
-ImageManager.getImageByID = function (id) {
-  return ImageManager.allImages_ob[id];
+/**
+ * @function getImageByID
+ * @static
+ *
+ * @description
+ * ##### Get an image and associated data
+ *
+ * @param {String} _id - The image ID as used during initialisation
+ *
+ * @returns {Object} Containing an HTMLImageElement and associated metadata
+ */
+ImageManager.getImageByID = function (_id) {
+  return ImageManager.allImages_ob[_id];
 };
 
+/**
+ * @function updatePreloadStatus
+ * @static
+ *
+ * @description
+ * ##### Update status of preloaded images
+ *
+ * Check whether all images are now loaded and call the `preloadCallback` function if so
+ *
+ * @param {HTMLImageElement} _el - An image element that has just updated its loading status
+ */
 ImageManager.updatePreloadStatus = function (_el) {
   var i;
 
@@ -68,15 +103,25 @@ ImageManager.updatePreloadStatus = function (_el) {
   });
 
   if (ImageManager.preload_ar.length === 0) {
-    // all images loaded
     if (ImageManager.preloadCallback) {
       ImageManager.preloadCallback();
     }
   }
 };
 
-ImageManager.onImageLoad = function (event) {
-  var image_el = event.target,
+/**
+ * @function onImageLoad
+ * @static
+ *
+ * @description
+ * ##### Process an image load event
+ *
+ * Update the `allImages_ob` object with final data
+ *
+ * @param {Event} _event - A load event
+ */
+ImageManager.onImageLoad = function (_event) {
+  var image_el = _event.target,
     id = image_el.data.id;
 
   ImageManager.allImages_ob[id] = image_el.data;
