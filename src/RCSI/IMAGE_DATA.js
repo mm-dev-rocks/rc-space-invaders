@@ -14,6 +14,18 @@
 
 import * as IMAGE_IDS from "./IMAGE_IDS.js";
 
+/**
+ * @constant IMAGE_AR
+ *
+ * @description
+ * ## Info about image assets
+ *
+ * Each item must have at least:
+ * id: Which must exist in `IMAGE_IDS`
+ * file: Path to the image file relative to the www root
+ *
+ * Other variables may also be added and will be made available via `ImageManager`
+ */
 export const IMAGE_AR = [
   {
     // https://robey.lag.net/2010/01/23/tiny-monospace-font.html
@@ -45,8 +57,9 @@ export const IMAGE_AR = [
   },
   {
     id: IMAGE_IDS.ENEMY_SPRITESHEET_8x8,
+    file: "images/enemy-sprites.png",
+    // Size of each frame
     width: 8,
     height: 8,
-    file: "images/enemy-sprites.png",
   },
 ];
