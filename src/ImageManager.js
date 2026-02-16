@@ -13,7 +13,6 @@
  */
 
 import { RCSI } from "./RCSI/CONST.js";
-import * as GAME from "./RCSI/GAME.js";
 import { __, manualEvent } from "./utils.js";
 
 class ImageManager {
@@ -21,7 +20,6 @@ class ImageManager {
   /** @type {Array} */ static preload_ar;
   /** @type {Function} */ static preloadCallback;
   /** @type {Object} */ static allImages_ob;
-  /** @type {boolean} */ static produceBitmaps;
 }
 
 ImageManager.init = function (ob) {
@@ -31,8 +29,6 @@ ImageManager.init = function (ob) {
   ImageManager.preloadCallback = ob.preloadCallback;
   ImageManager.preload_ar = [];
   ImageManager.allImages_ob = {};
-
-  ImageManager.produceBitmaps = ob.produceBitmaps;
 
   // loop through array of image files
   // create image objects from them, add them to the preload_ar
@@ -86,20 +82,7 @@ ImageManager.onImageLoad = function (event) {
   ImageManager.allImages_ob[id] = image_el.data;
   ImageManager.allImages_ob[id].image_el = image_el;
 
-  if (ImageManager.produceBitmaps) {
-    createImageBitmap(image_el, GAME.BITMAPIMAGE_DEFAULT_OPTIONS).then(
-      function (imageBitmap) {
-        ImageManager.allImages_ob[id].bitmap = imageBitmap;
-        __("\tbitmap created: " + ImageManager.allImages_ob[id].bitmap, RCSI.FMT_IMAGEMANAGER);
-        ImageManager.updatePreloadStatus(image_el);
-      },
-      function (error) {
-        __(error, RCSI.FMT_ERROR);
-      },
-    );
-  } else {
-    ImageManager.updatePreloadStatus(image_el);
-  }
+  ImageManager.updatePreloadStatus(image_el);
 };
 
 export { ImageManager };
