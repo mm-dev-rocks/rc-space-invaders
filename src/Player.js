@@ -131,6 +131,7 @@ Player.draw = function () {
 
   playerDrawnPosX = Player.pos.x;
   playerDrawnPosY = Player.pos.y;
+  // TODO Colour isn't being used
   color = Player.color;
 
   if (Display.ctx) {

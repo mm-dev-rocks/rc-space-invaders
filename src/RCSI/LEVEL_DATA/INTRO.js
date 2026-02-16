@@ -7,7 +7,7 @@ export const INTRO = {
   bgColor: "#000000",
   bgFadeAlpha: 0.4,
   player: {
-    color: "#ffffff",
+    color: "#cccccc",
   },
   things: [
     {
