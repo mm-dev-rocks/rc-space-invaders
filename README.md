@@ -14,7 +14,7 @@ This is a vanilla JS project.
 Hopefully orientation will be straightforward but for a quick start:
 
 
-### `/src/`
+### `/src/` directory
 
 - `main.js` App entry point
 - `Game.js` Handles high-level game stuff such as loading/starting a level, scoring etc
@@ -23,14 +23,14 @@ Hopefully orientation will be straightforward but for a quick start:
 - `InternalTimer.js` Manages the timer for the game loop
 
 
-### `/000-ASSETS/`
+### `/000-ASSETS/` directory
 
 Files used during dev eg:
 - Krita (image editor) project files
 - Shell scripts to merge images into sprite sheets
 
 
-### `/src/RCSI/`
+### `/src/RCSI/` directory
 
 Constants for configuring the game eg:
 - Strings for display text
