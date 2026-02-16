@@ -42,7 +42,7 @@ class Layout {
  *
  * @description
  * ##### Simple initialisation
- * This just calls the update function with a default gameplay area size so that the caclulations have something to work with
+ * Calls the update function with a default gameplay area size (no arguments) so that the other calculations have something to work with
  */
 Layout.init = function () {
   __("Layout.init()::", RCSI.FMT_LAYOUT);
@@ -55,6 +55,7 @@ Layout.init = function () {
  *
  * @description
  * ##### Calculate some values which are used heavily throughout the app
+ *
  * - `Layout.proportionalMultiplier` - Used to shrink/grow things in relation to an ideal (`GAME.SCALING_TARGET_SIZE`), to try to make things feel consistent between highly variable screen sizes
  * - `Layout.mainPaddingProportional` - Common padding used eg between text/icons and the edge of the screen
  * - `Layout.textBgPaddingProportional` - Extra spacing around text and the borders of its background
@@ -81,7 +82,7 @@ Layout.setProportionalSizes = function () {
  * @static
  *
  * @description
- * ##### Calculate sizes (particularly recctangles) for lots of important parts of the game and UI
+ * ##### Calculate sizes (particularly rectangles) for lots of important parts of the game and UI
  *
  */
 Layout.update = function () {
@@ -175,7 +176,6 @@ Layout.getRectangle = function (_type) {
       w,
       h,
       0,
-      //0
       UI_PORTRAIT.mainTitle.offsetByCharsV * Text.drawnCharHeight,
     );
     rect = {
@@ -186,34 +186,6 @@ Layout.getRectangle = function (_type) {
     };
     //
     //
-  } else if (_type === RECTANGLE.SOUNDTOGGLEICON) {
-    pos = Layout.getAlignedPos(
-      UI_PORTRAIT.soundToggle.alignH,
-      UI_PORTRAIT.soundToggle.alignV,
-      Text.drawnCharWidth,
-      Text.drawnCharHeight,
-    );
-    rect = {
-      left: pos.x - Layout.hitAreaPaddingProportional,
-      right: pos.x + Text.drawnCharWidth + Layout.hitAreaPaddingProportional,
-      top: pos.y - Layout.hitAreaPaddingProportional,
-      bottom: pos.y + Text.drawnCharHeight + Layout.hitAreaPaddingProportional,
-    };
-    //
-    //
-  } else if (_type === RECTANGLE.FULLSCREENICON) {
-    pos = Layout.getAlignedPos(
-      UI_PORTRAIT.fullscreenToggle.alignH,
-      UI_PORTRAIT.fullscreenToggle.alignV,
-      Text.drawnCharWidth,
-      Text.drawnCharHeight,
-    );
-    rect = {
-      left: pos.x - Layout.hitAreaPaddingProportional,
-      right: pos.x + Text.drawnCharWidth + Layout.hitAreaPaddingProportional,
-      top: pos.y - Layout.hitAreaPaddingProportional,
-      bottom: pos.y + Text.drawnCharHeight + Layout.hitAreaPaddingProportional,
-    };
   }
   return rect;
 };
@@ -235,8 +207,8 @@ Layout.getRectangle = function (_type) {
  * @returns {object}  x/y coordinates for the item
  */
 Layout.getAlignedPos = function (_alignmentH, _alignmentV, _itemWidth, _itemHeight, _offsetH, _offsetV) {
-  var x,
-    y,
+  var x = 0,
+    y = 0,
     padding = Layout.mainPaddingProportional,
     offsetH = _offsetH || 0,
     offsetV = _offsetV || 0;
@@ -260,8 +232,10 @@ Layout.getAlignedPos = function (_alignmentH, _alignmentV, _itemWidth, _itemHeig
   } else {
     __("Layout::getAlignedPos:: _alignmentV NOT RECOGNISED: " + _alignmentH, RCSI.FMT_ERROR);
   }
+
   x += offsetH;
   y += offsetV;
+
   return { x: Math.round(x), y: Math.round(y) };
 };
 
