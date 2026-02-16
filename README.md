@@ -4,7 +4,7 @@
 
 ## Development Environment
 
-Really all we need to do is bundle the JS with esbuild (there is some minimal CSS but rarely a need to edit it).    
+Really **all we need to do is bundle the JS with esbuild** (there is some minimal CSS but rarely any need to edit it).    
 
 ### esbuild  
 JS  bundler, tree shaker, transpiler. I like to install a standalone build but it can also be installed with npm or other methods:  
@@ -13,12 +13,21 @@ JS  bundler, tree shaker, transpiler. I like to install a standalone build but i
 From the project root:
 
 ```sh
-esbuild src/main.js --outfile=www/js/rc-space-invaders.js --target=es6 --bundle --minify --sourcemap --global-name=RcSpaceInvaders --format=iife --watch --servedir=www
+esbuild src/main.js \
+    --outfile=www/js/rc-space-invaders.js \
+    --target=es6 \
+    --global-name=RcSpaceInvaders \
+    --format=iife \
+    --watch \
+    --servedir=www \
+    --bundle \
+    --minify \
+    --sourcemap 
 ```
 
 
 ### SASS  
-For compiling and bundling SASS/SCSS:
+For compiling and bundling SASS/SCSS:  
 [SASS: Install SASS](https://sass-lang.com/install)
 
 From the project root:
