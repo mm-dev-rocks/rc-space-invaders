@@ -41,15 +41,14 @@ Constants for configuring the game eg:
 
 **All we need to do is bundle the JS with esbuild**
 
-### esbuild  
-JS bundler/tree shaker/transpiler. 
-
-I install a standalone build but there are other ways eg `npm install --save-exact --save-dev esbuild`:  
+### esbuild (JS bundler/tree shaker/transpiler)
 [esbuild: Download a build](https://esbuild.github.io/getting-started/#download-a-build)
 
-From the project root:
+I install a standalone build but there are other ways eg `npm install --save-exact --save-dev esbuild`:  
 
 ```sh
+# From the project root:
+
 esbuild src/main.js \
     --outfile=www/js/rc-space-invaders.js \
     --target=es6 \
@@ -62,15 +61,13 @@ esbuild src/main.js \
 ```
 
 
-### SASS  
+### SASS (For compiling and bundling SASS/SCSS)
+[SASS: Install SASS](https://sass-lang.com/install)
 
 **CSS is minimal and there's rarely any need to edit it**
 
-For compiling and bundling SASS/SCSS:  
-[SASS: Install SASS](https://sass-lang.com/install)
-
-From the project root:
-
 ```sh
+# From the project root:
+
 sass --watch src/scss/:www/css/
 ```
