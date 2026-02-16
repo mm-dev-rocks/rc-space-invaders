@@ -10,7 +10,6 @@
  * ## A simple loading progress bar
  */
 
-
 import { __, removeChildFromParent } from "./utils.js";
 
 import * as STRING from "./RCSI/STRING.js";
@@ -20,7 +19,7 @@ class LoadingIndicator {}
 
 /**
  * @function init
- * @static 
+ * @static
  *
  * @description
  * ##### Create the graphical elements, add event listeners and set to 0%
@@ -49,16 +48,16 @@ LoadingIndicator.init = function () {
 
 /**
  * @function setPercentage
- * @static 
+ * @static
  *
  * @description
  * ##### Update the percentage of loading that has completed so far
  * Visually changes the size of the inidcator bar by altering its `paddingRight` property
  *
- * @param {number} percentDone
+ * @param {number} _percentDone
  */
-LoadingIndicator.setPercentage = function (percentDone) {
-  var scaledPercent = (100 - percentDone) / LoadingIndicator.CSSWIDTH_SCALE;
+LoadingIndicator.setPercentage = function (_percentDone) {
+  var scaledPercent = (100 - _percentDone) / LoadingIndicator.CSSWIDTH_SCALE;
   LoadingIndicator.bar_el.style.paddingRight = scaledPercent + "%";
 };
 
@@ -80,7 +79,7 @@ LoadingIndicator.onPageLoadStarted = function () {
 };
 
 LoadingIndicator.onUpdate = function (event) {
-  LoadingIndicator.setPercentage(event.detail.percentDone);
+  LoadingIndicator.setPercentage(event.detail._percentDone);
 };
 
 LoadingIndicator.CSSWIDTH_SCALE = 2; // eg. 2 if 'full' width should be 50% (100/2)

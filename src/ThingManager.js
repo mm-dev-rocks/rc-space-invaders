@@ -8,8 +8,9 @@
  *
  * @description
  * ## Handles thing-related jobs
+ *
  * 'Things' are all non-player, in-game items including:
- * - Background stars
+ * - Background (stars)
  * - Enemies
  * - Bullets
  */
@@ -60,7 +61,7 @@ ThingManager.deleteThings = function () {
  * ##### Add a group of things to the game
  * Loops through the group, calling `spawn()` repeatedly until `_data.total` things of this group type have been added.
  *
- * @param {object} _data - An object describing a group of things, originating from a `LEVEL_DATA/*.js` file
+ * @param {Object} _data - An object describing a group of things, originating from a `LEVEL_DATA/*.js` file
  */
 ThingManager.addGroup = function (_data) {
   __("ThingManager.addGroup()::");
@@ -101,6 +102,7 @@ ThingManager.addGroup = function (_data) {
       y += yStep;
     }
   } else {
+    // All other thing types
     __("\t_data.total: " + _data.total);
     for (i = 0; i < _data.total; i++) {
       ThingManager.spawn(_data);
@@ -115,10 +117,10 @@ ThingManager.addGroup = function (_data) {
  * @description
  * ##### Get a random vector for a thing, based on its allowable range of movement as described in its group data
  *
- * @param {number} _degreesMin - Smallest possible angle of direction in degrees
- * @param {number} _degreesMax - Largest possible angle of direction in degrees
+ * @param {Number} _degreesMin - Smallest possible angle of direction in degrees
+ * @param {Number} _degreesMax - Largest possible angle of direction in degrees
  *
- * @return {object} A normalised vector
+ * @return {Object} A normalised vector
  */
 ThingManager.getRandomVector = function (_degreesMin, _degreesMax) {
   return degreesToVector(randomIntBetween(_degreesMin, _degreesMax));
@@ -130,9 +132,10 @@ ThingManager.getRandomVector = function (_degreesMin, _degreesMax) {
  *
  * @description
  * ##### Creates an individual thing object and adds it to `ThingManager.things` array
+ *
  * Sets various properties depending on the type of thing.
  *
- * @param {object} _data - An object describing a group of things, originating from a `LEVEL_DATA/*.js` file
+ * @param {Object} _data - An object describing a group of things, originating from a `LEVEL_DATA/*.js` file
  */
 ThingManager.spawn = function (_data) {
   var x,
@@ -182,10 +185,13 @@ ThingManager.spawn = function (_data) {
  *
  * @description
  * ##### Bounce an enemy thing off the walls of a rectangle
+ *
  * Enemies move in unison, so when one bounces, they all change direction
  *
- * @param {object} _thing
- * @param {object} _rect - A rectangle with top, right, bottom, left properties
+ * @param {Object} _thing
+ * @param {Object} _rect - A rectangle with top, right, bottom, left properties
+ *
+ * @returns {Boolean} Whether a bounce happened or not
  */
 ThingManager.enemyBounceInRectangle = function (_thing, _rect) {
   var i,
@@ -202,19 +208,21 @@ ThingManager.enemyBounceInRectangle = function (_thing, _rect) {
     hasBounced = true;
     overlapSideBy = _rect.right - thingRight;
   }
+
   if (hasBounced) {
     for (i = 0; i < ThingManager.things.length; i++) {
       currentThing = ThingManager.things[i];
       if (currentThing.type === THING_TYPE.ENEMY) {
         currentThing.vector.x *= -1;
         currentThing.pos.x += overlapSideBy;
+        // Initiate 'drop down' by setting the final y pos we're aiming for
         currentThing.aimY =
           currentThing.pos.y + (ThingManager.enemyImageData.height + GAME.ENEMY_DRAW_PAD) * GAME.ENEMY_DRAW_SCALE;
-        //currentThing.pos.y += (ThingManager.enemyImageData.height + GAME.ENEMY_DRAW_PAD) * GAME.ENEMY_DRAW_SCALE;
       }
     }
   }
 
+  // Gradually drop down
   if (_thing.pos.y < _thing.aimY) {
     _thing.pos.y += 20;
     if (_thing.pos.y > _thing.aimY) {
@@ -269,7 +277,7 @@ ThingManager.addAllBackground = function () {
  * @description
  * ##### Loop through all things, updating their positions and other properties
  *
- * @param {number} _frames - Number of frames passed since last update, in case the engine isn't keeping up with our desired frame rate and we need perform multiple operations to keep things as smooth/consistent as possible
+ * @param {Number} _frames - Number of frames passed since last update, in case the engine isn't keeping up with our desired frame rate and we need perform multiple operations to keep things as smooth/consistent as possible
  */
 ThingManager.update = function (_frames) {
   var i,
@@ -301,8 +309,8 @@ ThingManager.update = function (_frames) {
  * Behaviour varies based on thing type.
  * IN THIS GAME ONLY THE STARS WRAP, SO WE ONLY NEED TO HANDLE THE TOP/BOTTOM EDGES
  *
- * @param {object} _thing
- * @param {object} _rect - A rectangle with top, right, bottom, left properties
+ * @param {Object} _thing
+ * @param {Object} _rect - A rectangle with top, right, bottom, left properties
  */
 ThingManager.wrapAroundRectangle = function (_thing, _rect) {
   var hasWrapped,
