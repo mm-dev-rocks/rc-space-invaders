@@ -9,7 +9,8 @@
  * @description
  * ## Pre-load required images
  *
- * - Cache as `<image>` elements
+ * - Cache as `<image>` elements accessible via an ID
+ * - Optionally store supplementary data (eg dimensions of frames in a spritesheet)
  */
 
 import { RCSI } from "./RCSI/CONST.js";
