@@ -1,59 +1,28 @@
 # RC Space Invaders
 
 
-## Play
-
 
 ## Development Environment
 
-### Dependencies
-    
+Really all we need to do is bundle the JS with esbuild (there is some minimal CSS but rarely a need to edit it).    
+
+### esbuild  
+JS  bundler, tree shaker, transpiler. I like to install a standalone build but it can also be installed with npm or other methods:  
+[esbuild: Download a build](https://esbuild.github.io/getting-started/#download-a-build)
+
+From the project root:
 
 ```sh
 esbuild src/main.js --outfile=www/js/rc-space-invaders.js --target=es6 --bundle --minify --sourcemap --global-name=RcSpaceInvaders --format=iife --watch --servedir=www
 ```
 
 
-
-### esbuild  
-JS  bundler, tree shaker, transpiler. I like to install a standalone build but it can also be installed with npm or other methods:  
-[esbuild: Download a build](https://esbuild.github.io/getting-started/#download-a-build)
-
-
 ### SASS  
 For compiling and bundling SASS/SCSS:
 [SASS: Install SASS](https://sass-lang.com/install)
 
+From the project root:
 
-### Example of Project Setup Using Tmux/Vim  
-
-Below is an example build script which does the following:
-
-- Change to the project directory
-- Use `tmux` to open a few window panes:
- 
-    - **esbuild** watching for changes to **JS**
-    - **SASS** watching for changes to **CSS**
-    - **git** status, pane left open for commits etc
-    - A simple **Python server** so we can test the app in a browser
-- Open a **vim** session for file **editing**
-
-
-```bash
-
-#!/bin/bash
-
-# Open a JS project using esbuild, SASS and vim
-
-WORK_DIR="$HOME"/000-WORK/rc-space-invaders/
-
-'tmux' \
-    new-window -c "$WORK_DIR" "esbuild src/main.js --outfile=www/js/rc-space-invaders.js --target=es6 --bundle --minify --sourcemap --global-name=PIPEDREAM --format=iife --watch" \; \
-    split-window -c "$WORK_DIR" "sass --watch src/scss/:www/css/" \; \
-    split-window -c "$WORK_DIR" "git status; bash -i" \; \
-    split-window -c "$WORK_DIR" "python -m http.server --directory www/" \; \
-    select-layout even-vertical \; \
-    new-window -c "$WORK_DIR" "vim -S vim.Session" \; \
+```sh
+sass --watch src/scss/:www/css/
 ```
-
-
