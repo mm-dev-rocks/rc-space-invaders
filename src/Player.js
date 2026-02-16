@@ -96,9 +96,9 @@ Player.stopMove = function () {
  */
 Player.updateSizes = function () {
   Player.pos.x = Math.round(Layout.gameplayWidth / 2) - (Player.image.width * GAME.PLAYER_DRAW_SCALE) / 2;
-  Player.pos.y = Layout.playerBounds_rect.bottom - Player.image.height * GAME.PLAYER_DRAW_SCALE;
-  Player.xLimitLeft = Layout.playerBounds_rect.left;
-  Player.xLimitRight = Layout.playerBounds_rect.right - Player.image.width * GAME.PLAYER_DRAW_SCALE;
+  Player.pos.y = Layout.gameplay_rect.bottom - Player.image.height * GAME.PLAYER_DRAW_SCALE;
+  Player.xLimitLeft = Layout.gameplay_rect.left;
+  Player.xLimitRight = Layout.gameplay_rect.right - Player.image.width * GAME.PLAYER_DRAW_SCALE;
 };
 
 /**

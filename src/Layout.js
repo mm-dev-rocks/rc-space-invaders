@@ -30,7 +30,6 @@ class Layout {
   /** @type {number} */ static gameplayHeight;
 
   /** @type {Object} */ static canvas_rect;
-  /** @type {Object} */ static playerBounds_rect;
   /** @type {Object} */ static gameplay_rect;
   /** @type {Object} */ static background_rect;
   /** @type {Object} */ static mainTitle_rect;
@@ -101,11 +100,9 @@ Layout.update = function () {
   Layout.canvas_rect = Layout.getRectangle(RECTANGLE.CANVAS);
   Layout.gameplay_rect = Layout.getRectangle(RECTANGLE.GAMEAREA);
   Layout.background_rect = Layout.getRectangle(RECTANGLE.BACKGROUND);
-  Layout.playerBounds_rect = Layout.getRectangle(RECTANGLE.PLAYERBOUNDS);
   __("\tLayout.canvas_rect: " + JSON.stringify(Layout.canvas_rect), RCSI.FMT_LAYOUT);
   __("\tLayout.gameplay_rect: " + JSON.stringify(Layout.gameplay_rect), RCSI.FMT_LAYOUT);
   __("\tLayout.background_rect: " + JSON.stringify(Layout.background_rect), RCSI.FMT_LAYOUT);
-  __("\tLayout.playerBounds_rect: " + JSON.stringify(Layout.playerBounds_rect), RCSI.FMT_LAYOUT);
 
   Layout.setProportionalSizes();
 
@@ -136,8 +133,6 @@ Layout.getRectangle = function (_type) {
     //
     //
   } else if (_type === RECTANGLE.BACKGROUND) {
-    // The player is always laterally in the midpoint of the canvas
-    // So the furthest outside the gameplay area that will be displayed is half a canvas
     rect = {
       left: 0 - Layout.gameplayWidth / 2,
       right: Layout.canvasWidth + Layout.gameplayWidth / 2,
@@ -147,16 +142,6 @@ Layout.getRectangle = function (_type) {
     //
     //
   } else if (_type === RECTANGLE.GAMEAREA) {
-    rect = {
-      left: 0,
-      right: Layout.gameplayWidth,
-      top: 0,
-      bottom: Layout.gameplayHeight,
-    };
-    rect.bottom *= 2;
-    //
-    //
-  } else if (_type === RECTANGLE.PLAYERBOUNDS) {
     rect = {
       left: GAME.MAIN_PADDING_PX,
       right: Layout.gameplayWidth - GAME.MAIN_PADDING_PX,

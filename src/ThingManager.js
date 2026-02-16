@@ -293,7 +293,7 @@ ThingManager.update = function (_frames) {
       thing.pos.x += thing.vector.x * thing.speed * _frames;
       thing.pos.y += thing.vector.y * thing.speed * _frames;
     } else if (!thing.isDeleted && !enemyBounceHappened) {
-      enemyBounceHappened = ThingManager.enemyBounceInRectangle(thing, Layout.playerBounds_rect);
+      enemyBounceHappened = ThingManager.enemyBounceInRectangle(thing, Layout.gameplay_rect);
       thing.pos.x += thing.vector.x * thing.speed * _frames;
       thing.pos.y += thing.vector.y * thing.speed * _frames;
     }
