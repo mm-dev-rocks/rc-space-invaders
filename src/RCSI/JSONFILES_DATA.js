@@ -1,4 +1,14 @@
-// SPDX-License-Identifier: GPL-3.0-only
+/**
+ * @license GPL-3.0-only
+ *
+ * @author Mark Mayes / mm-dev
+ *
+ *
+ * @module RCSI/JSONFILES_DATA
+ *
+ * @description
+ * ## List of JSON files used in the app
+ */
 
 import * as JSONFILE_IDS from "./JSONFILE_IDS.js";
 

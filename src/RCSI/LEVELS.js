@@ -12,9 +12,9 @@
  */
 
 import { INTRO } from "./LEVEL_DATA/INTRO.js";
-import { BASIC } from "./LEVEL_DATA/BASIC.js";
+import { RC } from "./LEVEL_DATA/RC.js";
 
 export const LEVEL_DATA = {
   INTRO: INTRO,
-  BASIC: BASIC,
+  RC: RC,
 };
