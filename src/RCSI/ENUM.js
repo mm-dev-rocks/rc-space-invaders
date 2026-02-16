@@ -14,16 +14,6 @@
  * @readonly
  * @enum {string}
  */
-export const GAMEOVER_REASON = {
-  TIMES_UP: "gameOverReasonTimesUp",
-  HEALTH_DEPLETED: "gameOverReasonHealthDepleted",
-  GAME_COMPLETED: "gameOverReasonGameCompleted",
-};
-
-/**
- * @readonly
- * @enum {string}
- */
 export const THING_TYPE = {
   ENEMY: "thingTypeEnemy",
   BACKGROUND: "thingTypeBackground",
