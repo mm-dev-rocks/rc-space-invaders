@@ -13,4 +13,4 @@
 
 export const HIDDEN = "hidden";
 
-export const GAME = "pd-game";
+export const GAME = "rcsi-game";
