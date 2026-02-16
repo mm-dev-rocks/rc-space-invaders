@@ -39,12 +39,12 @@ Constants for configuring the game eg:
 
 ## Building
 
-**All we need to do is bundle the JS with esbuild**
-
 ### esbuild (JS bundler/tree shaker/transpiler)
 [esbuild: Download a build](https://esbuild.github.io/getting-started/#download-a-build)
 
 I install a standalone build but there are other ways eg `npm install --save-exact --save-dev esbuild`:  
+
+**All we need to do is bundle the JS with esbuild**
 
 ```sh
 # From the project root:
