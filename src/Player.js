@@ -34,7 +34,7 @@ class Player {
  * @static
  *
  * @description
- * ##### Set the player image and a neutral start position
+ * ##### Set the player image, a neutral start position, and initial speed
  */
 Player.init = function () {
   Player.image = ImageManager.getImageByID(IMAGE_IDS.IMG_PLAYER).image_el;
@@ -47,7 +47,7 @@ Player.init = function () {
  * @static
  *
  * @description
- * ##### Set colour, health, size etc according to the current level configuration
+ * ##### Set colour according to the current level configuration
  */
 Player.setupForLevel = function () {
   Player.color = Game.curLevelData.player.color;
@@ -61,8 +61,7 @@ Player.setupForLevel = function () {
  * ##### Change vector to initiate movement to the left
  */
 Player.startMoveLeft = function () {
-  // TODO magic number
-  Player.speedVector.x -= 1;
+  Player.speedVector.x -= GAME.PLAYER_ACCEL;
 };
 
 /**
@@ -73,8 +72,7 @@ Player.startMoveLeft = function () {
  * ##### Change vector to initiate movement to the right
  */
 Player.startMoveRight = function () {
-  // TODO magic number
-  Player.speedVector.x += 1;
+  Player.speedVector.x += GAME.PLAYER_ACCEL;
 };
 
 /**
@@ -108,17 +106,16 @@ Player.updateSizes = function () {
  * @static
  *
  * @description
- * ##### Update some properties of the player
- * - The position to be drawn at
- * - If currently damaged, or eating, decrement the counters for those states
+ * ##### Update some properties of the player (called on each frame)
+ *
+ * - The position to be drawn at (capped within bounds)
+ * - Add inertia effect (slow down)
  *
  */
 Player.update = function () {
-  Player.pos.x += Player.speedVector.x;
-  Player.pos.x = Math.max(Player.xLimitLeft, Math.min(Player.pos.x, Player.xLimitRight));
+  Player.pos.x = Math.max(Player.xLimitLeft, Math.min(Player.pos.x + Player.speedVector.x, Player.xLimitRight));
   if (Player.speedVector.x != 0) {
-    // TODO magic number
-    Player.speedVector.x *= 0.95;
+    Player.speedVector.x *= GAME.PLAYER_INERTIA_MULTIPLIER;
   }
 };
 
@@ -128,11 +125,6 @@ Player.update = function () {
  *
  * @description
  * ##### Draw the character
- * - If currently being damaged, flash a different colour based on the level background
- * - If currently eating, flash a different colour based on the eaten thing
- * - Draw the tail/friction effect
- * - At faster speeds, distort the circular shape into an ellipse to suggest stretching in the direction of travel
- * - Add any extra layers such as hats etc
  */
 Player.draw = function () {
   var color, playerDrawnPosX, playerDrawnPosY;

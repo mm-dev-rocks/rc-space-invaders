@@ -99,6 +99,16 @@ export const UI_PORTRAIT = {
  */
 
 export const PLAYER_DRAW_SCALE = 4;
+export const PLAYER_ACCEL = 2;
+export const PLAYER_INERTIA_MULTIPLIER = 0.95;
+
+/*
+ *
+ *
+ * Enemies
+ *
+ */
+
 export const ENEMY_DRAW_SCALE = 4;
 export const ENEMY_DRAW_PAD = 5;
 export const ENEMY_WIGGLE_ANIM_FRAMES = 20;
@@ -110,12 +120,8 @@ export const ENEMY_WIGGLE_ANIM_FRAMES = 20;
  *
  */
 
-// For non-moving things (eg trees), setting speed to 0 can cause errors/bugs relating to dividing/multiplying by 0, so use this value instead
+// For non-moving things, setting speed to 0 can cause errors/bugs relating to dividing/multiplying by 0, so use this value instead
 export const STATIC_THING_SPEED = Number.MIN_VALUE;
-
-export const TEXT_BACKGROUND_FILL_ALPHA = 0.66;
-
-export const INSTRUCTIONTEXT_COLOR = "#ff4444";
 
 /*
  *
@@ -123,6 +129,10 @@ export const INSTRUCTIONTEXT_COLOR = "#ff4444";
  * Text
  *
  */
+
+export const TEXT_BACKGROUND_FILL_ALPHA = 0.66;
+
+export const INSTRUCTIONTEXT_COLOR = "#ff4444";
 // Best not to have this lower than 2 as it causes some padding values to end up as low fractions below 1 and get rounded weirdly, then layout issues
 export const TEXT_BG_PADDING_TO_CHARWIDTH_RATIO = 2;
 
